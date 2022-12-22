@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    env_file:
+      - .env
+  redis-db:
+    image: redis
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  app:
+    image: petemoon:${BUILD_VERSION_PETEMOON}
+    container_name: petemoon_app
+    command: gunicorn --bind 0.0.0.0:8080 --workers=4 --log-level=debug --capture-output --chdir=/code config.wsgi:application
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis-db
+    restart: unless-stopped
+
+volumes:
+  db-data:
+    driver: local
+  redis-data:
+    driver: local
+
+
