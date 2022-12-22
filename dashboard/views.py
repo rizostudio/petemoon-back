@@ -42,7 +42,7 @@ class PetViewSet(
         
         return super().get_serializer_class()
 
-    @action(detail=False, methods=["get","put"], url_path='medical')
+    @action(detail=False, methods=["get","put"], url_path='pet-medical')
     def medical(self, request):
 
         if self.request.method == 'GET':
@@ -55,7 +55,7 @@ class PetViewSet(
             serializer.save()
             return Response(serializer.data)
 
-    @action(detail=False, methods=["get"], url_path='general')
+    @action(detail=False, methods=["get","put"], url_path='pet-general')
     def general(self, request):
 
         if self.request.method == 'GET':

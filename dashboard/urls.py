@@ -5,5 +5,5 @@ from .views import (
 
 
 def register_routes(router):
-    router.register("pet", PetViewSet, basename='pet')
+    router.register("dashboard", PetViewSet, basename='pet')
     
