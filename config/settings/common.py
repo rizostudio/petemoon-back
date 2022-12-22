@@ -41,7 +41,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env(
     "SECRET_KEY",
-    default="django-insecure-zmk1c2%=a2k@mj)e-ibe+4!-w9&(p9uan0*6i2vd$nkeh10uqf",
+    default=(
+        "django-insecure-zmk1c2%=a2k@mj)e-ibe+4!-w9&(p9uan0*6i2vd$nkeh10uqf"
+    ),
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -173,3 +175,12 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="*").split(",")
+
+# CACHING CONFIGURATION
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": get_env("REDIS_URL"),
+    }
+}
+# END CACHING CONFIGURATION
