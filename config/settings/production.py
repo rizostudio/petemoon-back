@@ -4,6 +4,19 @@ from config.settings.common import *
 INSTALLED_APPS = ("corsheaders",) + INSTALLED_APPS + ("gunicorn",)
 # PRODUCTION APPS CONFIGURATION
 
+# DATABASE CONFIGURATION
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": get_env("DEFAULT_DATABASE_NAME"),
+        "USER": get_env("DEFAULT_DATABASE_USER"),
+        "PASSWORD": get_env("DEFAULT_DATABASE_PASSWORD"),
+        "HOST": get_env("DEFAULT_DATABASE_HOST"),
+        "PORT": get_env("DEFAULT_DATABASE_PORT"),
+    }
+}
+
+# END DATABASE CONFIGURATION
 
 # CORSHEADERS CONFIGURATION
 CSRF_TRUSTED_ORIGINS = get_env("CSRF_TRUSTED_ORIGINS", default="").split(",")
