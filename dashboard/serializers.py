@@ -13,7 +13,7 @@ class PetMidicalSerializer(serializers.ModelSerializer):
             'birth_date',
         ]
 
-class PetGeneralSerializer(serializers.Serializer):
+class PetGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pet
         fields = [
@@ -22,3 +22,9 @@ class PetGeneralSerializer(serializers.Serializer):
             'underlying_disease',
             'last_anti_parasitic_vaccine_date',
         ]
+
+
+class PetSerializer(serializers.Serializer):
+    pass
+
+
