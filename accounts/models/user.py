@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from accounts.models.user_manager import UserManager
 
 
@@ -29,6 +30,8 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name=_("updated at")
     )
+
+    birth_date = models.DateField(blank=True, null=True)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "phone_number"
