@@ -1,5 +1,5 @@
-from pathlib import Path
 from os import environ
+from pathlib import Path
 
 # GET ENV UTIL
 
@@ -188,3 +188,8 @@ CACHES = {
 # AUTH USER MODEL CONFIGURATION
 AUTH_USER_MODEL = "accounts.User"
 # END AUTH USER MODEL CONFIGURATION
+
+# OTP CONFIGURATION
+OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="6"))
+OTP_TTL = int(get_env("OTP_TTL", default="120"))
+# END OTP CONFIGURATION
