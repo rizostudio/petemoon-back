@@ -10,15 +10,15 @@ class OneTimePasswordTestCase(TestCase):
         self.user = UserFactory()
         self.otp = OneTimePassword(self.user)
 
-    # def test_one_time_password_model(self):
-    #     self.assertEqual(self.otp.user, self.user)
-    #     self.assertNotEqual(self.otp.code, None)
-    #     self.assertNotEqual(self.otp.otp_id, None)
-    #     self.assertTrue(cache.has_key(self.user.phone_number))
-    #     self.assertTrue(cache.has_key(self.otp.otp_id))
-    #     self.assertTrue(
-    #         OneTimePassword.otp_exist(phone_number=self.user.phone_number)
-    #     )
+    def test_one_time_password_model(self):
+        self.assertEqual(self.otp.user, self.user)
+        self.assertNotEqual(self.otp.code, None)
+        self.assertNotEqual(self.otp.otp_id, None)
+        self.assertTrue(cache.has_key(self.user.phone_number))
+        self.assertTrue(cache.has_key(self.otp.otp_id))
+        self.assertTrue(
+            OneTimePassword.otp_exist(phone_number=self.user.phone_number)
+        )
 
     def test_verify_otp_method(self):
         with self.assertRaises(ValueError):
