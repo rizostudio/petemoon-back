@@ -1,0 +1,60 @@
+from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.db.utils import IntegrityError
+import faker
+
+
+class UserModelTestCase(TestCase):
+    def setUp(self):
+        self.User = get_user_model()
+        self.faker = faker.Faker()
+
+    def test_create_user(self):
+        with self.assertRaises(ValueError):
+            self.User.objects.create_user(phone_number="")
+        phone_number = self.faker.numerify("09#########")
+        user = self.User.objects.create_user(phone_number=phone_number)
+        self.assertFalse(user.has_usable_password())
+        self.assertTrue(
+            self.User.objects.filter(phone_number=phone_number).exists()
+        )
+        with self.assertRaises(IntegrityError):
+            user = self.User.objects.create_user(phone_number=phone_number)
+        new_phone_number = self.faker.numerify("09#########")
+        while new_phone_number == phone_number:
+            new_phone_number = self.faker.numerify("09#########")
+        password = self.faker.pystr()
+        user = self.User.objects.create_user(
+            phone_number=new_phone_number, password=password
+        )
+        self.assertTrue(user.has_usable_password())
+        self.assertTrue(
+            self.User.objects.filter(phone_number=new_phone_number).exists()
+        )
+        self.assertTrue(user.check_password(password))
+
+    def test_create_superuser(self):
+        phone_number = self.faker.numerify("09#########")
+        password = self.faker.pystr()
+        with self.assertRaises(ValueError):
+            self.User.objects.create_superuser(
+                phone_number=phone_number, password=password, is_staff=False
+            )
+        with self.assertRaises(ValueError):
+            self.User.objects.create_superuser(
+                phone_number=phone_number,
+                password=password,
+                is_superuser=False,
+            )
+        user = self.User.objects.create_superuser(
+            phone_number=phone_number, password=password
+        )
+        self.assertTrue(user.has_usable_password())
+        self.assertTrue(
+            self.User.objects.filter(
+                phone_number=phone_number, is_superuser=True, is_staff=True
+            ).exists()
+        )
+        self.assertTrue(user.check_password(password))
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_superuser)
