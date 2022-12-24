@@ -1,5 +1,6 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Pet
+from .models import Pet,Address
 
 
 class PetMidicalSerializer(serializers.ModelSerializer):
@@ -28,3 +29,26 @@ class PetSerializer(serializers.Serializer):
     pass
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = [
+            'province',
+            'city',
+            'receiver',
+            'postal_code',
+            'postal_address'
+        ]
+        read_only_fields = (
+            'user', 
+        )
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+        ]
+        

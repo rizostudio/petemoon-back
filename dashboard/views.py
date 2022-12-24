@@ -1,25 +1,75 @@
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.utils.translation import gettext_lazy as _
-from .serializers import (PetGeneralSerializer,PetMidicalSerializer,PetSerializer)
-from .models import Pet
+from .serializers import (
+    PetGeneralSerializer,PetMidicalSerializer,PetSerializer,AddressSerializer,ProfileSerializer)
+from .models import Pet,Address
 
 
 
-class AccountVeiwSet(viewsets.GenericViewSet):
+class ProfileViewSet(viewsets.GenericViewSet):
+
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+        
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def retrieve(self):
+        serializer = self.get_serializer(data=self.request.user)
+        return Response(serializer.data)
+
+
+class OrdersViewSet(viewsets.GenericViewSet):
     pass
 
-class OrdersVeiwSet(viewsets.GenericViewSet):
-    pass
+class AddressViewSet(
+    viewsets.GenericViewSet,
+    mixins.UpdateModelMixin,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin):
 
+    serializer_class = AddressSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        
+        return Address.objects.filter(
+            user=self.request.user
+        )
+
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
+
+   
 
 class PetViewSet(
     viewsets.GenericViewSet,
     mixins.UpdateModelMixin,
-    mixins.CreateModelMixin
-):
+    mixins.CreateModelMixin):
+
     serializer_class = PetSerializer
     permission_classes = [IsAuthenticated]
 

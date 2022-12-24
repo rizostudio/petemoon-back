@@ -15,3 +15,12 @@ class Pet(models.Model):
     last_vaccine_date = models.DateField(null=True)
     underlying_disease = models.CharField(max_length=128,null=True)
     last_anti_parasitic_vaccine_date = models.DateField(null=True)
+
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    province = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    receiver = models.CharField(max_length=128)
+    postal_code = models.CharField(max_length=10)
+    postal_address = models.CharField(max_length=512)
