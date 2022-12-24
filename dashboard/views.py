@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import (
-    PetGeneralSerializer,PetMidicalSerializer,PetSerializer,AddressSerializer,ProfileSerializer)
-from .models import Pet,Address
+    PetGeneralSerializer,PetMidicalSerializer,PetSerializer,AddressSerializer,ProfileSerializer,OrderSerializer)
+from .models import Pet, Address, Order
 
 
 
@@ -31,8 +31,20 @@ class ProfileViewSet(viewsets.GenericViewSet):
         return Response(serializer.data)
 
 
-class OrdersViewSet(viewsets.GenericViewSet):
-    pass
+class OrdersViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        
+        return Order.objects.filter(
+            user=self.request.user
+        ) 
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
 
 class AddressViewSet(
     viewsets.GenericViewSet,

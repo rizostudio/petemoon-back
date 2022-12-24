@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Pet,Address
+from .models import Pet, Address, Order
 
 
 class PetMidicalSerializer(serializers.ModelSerializer):
@@ -52,3 +52,10 @@ class ProfileSerializer(serializers.ModelSerializer):
             'email',
         ]
         
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+        read_only_fields = (
+            'address', 
+        )

@@ -13,4 +13,6 @@ class Choices(object):
         FEMALE = "F",_("Female")
 
 
-    
+    class Order(models.TextChoices):
+        DELIVERED = "DELIVERED",_("Delivered")
+        CANCELED = "CANCELED",_("Canceled")
