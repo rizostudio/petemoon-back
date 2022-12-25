@@ -1,7 +1,9 @@
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from django.db.utils import IntegrityError
 import faker
+from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
+from django.test import TestCase
+
+from accounts.tests.fakers import UserFactory
 
 
 class UserModelTestCase(TestCase):
@@ -58,3 +60,9 @@ class UserModelTestCase(TestCase):
         self.assertTrue(user.check_password(password))
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+    def test_is_registered(self):
+        user = UserFactory(first_name="", last_name="")
+        self.assertFalse(user.is_registered())
+        user = UserFactory(first_name="John", last_name="Doe")
+        self.assertTrue(user.is_registered())

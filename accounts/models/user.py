@@ -47,3 +47,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.phone_number}-{self.get_full_name()}"
+
+    def is_registered(self):
+        return self.first_name != "" and self.last_name != ""
