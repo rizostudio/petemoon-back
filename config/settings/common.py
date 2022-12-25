@@ -193,3 +193,17 @@ AUTH_USER_MODEL = "accounts.User"
 OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="6"))
 OTP_TTL = int(get_env("OTP_TTL", default="120"))
 # END OTP CONFIGURATION
+
+# JWT SETIINGS
+ACCESS_TTL = int(get_env("ACCESS_TTL", default="300"))
+REFRESH_TTL = int(get_env("REFRESH_TTL", default="86400"))
+JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
+# END JWT SETTINGS
+
+# REST FRAMEWORK CONFIGURATION
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "accounts.authentication.JWTAuthentication",
+    ),
+}
+# END REST FRAMEWORK CONFIGURATION

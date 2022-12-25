@@ -38,6 +38,8 @@ psycopg2==2.9.5
     # via -r common.in
 pycparser==2.21
     # via cffi
+pyjwt==2.6.0
+    # via -r common.in
 python-dateutil==2.8.2
     # via
     #   faker

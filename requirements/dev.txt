@@ -27,6 +27,8 @@ psycopg2==2.9.5
     # via -r common.in
 pycparser==2.21
     # via cffi
+pyjwt==2.6.0
+    # via -r common.in
 python-dotenv==0.21.0
     # via -r common.in
 pytz==2022.7

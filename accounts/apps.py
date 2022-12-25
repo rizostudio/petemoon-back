@@ -1,4 +1,9 @@
+import warnings
+
 from django.apps import AppConfig
+from django.core.cache import CacheKeyWarning
+
+warnings.simplefilter("ignore", CacheKeyWarning)
 
 
 class AccountsConfig(AppConfig):
