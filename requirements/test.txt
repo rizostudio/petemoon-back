@@ -34,6 +34,8 @@ freezegun==1.2.2
     # via -r test.in
 idna==3.4
     # via requests
+kavenegar==1.1.2
+    # via -r common.in
 psycopg2==2.9.5
     # via -r common.in
 pycparser==2.21
@@ -51,7 +53,9 @@ pytz==2022.7
 redis==4.4.0
     # via -r common.in
 requests==2.28.1
-    # via -r test.in
+    # via
+    #   -r test.in
+    #   kavenegar
 six==1.16.0
     # via python-dateutil
 sqlparse==0.4.3
