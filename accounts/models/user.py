@@ -33,6 +33,8 @@ class User(AbstractUser):
 
     birth_date = models.DateField(blank=True, null=True)
 
+    referal_code = models.CharField(max_length=16, blank=True, null=True)
+
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
