@@ -30,11 +30,7 @@ class JWTFunctionsTestCase(TestCase):
 
     def test_login_jwt_function(self):
         user_id = str(self.user.id)
-        tokens = login(self.user)
-        access_token, refresh_token = (
-            tokens.get("access_token"),
-            tokens.get("refresh_token"),
-        )
+        access_token, refresh_token = login(self.user)
         access_data = self.decode_token(token=access_token)
         refresh_data = self.decode_token(token=refresh_token)
         self.assertNotEqual(cache.has_key(access_token), False)
@@ -48,11 +44,7 @@ class JWTFunctionsTestCase(TestCase):
         self.assertEqual(refresh_data.get("user_id"), user_id)
 
     def test_claim_token_jwt_function(self):
-        tokens = login(self.user)
-        access_token, refresh_token = (
-            tokens.get("access_token"),
-            tokens.get("refresh_token"),
-        )
+        access_token, refresh_token = login(self.user)
         access_data = self.decode_token(token=access_token)
         refresh_data = self.decode_token(token=refresh_token)
         access_claimed = claim_token(token=access_token)
@@ -175,16 +167,16 @@ class JWTFunctionsTestCase(TestCase):
         tokens = login(self.user)
         with freeze_time(timezone.now() + timedelta(seconds=2)):
             new_access_token, new_refresh_token = refresh(
-                tokens.get("refresh_token")
+                tokens[1]
             )
         self.assertTrue(validate_token(new_access_token))
         self.assertTrue(validate_token(new_refresh_token))
-        self.assertFalse(cache.has_key(tokens.get("access_token")))
-        self.assertFalse(cache.has_key(tokens.get("refresh_token")))
+        self.assertFalse(cache.has_key(tokens[0]))
+        self.assertFalse(cache.has_key(tokens[1]))
 
         with self.assertRaises(ValueError):
             refresh(
-                tokens.get("refresh_token")
+                tokens[1]
             )  # refresh_token is now invalid
         with self.assertRaises(ValueError):
             refresh(new_access_token)  # access is not refresh

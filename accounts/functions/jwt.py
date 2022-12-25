@@ -28,8 +28,7 @@ def __gen_tokens(user_id):
 
 
 def login(user):
-    access_token, refresh_token = __gen_tokens(user_id=str(user.id))
-    return {"access_token": access_token, "refresh_token": refresh_token}
+    return __gen_tokens(user_id=str(user.id))
 
 
 def claim_token(token):

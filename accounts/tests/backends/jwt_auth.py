@@ -10,9 +10,7 @@ class JWTAuthenticationBackendTestCase(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.user = UserFactory()
-        tokens = login(self.user)
-        self.access = tokens.get("access_token")
-        self.refresh = tokens.get("refresh_token")
+        self.access, self.refresh = login(self.user)
         self.auth_class = JWTAuthentication()
 
     def test_jwt_auth_backend(self):

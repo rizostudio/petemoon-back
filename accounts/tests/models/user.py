@@ -63,6 +63,6 @@ class UserModelTestCase(TestCase):
 
     def test_is_registered(self):
         user = UserFactory(first_name="", last_name="")
-        self.assertFalse(user.is_registered())
+        self.assertFalse(user.is_registered)
         user = UserFactory(first_name="John", last_name="Doe")
-        self.assertTrue(user.is_registered())
+        self.assertTrue(user.is_registered)
