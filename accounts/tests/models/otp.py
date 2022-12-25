@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.test import TestCase
 
-from accounts.models.otp import OneTimePassword
+from accounts.models import OneTimePassword
 from accounts.tests.fakers.user import UserFactory
 
 

@@ -202,13 +202,14 @@ JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
 
 # REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "accounts.authentication.JWTAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("accounts.backends.JWTAuthentication",),
+    "DEFAULT_THROTTLE_RATES": {
+        "otp": get_env("OTP_THROTTLE_RATE", default="10/min"),
+    },
 }
 # END REST FRAMEWORK CONFIGURATION
 
 # SMS CONFIGURATION
-KAVENEGAR_API_KEY = get_env("KAVENEGAR_API_KEY", optinal=True)
-KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", optinal=True)
+KAVENEGAR_API_KEY = get_env("KAVENEGAR_API_KEY", default="")
+KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="")
 # END SMS CONFIGURATION

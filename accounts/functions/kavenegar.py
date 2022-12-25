@@ -16,6 +16,8 @@ def send_sms(phone_number: str, code: str) -> bool:
         return True
     except APIException as e:
         print(e)
-    except HTTPException() as e:
+    except HTTPException as e:
+        print(e)
+    except Exception as e:
         print(e)
     return False
