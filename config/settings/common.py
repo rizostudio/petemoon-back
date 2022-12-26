@@ -1,5 +1,5 @@
-from pathlib import Path
 from os import environ
+from pathlib import Path
 
 # GET ENV UTIL
 
@@ -101,16 +101,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
-
-
-# DATABASE CONFIGURATION
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-# END DATABASE CONFIGURATION
 
 
 # Password validation
