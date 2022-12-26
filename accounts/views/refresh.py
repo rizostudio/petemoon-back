@@ -16,11 +16,11 @@ class Refresh(APIView):
             access, refresh = refresh_function(refresh)
         except ValueError:
             return Response(
-                {"error": _("refresh is invalid")},
+                {"success": False, "errors": [_("refresh is invalid")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         response = Response(
-            {"refresh_token": refresh},
+            {"success": True, "data": {"refresh_token": refresh}},
             status=status.HTTP_200_OK,
         )
         response.set_cookie(

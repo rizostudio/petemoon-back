@@ -21,10 +21,14 @@ class RefreshViewTestCase(LiveServerTestCase):
     def test_400_response(self):
         response = self.make_request("invalid")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertDictEqual(response.json(), {"error": "refresh is invalid"})
+        self.assertDictEqual(
+            response.json(),
+            {"success": False, "errors": ["refresh is invalid"]},
+        )
 
     def test_200_response(self):
         response = self.make_request(self.refresh)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("refresh_token", response.json())
+        self.assertTrue(response.json().get("success"))
+        self.assertIn("refresh_token", response.json().get("data"))
         self.assertIn("HTTP_ACCESS", response.cookies)
