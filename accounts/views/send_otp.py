@@ -24,12 +24,12 @@ class SendOTP(APIView):
         phone_number = self.request.data.get("phone_number")
         if not phone_number_regex.match(phone_number):
             return Response(
-                {"error": _("invalid phone number")},
+                {"success": False, "errors": [_("invalid phone number")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if OneTimePassword.otp_exist(phone_number):
             return Response(
-                {"error": _("otp already sent")},
+                {"success": False, "errors": [_("otp already sent")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if User.objects.filter(phone_number=phone_number).exists():
@@ -40,7 +40,10 @@ class SendOTP(APIView):
         done = send_sms(phone_number, otp.code)
         if not done:
             return Response(
-                {"error": _("error in sending otp")},
+                {"success": False, "errors": [_("error in sending otp")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        return Response({"otp_id": otp.otp_id}, status=status.HTTP_200_OK)
+        return Response(
+            {"success": True, "data": {"otp_id": otp.otp_id}},
+            status=status.HTTP_200_OK,
+        )

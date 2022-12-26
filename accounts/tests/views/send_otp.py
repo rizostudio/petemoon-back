@@ -24,19 +24,23 @@ class SendOTPViewTestCase(LiveServerTestCase):
         response = self.make_request("invalid")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(
-            response.json(), {"error": "invalid phone number"}
+            response.json(),
+            {"success": False, "errors": ["invalid phone number"]},
         )
         user = UserFactory()
         OneTimePassword(user)
         response = self.make_request(user.phone_number)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertDictEqual(response.json(), {"error": "otp already sent"})
+        self.assertDictEqual(
+            response.json(), {"success": False, "errors": ["otp already sent"]}
+        )
         user = UserFactory()
         with patch("accounts.views.send_otp.send_sms", new=lambda *_: False):
             response = self.make_request(user.phone_number)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(
-            response.json(), {"error": "error in sending otp"}
+            response.json(),
+            {"success": False, "errors": ["error in sending otp"]},
         )
 
     def test_200_response(self):
@@ -48,4 +52,5 @@ class SendOTPViewTestCase(LiveServerTestCase):
         self.assertTrue(
             User.objects.filter(phone_number=phone_number).exists()
         )
-        self.assertIn("otp_id", response.json())
+        self.assertIn("otp_id", response.json().get("data"))
+        self.assertTrue(response.json().get("success"))
