@@ -1,4 +1,4 @@
--r common.in
+-r common.txt
 
 uvicorn==0.18.3
 django-cors-headers==3.13.0
