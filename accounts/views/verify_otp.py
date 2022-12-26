@@ -19,13 +19,19 @@ class VerifyOTP(APIView):
             user_id = OneTimePassword.verify_otp(otp_id, otp_code)
         except ValueError:
             return Response(
-                {"error": _("OTP is invalid")},
+                {"success": False, "errors": [_("OTP is invalid")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user = get_user(id=user_id)
         access, refresh = login(user)
         response = Response(
-            {"refresh_token": refresh, "is_registered": user.is_registered},
+            {
+                "success": True,
+                "data": {
+                    "refresh_token": refresh,
+                    "is_registered": user.is_registered,
+                },
+            },
             status=status.HTTP_200_OK,
         )
         response.set_cookie(

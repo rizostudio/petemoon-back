@@ -19,7 +19,9 @@ class VerifyOTPViewTestCase(LiveServerTestCase):
     def test_400_response(self):
         response = self.make_request("invalid", "invalid")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertDictEqual(response.json(), {"error": "OTP is invalid"})
+        self.assertDictEqual(
+            response.json(), {"success": False, "errors": ["OTP is invalid"]}
+        )
 
     def test_200_response(self):
         user = UserFactory()
@@ -27,7 +29,7 @@ class VerifyOTPViewTestCase(LiveServerTestCase):
         response = self.make_request(otp.otp_id, otp.code)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.json().get("is_registered"), user.is_registered
+            response.json()["data"].get("is_registered"), user.is_registered
         )
-        self.assertIn("refresh_token", response.json())
+        self.assertIn("refresh_token", response.json()["data"])
         self.assertIn("HTTP_ACCESS", response.cookies)
