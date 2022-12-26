@@ -14,4 +14,4 @@ if stage == "PRODUCTION":
 elif stage == "CI":
     from config.settings.test import *
 else:
-    from configsettings.dev import *
+    from config.settings.dev import *

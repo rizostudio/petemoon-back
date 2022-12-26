@@ -17,10 +17,3 @@ pip install -r requirements/test.txt # for test
 1. Make sure you have Postgredb running
 
 1. enjoy!
-
-## How to update deps
-
-```bash
-cd requirements
-make update_deps
-```
