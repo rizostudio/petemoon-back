@@ -1,4 +1,4 @@
--r common.in
+-r common.txt
 
 coverage==6.4.4
 requests==2.28.1
