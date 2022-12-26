@@ -10,8 +10,7 @@ class Order(models.Model):
     order_id = models.CharField(max_length=128)
     status = models.CharField(choices=Choices.Order.choices, max_length=128)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
-    price = models.FloatField()
-    discount = models.FloatField()
+    product = models.ForeignKey("dashboard.Product",on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Order")
@@ -19,4 +18,3 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_id
-

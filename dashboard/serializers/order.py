@@ -3,9 +3,12 @@ from dashboard.models import Order
 
 
 class OrderSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['order_id','status','address','product']
         read_only_fields = (
             'address',
         )
+        depth = 1
+
