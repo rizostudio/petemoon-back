@@ -10,3 +10,5 @@ schemes:
 paths:
   /accounts/otp:
     $ref: "accounts/send_otp.yaml"
+  /accounts/otp/verify:
+    $ref: "accounts/verify_otp.yaml"
