@@ -12,3 +12,5 @@ paths:
     $ref: "accounts/send_otp.yaml"
   /accounts/otp/verify:
     $ref: "accounts/verify_otp.yaml"
+  /accounts/refresh:
+    $ref: "accounts/refresh.yaml"

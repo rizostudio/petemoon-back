@@ -1,9 +1,9 @@
 post:
   tags:
     - "accounts"
-  summary: "Verify OTP"
+  summary: "Refresh session"
   description: ""
-  operationId: "verify_otp"
+  operationId: "refresh"
   consumes:
     - "application/json"
   produces:
@@ -11,13 +11,13 @@ post:
   parameters:
     - in: "body"
       name: "body"
-      description: "OTP to verify"
+      description: "Refresh token"
       required: true
       schema:
-        $ref: "#/definitions/OTP"
+        $ref: "#/definitions/RefreshToken"
   responses:
     200:
-      description: "OTP verified successfully"
+      description: "Session refreshed successfully"
       headers:
         Set-Cookie:
           description: >
@@ -28,20 +28,17 @@ post:
       schema:
         $ref: "#/definitions/Success"
     400:
-      description: "Invalid OTP"
+      description: "Invalid refresh token"
       schema:
-        $ref: "#/definitions/InvalidOTP"
+        $ref: "#/definitions/InvalidRefreshToken"
 
 definitions:
-  OTP:
+  RefreshToken:
     type: "object"
     properties:
-      otp_id:
+      refresh_token:
         type: "string"
         format: "uuid"
-      otp_code:
-        type: "string"
-        example: "123456"
   Success:
     type: "object"
     properties:
@@ -51,10 +48,10 @@ definitions:
       data:
         type: "object"
         properties:
-          refresh_token:
+          access_token:
             type: "string"
             format: "uuid"
-  InvalidOTP:
+  InvalidRefreshToken:
     type: "object"
     properties:
       success:
@@ -62,4 +59,4 @@ definitions:
         example: false
       errors:
         type: "array"
-        example: ["otp is invalid"]
+        example: ["refresh is invalid"]  
