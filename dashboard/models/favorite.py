@@ -7,6 +7,7 @@ class Product(models.Model):
     name = models.CharField(max_length=256)
     price = models.FloatField()
     discount = models.FloatField()
+    image = models.ImageField()
 
     class Meta:
         verbose_name = _("Product")
