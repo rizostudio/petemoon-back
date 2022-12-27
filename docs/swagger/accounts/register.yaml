@@ -1,0 +1,80 @@
+patch:
+  tags:
+    - "accounts"
+  summary: "complete user profile"
+  details: "auth needed"
+  auth: true
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "user profile"
+      required: true
+      schema:
+        $ref: "#/definitions/Profile"
+    - in: "header"
+      name: "Authorization"
+      description: "Bearer token must be here or in cookie"
+      required: false
+      schema:
+        type: "string"
+  responses:
+    200:
+      description: "user profile updated"
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "invalid request"
+      schema:
+        $ref: "#/definitions/InvalidProfile"
+    403:
+      description: "forbidden"
+      schema:
+definitions:
+  Profile:
+    type: "object"
+    properties:
+      first_name:
+        type: "string"
+        example: "John"
+      last_name:
+        type: "string"
+        example: "Doe"
+      email:
+        type: "string"
+        example: "example@mail.com"
+      referal_code:
+        type: "string"
+        default: null
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          message:
+            type: "string"
+            example: "registeration completed"
+  InvalidProfile:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "array"
+        example: [
+          "user is already registered",
+          "incorrect data",
+          {
+            "email": "email is already registered",
+            "first_name": "first name is required",
+            "last_name": "last name is required"
+          }
+        ]
