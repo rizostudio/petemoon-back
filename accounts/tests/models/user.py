@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
+from accounts.models import PetshopProfile, UserProfile
 from accounts.tests.fakers import UserFactory
 
 
@@ -66,3 +67,9 @@ class UserModelTestCase(TestCase):
         self.assertFalse(user.is_registered)
         user = UserFactory(first_name="John", last_name="Doe")
         self.assertTrue(user.is_registered)
+
+    def test_create_profile_signals(self):
+        user = UserFactory(user_type="petshop")
+        self.assertTrue(PetshopProfile.objects.filter(user=user).exists())
+        user = UserFactory(user_type="user")
+        self.assertTrue(UserProfile.objects.filter(user=user).exists())

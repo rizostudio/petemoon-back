@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from accounts.models.user import User
 
@@ -20,3 +22,9 @@ class PetshopProfile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=User)
+def create_petshop_profile(sender, instance, created, **kwargs):
+    if created and instance.user_type == "petshop":
+        PetshopProfile.objects.create(user=instance)
