@@ -31,9 +31,15 @@ class User(AbstractUser):
         auto_now=True, verbose_name=_("updated at")
     )
 
-    birth_date = models.DateField(blank=True, null=True)
-
-    referal_code = models.CharField(max_length=16, blank=True, null=True)
+    user_type_choices = (
+        ("normal", "normal"),
+        ("petshop", "petshop"),
+        ("vet", "vet"),
+        ("admin", "admin"),
+    )
+    user_type = models.CharField(
+        max_length=7, default="normal", choices=user_type_choices
+    )
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "phone_number"
