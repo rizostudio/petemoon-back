@@ -45,12 +45,13 @@ class AddressView(APIView):
                 serialized_data.update(instance=address,validated_data=serialized_data.validated_data)
 
                 return SuccessResponse(
-                    message=_("address updated successfuly")).send()
+                    message=_("Address updated successfuly")).send()
 
         except CustomException as e:
             return UnsuccessfulResponse(error=e.detail, status=e.status_code).send()
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(error=e.detail, status=e.status_code).send()
+
 
     def delete(self, request, id=None):
         
