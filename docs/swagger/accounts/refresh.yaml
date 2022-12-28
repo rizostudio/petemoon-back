@@ -1,0 +1,62 @@
+post:
+  tags:
+    - "accounts"
+  summary: "Refresh session"
+  description: ""
+  operationId: "refresh"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "Refresh token"
+      required: true
+      schema:
+        $ref: "#/definitions/RefreshToken"
+  responses:
+    200:
+      description: "Session refreshed successfully"
+      headers:
+        Set-Cookie:
+          description: >
+            Contains the session cookie named `HTTP_ACCESS`.
+            Pass this cookie back in subsequent requests.
+          schema: 
+            type: string
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "Invalid refresh token"
+      schema:
+        $ref: "#/definitions/InvalidRefreshToken"
+
+definitions:
+  RefreshToken:
+    type: "object"
+    properties:
+      refresh_token:
+        type: "string"
+        format: "uuid"
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          access_token:
+            type: "string"
+            format: "uuid"
+  InvalidRefreshToken:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "array"
+        example: ["refresh is invalid"]  

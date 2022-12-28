@@ -30,3 +30,5 @@ CORS_URLS_REGEX = r".*"  # TODO fill this
 DEBUG = get_env("DEBUG") == "True"
 
 SECRET_KEY = get_env("SECRET_KEY")
+
+JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
