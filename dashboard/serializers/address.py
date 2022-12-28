@@ -15,3 +15,12 @@ class AddressSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'user',
         )
+
+    def create(self, validated_data):
+        addres = Address.objects.create(**validated_data)
+        return addres
+
+    def update(self, instance, validated_data):
+        instance.update(**validated_data)
+
+        return instance
