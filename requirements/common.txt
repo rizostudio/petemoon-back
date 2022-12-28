@@ -4,3 +4,5 @@ psycopg2==2.9.5
 argon2-cffi==21.2.0
 python-dotenv==0.21.0
 redis==4.4.0
+PyJWT==2.6.0
+kavenegar==1.1.2

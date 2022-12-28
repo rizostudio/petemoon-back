@@ -1,0 +1,65 @@
+post:
+  tags:
+    - "accounts"
+  summary: "Verify OTP"
+  description: ""
+  operationId: "verify_otp"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "OTP to verify"
+      required: true
+      schema:
+        $ref: "#/definitions/OTP"
+  responses:
+    200:
+      description: "OTP verified successfully"
+      headers:
+        Set-Cookie:
+          description: >
+            Contains the session cookie named `HTTP_ACCESS`.
+            Pass this cookie back in subsequent requests.
+          schema: 
+            type: string
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "Invalid OTP"
+      schema:
+        $ref: "#/definitions/InvalidOTP"
+
+definitions:
+  OTP:
+    type: "object"
+    properties:
+      otp_id:
+        type: "string"
+        format: "uuid"
+      otp_code:
+        type: "string"
+        example: "123456"
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          refresh_token:
+            type: "string"
+            format: "uuid"
+  InvalidOTP:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "array"
+        example: ["otp is invalid"]
