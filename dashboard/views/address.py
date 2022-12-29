@@ -13,12 +13,12 @@ from config.exceptions import CustomException
 class AddressView(APIView):
 
     serializer_class = AddressSerializer
-    authentication_classes = []
+    #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         address = Address.objects.filter(user=request.user)
-        result = self.get_serializer(address).data
+        result = self.serializer_class(address,many=True).data
         return SuccessResponse(data=result)
 
 
@@ -26,12 +26,12 @@ class AddressView(APIView):
         serialized_data = self.serializer_class(data=request.data)
         try:
             if serialized_data.is_valid(raise_exception=True):
-                serialized_data.save()
-                return SuccessResponse(message=_("Address added successfuly"))
+                serialized_data.save(user=request.user)
+                return SuccessResponse(data={"message":_("Address added successfuly")})
         except CustomException as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code)
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code)
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
 
     def patch(self, request, id=None):
@@ -40,24 +40,26 @@ class AddressView(APIView):
         try:
             if serialized_data.is_valid(raise_exception=True):
 
-                address = Address.objects.get(id=id)
+                address = Address.objects.filter(id=id)
 
                 serialized_data.update(instance=address,validated_data=serialized_data.validated_data)
 
-                return SuccessResponse(
-                    message=_("Address updated successfuly")).send()
+                return SuccessResponse(data={"message":_("Address updated successfuly")})
 
         except CustomException as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code).send()
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code).send()
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
 
     def delete(self, request, id=None):
-        
-            address = Address.objects.delete(id=id)
+        try:
+            try:
+                address = Address.objects.get(id=id).delete()
+            except Address.DoesNotExist:
+                raise CustomException(detail=_("address does not exist"))
 
-            return SuccessResponse(
-                message=_("address deleted successfuly"))
-
-        
+            return SuccessResponse(data={"message":_("Address deleted successfuly")})
+                
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)       

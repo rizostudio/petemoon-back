@@ -1,11 +1,11 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from utils.choices import Choices
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class Pet(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     type = models.PositiveSmallIntegerField(choices=Choices.PetType.choices)
     sex = models.CharField(choices=Choices.Sex.choices,max_length=1)

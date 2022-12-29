@@ -5,13 +5,8 @@ from dashboard.models import Address
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = [
-            'province',
-            'city',
-            'receiver',
-            'postal_code',
-            'postal_address'
-        ]
+        fields = '__all__'
+        
         read_only_fields = (
             'user',
         )

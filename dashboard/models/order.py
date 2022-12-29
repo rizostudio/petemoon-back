@@ -1,12 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from utils.choices import Choices
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from . import Address
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     order_id = models.CharField(max_length=128)
     status = models.CharField(choices=Choices.Order.choices, max_length=128)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
