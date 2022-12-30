@@ -5,16 +5,16 @@ from django.contrib.auth import get_user_model
 
 
 class Pet(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     type = models.PositiveSmallIntegerField(choices=Choices.PetType.choices)
     sex = models.CharField(choices=Choices.Sex.choices,max_length=1)
     species = models.CharField(max_length=128)
     birth_date = models.DateField(null=True)
-    photo = models.ImageField()
+    photo = models.ImageField(null=True)
     
     #Medical
-    weight = models.FloatField()
+    weight = models.FloatField(null=True)
     last_vaccine_date = models.DateField(null=True)
     underlying_disease = models.CharField(max_length=128,null=True)
     last_anti_parasitic_vaccine_date = models.DateField(null=True)
