@@ -11,7 +11,7 @@ from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
 
-class PetGeneralView(APIView):
+class PetView(APIView):
     serializer_class = PetSerializer
     #authentication_classes = []
     permission_classes = [IsAuthenticated]
