@@ -13,14 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+
+from config.settings import STATIC_ROOT, STATIC_URL, SWAGGER_URL
+from utils.swagger_view import yaml_to_html
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     path("accounts/", include("accounts.urls")),
 ]
+if SWAGGER_URL is not None:
+    urlpatterns += [path(SWAGGER_URL, yaml_to_html)]
 
 
-urlpatterns = [path("api/", include(urlpatterns))]
+urlpatterns = [path("api/", include(urlpatterns))] + static(
+    STATIC_URL, document_root=STATIC_ROOT
+)

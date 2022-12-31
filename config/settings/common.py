@@ -32,7 +32,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -71,7 +71,7 @@ THIRD_PARTY_APPS = ("rest_framework",)
 LOCAL_APPS = (
     "accounts",
     "dashboard",
-  )
+)
 
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -92,7 +92,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates/",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -161,7 +163,7 @@ STATIC_ROOT = get_env("STATIC_ROOT", default="static/")
 STATIC_URL = get_env("STATIC_URL", default="static/")
 static_file_env = get_env("STATICFILES_DIRS", optinal=True)
 STATICFILES_DIRS = (
-    static_file_env.split(",") if static_file_env is not None else []
+    static_file_env.split(",") if static_file_env is not None else ["docs/"]
 )
 
 # Default primary key field type
@@ -208,3 +210,7 @@ REST_FRAMEWORK = {
 KAVENEGAR_API_KEY = get_env("KAVENEGAR_API_KEY", default="")
 KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="")
 # END SMS CONFIGURATION
+
+# SWAGGER CONFIGURATION
+SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
+# END SWAGGER CONFIGURATION
