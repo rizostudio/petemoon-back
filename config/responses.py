@@ -55,7 +55,7 @@ headers=None, content_type='application/json'):
 
 class UnsuccessfulResponse(CustomResponse):
     def __init__(self, status_code: int, errors=None, headers=None, 
-    content_type='application/json'):
+content_type='application/json'):
         super(UnsuccessfulResponse, self).__init__(
             success=False,
             status_code=status_code,
@@ -66,8 +66,8 @@ class UnsuccessfulResponse(CustomResponse):
         )
 
 
-def bad_request(errors, headers=None,
- content_type='application/json') -> UnsuccessfulResponse:
+def bad_request(errors, headers=None, content_type='application/json') -> 
+UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=400,
         errors=errors,
@@ -76,8 +76,8 @@ def bad_request(errors, headers=None,
     )
 
 
-def ok(data, meta=None, headers=None,
- content_type='application/json') -> SuccessResponse:
+def ok(data, meta=None, headers=None, content_type='application/json') -> 
+SuccessResponse:
     return SuccessResponse(
         data=data,
         status_code=200,
@@ -98,7 +98,7 @@ content_type='application/json') -> SuccessResponse:
 
 
 def created(data, meta=None, headers=None, 
- content_type='application/json') -> SuccessResponse:
+content_type='application/json') -> SuccessResponse:
     return SuccessResponse(
         data=data,
         status_code=201,
@@ -108,8 +108,8 @@ def created(data, meta=None, headers=None,
     )
 
 
-def conflict(errors, headers=None,
- content_type='application/json') -> UnsuccessfulResponse:
+def conflict(errors, headers=None, content_type='application/json') -> 
+UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=409,
         errors=errors,
@@ -119,7 +119,7 @@ def conflict(errors, headers=None,
 
 
 def internal_server_error(errors, headers=None, 
- content_type='application/json') -> UnsuccessfulResponse:
+content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=500,
         errors=errors,
@@ -128,8 +128,8 @@ def internal_server_error(errors, headers=None,
     )
 
 
-def forbidden(errors, headers=None, 
- content_type='application/json') -> UnsuccessfulResponse:
+def forbidden(errors, headers=None, content_type='application/json') -> 
+UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=403,
         errors=errors,
@@ -138,8 +138,8 @@ def forbidden(errors, headers=None,
     )
 
 
-def not_found(errors, headers=None, 
- content_type='application/json') -> UnsuccessfulResponse:
+def not_found(errors, headers=None, content_type='application/json') -> 
+UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=404,
         errors=errors,
@@ -158,11 +158,11 @@ def not_implemented() -> UnsuccessfulResponse:
 
 
 def generic_unsuccessful(status_code: int, errors, headers=None,
-                         content_type='application/json') -> UnsuccessfulResponse:
+                         content_type='application/json') -> 
+UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=status_code,
         errors=errors,
         headers=headers,
         content_type=content_type
     )
-
