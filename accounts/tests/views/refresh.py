@@ -14,7 +14,7 @@ class RefreshViewTestCase(LiveServerTestCase):
 
     def make_request(self, refresh):
         return self.rc.post(
-            f"{self.live_server_url}/accounts/refresh/",
+            f"{self.live_server_url}/api/accounts/refresh/",
             json={"refresh": refresh},
         )
 

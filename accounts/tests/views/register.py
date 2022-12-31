@@ -18,7 +18,7 @@ class RegisterViewTestCase(LiveServerTestCase):
 
     def make_request(self, data=None, access=None):
         return self.client.patch(
-            f"{self.live_server_url}/accounts/register/",
+            f"{self.live_server_url}/api/accounts/register/",
             json=data,
             headers={"ACCESS": f"Bearer {access}"},
         )

@@ -12,7 +12,7 @@ class VerifyOTPViewTestCase(LiveServerTestCase):
 
     def make_request(self, otp_id, otp):
         return self.rc.post(
-            f"{self.live_server_url}/accounts/otp/verify/",
+            f"{self.live_server_url}/api/accounts/otp/verify/",
             json={"otp_id": otp_id, "otp_code": otp},
         )
 
