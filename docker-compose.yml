@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:14.6
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      main:
+    env_file:
+      - .env
+
+
+
+  redis:
+    container_name: redis
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      main:
+
+  backend:
+    container_name: backend
+    build: ./petemoon-back
+    command: sh -c "python manage.py makemigrations --settings=config.settings.production &&
+                    python manage.py migrate --settings=config.settings.production &&
+                    python manage.py collectstatic --no-input --settings=config.settings.production &&
+                    gunicorn --bind 0.0.0.0:8000 --workers=4 --log-level=debug --capture-output --chdir=/petemoon-back config.wsgi:application"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/petemoon-back
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis-db
+    restart: unless-stopped
+    networks:
+      main:
+
+
+networks:
+  main:
+
+volumes:
+  postgres_data:
+    driver: local
+  redis-data:
+    driver: local
+
+

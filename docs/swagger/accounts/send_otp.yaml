@@ -1,0 +1,55 @@
+post:
+  tags:
+    - "accounts"
+  summary: "Send OTP to user's phone number"
+  description: ""
+  operationId: "send_otp"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "Phone number to send OTP to"
+      required: true
+      schema:
+        $ref: "#/definitions/PhoneNumber"
+  responses:
+    200:
+      description: "OTP sent successfully"
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "Invalid phone number"
+      schema:
+        $ref: "#/definitions/InvalidPhoneNumber"
+
+definitions:
+  PhoneNumber:
+    type: "object"
+    properties:
+      phone_number:
+        type: "string"
+        example: "09123456789"
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          otp_id:
+            type: "string"
+            format: "uuid"
+  InvalidPhoneNumber:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "array"
+        example: ["invalid phone number","otp already sent","error in sending otp"]
