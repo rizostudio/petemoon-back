@@ -9,7 +9,6 @@ TEMPLATE_DEBUG = DEBUG
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # END EMAIL CONFIGURATION
 
-
 # TOOLBAR CONFIGURATION
 INSTALLED_APPS += ("django_extensions",)
 # END TOOLBAR CONFIGURATION

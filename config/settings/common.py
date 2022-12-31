@@ -46,11 +46,6 @@ SECRET_KEY = get_env(
     ),
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # APP CONFIGURATION
 DJANGO_APPS = (
@@ -149,7 +144,7 @@ PASSWORD_HASHERS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
 
@@ -159,8 +154,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = get_env("STATIC_ROOT", default="static/")
-STATIC_URL = get_env("STATIC_URL", default="static/")
+STATIC_ROOT = get_env("STATIC_ROOT", default="/static/")
+STATIC_URL = get_env("STATIC_URL", default="/static/")
+MEDIA_ROOT = get_env("STATIC_ROOT", default="/media/")
+MEDIA_URL = get_env("STATIC_URL", default="/media/")
 static_file_env = get_env("STATICFILES_DIRS", optinal=True)
 STATICFILES_DIRS = (
     static_file_env.split(",") if static_file_env is not None else ["docs/"]
@@ -171,7 +168,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="*").split(",")
+ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="").split(",")
 
 # CACHING CONFIGURATION
 CACHES = {
@@ -187,7 +184,7 @@ AUTH_USER_MODEL = "accounts.User"
 # END AUTH USER MODEL CONFIGURATION
 
 # OTP CONFIGURATION
-OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="6"))
+OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="4"))
 OTP_TTL = int(get_env("OTP_TTL", default="120"))
 # END OTP CONFIGURATION
 
