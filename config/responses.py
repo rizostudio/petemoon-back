@@ -166,4 +166,3 @@ UnsuccessfulResponse:
         headers=headers,
         content_type=content_type
     )
-

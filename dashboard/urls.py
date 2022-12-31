@@ -1,11 +1,8 @@
-from dashboard.views import (
-    PetViewSet, AddressViewSet, OrdersViewSet, FavoriteViewSet
-
-)
+from django.urls import include, path
+from dashboard.views import AddressView
 
 
-def register_routes(router):
-    router.register("dashboard/address", AddressViewSet, basename='address')
-    router.register("dashboard/pet", PetViewSet, basename='pet')
-    router.register("dashboard/order", OrdersViewSet, basename='order')
-    router.register("dashboard/favorite", FavoriteViewSet, basename='favorite')
+urlpatterns = [
+    path('address/', AddressView.as_view(),name='address'),
+    path('address/<int:id>', AddressView.as_view(),name='address'),
+]

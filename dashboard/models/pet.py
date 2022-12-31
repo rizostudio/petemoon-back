@@ -12,7 +12,7 @@ class Pet(models.Model):
     sex = models.CharField(choices=Choices.Sex.choices, max_length=1)
     species = models.CharField(max_length=128)
     birth_date = models.DateField(null=True)
-
+    photo = models.ImageField()
     # Medical
     weight = models.FloatField()
     last_vaccine_date = models.DateField(null=True)

@@ -1,34 +1,65 @@
 from django.utils.translation import gettext_lazy as _
-from rest_framework import viewsets, mixins
+
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import exceptions
+
 from dashboard.serializers import AddressSerializer
 from dashboard.models import Address
+from config.responses import SuccessResponse, UnsuccessfulResponse
+from config.exceptions import CustomException
 
 
-class AddressViewSet(
-        viewsets.GenericViewSet,
-        mixins.UpdateModelMixin,
-        mixins.CreateModelMixin,
-        mixins.ListModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.DestroyModelMixin):
+class AddressView(APIView):
 
     serializer_class = AddressSerializer
+    #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get(self, request):
+        address = Address.objects.filter(user=request.user)
+        result = self.serializer_class(address,many=True).data
+        return SuccessResponse(data=result)
 
-        return Address.objects.filter(
-            user=self.request.user
-        )
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({"request": self.request})
-        return context
+    def post(self, request):
+        serialized_data = self.serializer_class(data=request.data)
+        try:
+            if serialized_data.is_valid(raise_exception=True):
+                serialized_data.save(user=request.user)
+                return SuccessResponse(data={"message":_("Address added successfuly")})
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except exceptions.ValidationError as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
-    def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+    def patch(self, request, id=None):
+        serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
+
+        try:
+            if serialized_data.is_valid(raise_exception=True):
+
+                address = Address.objects.filter(id=id)
+
+                serialized_data.update(instance=address,validated_data=serialized_data.validated_data)
+
+                return SuccessResponse(data={"message":_("Address updated successfuly")})
+
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except exceptions.ValidationError as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
+
+    def delete(self, request, id=None):
+        try:
+            try:
+                address = Address.objects.get(id=id).delete()
+            except Address.DoesNotExist:
+                raise CustomException(detail=_("address does not exist"))
+
+            return SuccessResponse(data={"message":_("Address deleted successfuly")})
+                
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)       
