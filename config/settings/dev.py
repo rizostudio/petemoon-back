@@ -1,5 +1,6 @@
 from config.settings.common import *
 
+ALLOWED_HOSTS = []
 # DEBUG CONFIGURATION
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
