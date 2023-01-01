@@ -15,8 +15,6 @@ services:
     env_file:
       - .env
 
-
-
   redis:
     container_name: redis
     image: redis:7.0
@@ -30,11 +28,11 @@ services:
 
   backend:
     container_name: backend
-    build: ./petemoon-back
+    build: ./
     command: sh -c "python manage.py makemigrations --settings=config.settings.production &&
-                    python manage.py migrate --settings=config.settings.production &&
-                    python manage.py collectstatic --no-input --settings=config.settings.production &&
-                    gunicorn --bind 0.0.0.0:8000 --workers=4 --log-level=debug --capture-output --chdir=/petemoon-back config.wsgi:application"
+      python manage.py migrate --settings=config.settings.production &&
+      python manage.py collectstatic --no-input --settings=config.settings.production &&
+      gunicorn --bind 0.0.0.0:8000 --workers=4 --log-level=debug --capture-output --chdir=/petemoon-back config.wsgi:application"
     ports:
       - "8000:8000"
     volumes:
