@@ -29,6 +29,4 @@ MIDDLEWARE += ("corsheaders.middleware.CorsMiddleware",)
 # END CORSHEADERS CONFIGURATION
 DEBUG = get_env("DEBUG") == "True"
 
-SECRET_KEY = get_env("SECRET_KEY")
-
 JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)

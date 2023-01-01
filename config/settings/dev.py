@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-zmk1c2%=a2k@mj)e-ibe+4!-w9&(p9uan0*6i2vd$nkeh10uqf"
-
+JWT_SECRET = SECRET_KEY
 # EMAIL CONFIGURATION
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # END EMAIL CONFIGURATION
