@@ -160,7 +160,6 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="").split(",")
 
 # CACHING CONFIGURATION
 CACHES = {
