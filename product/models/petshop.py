@@ -6,3 +6,4 @@ class Petshop(models.Model):
     products = models.ManyToManyField(
         "product.Product", through="product.ProductPricing"
     )
+    slug = models.SlugField(unique=True, db_index=True)

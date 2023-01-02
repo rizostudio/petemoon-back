@@ -10,6 +10,7 @@ class Category(models.Model):
         on_delete=models.SET_NULL,
         to_field="name",
     )
+    slug = models.SlugField(unique=True, db_index=True)
 
     def __str__(self):
         if self.parent_category is not None:
