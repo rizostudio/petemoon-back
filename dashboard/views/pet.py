@@ -50,3 +50,7 @@ class PetView(APIView):
             return UnsuccessfulResponse(error=e.detail, status=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(error=e.detail, status=e.status_code)     
+
+
+class PetTypeView(APIView):
+    pass
