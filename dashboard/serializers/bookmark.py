@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dashboard.models import Favorite
+from dashboard.models import Bookmark
 
 
 class ProductSerializer(serializers.Serializer):
@@ -9,11 +9,11 @@ class ProductSerializer(serializers.Serializer):
     discount = serializers.FloatField()
 
 
-class FavoriteSerializer(serializers.Serializer):
+class BookmarkSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     product_id = serializers.IntegerField(write_only=True)
     product = ProductSerializer(read_only=True)
 
     def create(self, validated_data):
-        favorite = Favorite.objects.create(**validated_data)
-        return favorite
+        bookmark = Bookmark.objects.create(**validated_data)
+        return bookmark

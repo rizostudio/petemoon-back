@@ -66,8 +66,7 @@ content_type='application/json'):
         )
 
 
-def bad_request(errors, headers=None, content_type='application/json') -> 
-UnsuccessfulResponse:
+def bad_request(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=400,
         errors=errors,
@@ -76,8 +75,7 @@ UnsuccessfulResponse:
     )
 
 
-def ok(data, meta=None, headers=None, content_type='application/json') -> 
-SuccessResponse:
+def ok(data, meta=None, headers=None, content_type='application/json') -> SuccessResponse:
     return SuccessResponse(
         data=data,
         status_code=200,
@@ -108,8 +106,7 @@ content_type='application/json') -> SuccessResponse:
     )
 
 
-def conflict(errors, headers=None, content_type='application/json') -> 
-UnsuccessfulResponse:
+def conflict(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=409,
         errors=errors,
@@ -128,8 +125,7 @@ content_type='application/json') -> UnsuccessfulResponse:
     )
 
 
-def forbidden(errors, headers=None, content_type='application/json') -> 
-UnsuccessfulResponse:
+def forbidden(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=403,
         errors=errors,
@@ -138,8 +134,7 @@ UnsuccessfulResponse:
     )
 
 
-def not_found(errors, headers=None, content_type='application/json') -> 
-UnsuccessfulResponse:
+def not_found(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=404,
         errors=errors,
@@ -158,8 +153,7 @@ def not_implemented() -> UnsuccessfulResponse:
 
 
 def generic_unsuccessful(status_code: int, errors, headers=None,
-                         content_type='application/json') -> 
-UnsuccessfulResponse:
+                         content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=status_code,
         errors=errors,
