@@ -1,16 +1,15 @@
-FROM python:3.10-slim-buster
+FROM python:3.9-slim-buster
 
-WORKDIR /code
+WORKDIR /petemoon-back
 
-COPY requirements.txt .
+COPY requirements/production.txt ./requirements
 
 RUN pip install --upgrade pip
 
-RUN apt-get update && apt-get -y install libpq-dev gcc
-RUN apt install -y wkhtmltopdf
+RUN apt-get update && apt-get upgrade -y
 
+RUN pip install -r requirements/production.txt
 
-RUN pip install -r requirements.txt
+COPY . /petemoon-back
 
-COPY . /code
-
+EXPOSE 8000

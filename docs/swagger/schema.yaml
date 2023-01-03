@@ -3,16 +3,17 @@ info:
   description: "this is the swagger documentation for Petemoon project's APIs"
   version: "1.0.0"
   title: "Petemoon API"
-host: "petemoon.com"
+host: "api.petemoon.com"
+basePath: "/"
 schemes:
   - "http"
   - "https"
 paths:
   /accounts/otp:
-    $ref: "accounts/send_otp.yaml"
+    $ref: "./accounts/send_otp.yaml"
   /accounts/otp/verify:
-    $ref: "accounts/verify_otp.yaml"
+    $ref: "./accounts/verify_otp.yaml"
   /accounts/refresh:
-    $ref: "accounts/refresh.yaml"
+    $ref: "./accounts/refresh.yaml"
   /accounts/register:
-    $ref: "accounts/register.yaml"
+    $ref: "./accounts/register.yaml"

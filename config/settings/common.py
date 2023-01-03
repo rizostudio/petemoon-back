@@ -32,24 +32,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env(
-    "SECRET_KEY",
-    default=(
-        "django-insecure-zmk1c2%=a2k@mj)e-ibe+4!-w9&(p9uan0*6i2vd$nkeh10uqf"
-    ),
-)
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # APP CONFIGURATION
@@ -71,7 +58,7 @@ THIRD_PARTY_APPS = ("rest_framework",)
 LOCAL_APPS = (
     "accounts",
     "dashboard",
-  )
+)
 
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -92,7 +79,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates/",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -147,7 +136,7 @@ PASSWORD_HASHERS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
 
@@ -157,11 +146,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = get_env("STATIC_ROOT", default="static/")
-STATIC_URL = get_env("STATIC_URL", default="static/")
+STATIC_ROOT = get_env("STATIC_ROOT", default="/static/")
+STATIC_URL = get_env("STATIC_URL", default="/static/")
+MEDIA_ROOT = get_env("STATIC_ROOT", default="/media/")
+MEDIA_URL = get_env("STATIC_URL", default="/media/")
 static_file_env = get_env("STATICFILES_DIRS", optinal=True)
 STATICFILES_DIRS = (
-    static_file_env.split(",") if static_file_env is not None else []
+    static_file_env.split(",") if static_file_env is not None else ["docs/"]
 )
 
 # Default primary key field type
@@ -169,7 +160,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="*").split(",")
+ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", default="").split(",")
 
 # CACHING CONFIGURATION
 CACHES = {
@@ -185,14 +176,13 @@ AUTH_USER_MODEL = "accounts.User"
 # END AUTH USER MODEL CONFIGURATION
 
 # OTP CONFIGURATION
-OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="6"))
+OTP_CODE_LENGTH = int(get_env("OTP_CODE_LENGTH", default="4"))
 OTP_TTL = int(get_env("OTP_TTL", default="120"))
 # END OTP CONFIGURATION
 
 # JWT SETIINGS
 ACCESS_TTL = int(get_env("ACCESS_TTL", default="300"))
 REFRESH_TTL = int(get_env("REFRESH_TTL", default="86400"))
-JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
 # END JWT SETTINGS
 
 # REST FRAMEWORK CONFIGURATION
@@ -208,3 +198,7 @@ REST_FRAMEWORK = {
 KAVENEGAR_API_KEY = get_env("KAVENEGAR_API_KEY", default="")
 KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="")
 # END SMS CONFIGURATION
+
+# SWAGGER CONFIGURATION
+SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
+# END SWAGGER CONFIGURATION
