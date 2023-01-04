@@ -16,7 +16,7 @@ class SendOTPViewTestCase(LiveServerTestCase):
 
     def make_request(self, phone_number):
         return self.rc.post(
-            f"{self.live_server_url}/api/accounts/otp/",
+            f"{self.live_server_url}/accounts/otp/",
             json={"phone_number": phone_number},
         )
 
