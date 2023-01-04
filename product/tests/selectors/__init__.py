@@ -1,0 +1,1 @@
+from product.tests.selectors.get_item import GetItemSelectorTestCase
