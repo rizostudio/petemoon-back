@@ -44,6 +44,9 @@ class SendOTP(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
-            {"success": True, "data": {"otp_id": otp.otp_id}},
+            {
+                "success": True,
+                "data": {"otp_id": otp.otp_id, "otp_code": otp.code},
+            },
             status=status.HTTP_200_OK,
         )
