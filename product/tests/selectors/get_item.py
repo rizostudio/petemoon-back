@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from product.selectors import get_item_by_slug
+from product.selectors import get_item_by_slug, get_item_list
 from product.tests.fakers import (
     CommentFactory,
     ProductFactory,
@@ -43,3 +43,16 @@ class GetItemSelectorTestCase(TestCase):
         self.assertEqual(
             product.rating, (self.comment.rate + self.second_comment.rate) / 2
         )
+
+    def test_get_item_list(self):
+        products, count = get_item_list(
+            pet_types=[self.product.animal_type],
+            category_slugs=[self.product.category.slug],
+            max_price=self.pricing.price,
+            min_price=self.lower_pricing.price_after_sale,
+            brand_slugs=[self.product.brand.slug],
+            order_by="cheapest",
+        )
+        self.assertEqual(count, 1)
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0], self.product)

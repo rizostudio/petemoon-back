@@ -1,1 +1,4 @@
-from product.serializers.product import ProductGetSerializer
+from product.serializers.product import (
+    ProductGetSerializer,
+    ProductListSerializer,
+)
