@@ -24,6 +24,7 @@ class Product(models.Model):
     )
     picture = models.ImageField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)
+    specs = models.TextField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
 
     brand = models.ForeignKey(
