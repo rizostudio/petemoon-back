@@ -1,6 +1,6 @@
 from django.urls import path
 from dashboard.views import (
-    AddressView, PetView, OrdersView, BookmarkView, MessageView)
+    AddressView, PetView, OrdersView, BookmarkView, MessageView, UserProfileView)
 
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path('bookmark', BookmarkView.as_view(), name='bookmark'),
     path('bookmark/<int:id>', BookmarkView.as_view(), name='bookmark'),
     path('message', MessageView.as_view(), name='message'),
+    path('user-profile', UserProfileView.as_view(), name='user_profile'),
 
 
 ]

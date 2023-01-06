@@ -47,9 +47,9 @@ class PetView(APIView):
                 return SuccessResponse(data={"message":_("Pet updated successfuly")})
 
         except CustomException as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code)
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(error=e.detail, status=e.status_code)     
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)     
 
 
 class PetTypeView(APIView):
