@@ -25,3 +25,7 @@ DATABASES = {
     }
 }
 # END DATABASE CONFIGURATION
+
+JWT_SECRET = "fake secret"
+ALLOWED_HOSTS=['*']
+SWAGGER_URL='swagger/'
