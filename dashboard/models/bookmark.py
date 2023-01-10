@@ -17,13 +17,13 @@ class Product(models.Model):
         return self.name
 
 
-class Favorite(models.Model):
+class Bookmark(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = _("Favorite")
-        verbose_name_plural = _("Favorites")
+        verbose_name = _("Bookmark")
+        verbose_name_plural = _("Bookmarks")
 
     def __str__(self):
         return self.product.name
