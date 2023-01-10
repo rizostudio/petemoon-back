@@ -38,7 +38,8 @@ class VerifyOTP(APIView):
             "HTTP_ACCESS",
             f"Bearer {access}",
             max_age=ACCESS_TTL,
+            secure=True,
             httponly=True,
-            samesite="Lax",
+            samesite="None",
         )
         return response
