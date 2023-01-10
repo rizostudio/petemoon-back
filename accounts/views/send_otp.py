@@ -46,7 +46,7 @@ class SendOTP(APIView):
         return Response(
             {
                 "success": True,
-                "data": {"otp_id": otp.otp_id, "otp_code": otp.code},
+                "data": {"otp_id": otp.otp_id},
             },
             status=status.HTTP_200_OK,
         )
