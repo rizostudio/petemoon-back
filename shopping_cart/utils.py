@@ -10,9 +10,11 @@ def add_to_cart(user_id,product_id,product_count):
             
         #cache[product_id] = product_count 
         cache.set(f"cart-{user_id}",new_cart)
-        print(cache.get(f"cart-{user_id}"))
 
     else:
         cart = {}
         cart[product_id] = product_count
         cache.set(f"cart-{user_id}",cart)
+
+def get_cart(user_id):
+    return cache.get(f"cart-{user_id}")
