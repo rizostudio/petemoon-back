@@ -26,6 +26,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("product/", include("product.urls")),
+    path("cart/", include("shopping_cart.urls")),
 ]
 if SWAGGER_URL is not None:
     urlpatterns += [path(SWAGGER_URL, yaml_to_html)]
