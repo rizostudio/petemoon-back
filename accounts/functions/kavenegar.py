@@ -3,7 +3,7 @@ from kavenegar import APIException, HTTPException, KavenegarAPI
 from config.settings import KAVENEGAR_API_KEY, KAVENEGAR_TEMPLATE
 
 
-def send_sms(phone_number: str, code: str) -> bool:
+def send_sms_otp(phone_number: str, code: str) -> bool:
     api = KavenegarAPI(KAVENEGAR_API_KEY)
     params = {
         "receptor": phone_number,
