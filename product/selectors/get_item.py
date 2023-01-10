@@ -26,6 +26,8 @@ def get_item_by_slug(slug):
         .prefetch_related("productpricing_set")
         .prefetch_related("comments")
         .prefetch_related("category")
+        .prefetch_related("brand")
+        .prefetch_related("pet_type")
         .first()
     )
 
@@ -84,7 +86,7 @@ def get_item_list(
         )
     )
     if pet_types is not None and len(pet_types) > 0:
-        base = base.filter(animal_type__in=pet_types)
+        base = base.filter(pet_type__pet_category__in=pet_types)
     if category_slugs is not None and len(category_slugs) > 0:
         base = base.filter(category__slug__in=category_slugs)
     if brand_slugs is not None and len(brand_slugs) > 0:

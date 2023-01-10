@@ -1,5 +1,3 @@
-import random
-
 import factory
 
 from product.models import Product
@@ -16,6 +14,6 @@ class ProductFactory(factory.django.DjangoModelFactory):
     category = factory.SubFactory(
         "product.tests.fakers.category.CategoryFactory"
     )
-    animal_type = factory.LazyFunction(
-        lambda: random.choice([x[0] for x in Product.animal_type_choice])
+    pet_type = factory.SubFactory(
+        "product.tests.fakers.pet_type.PetCategoryFactory"
     )

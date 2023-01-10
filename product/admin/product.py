@@ -8,5 +8,5 @@ from product.models import Product
 class ProductAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ("name", "category", "animal_type", "brand")
+    list_display = ("name", "category", "pet_type", "brand")
     inlines = [CommentInline]

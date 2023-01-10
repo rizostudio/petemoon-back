@@ -1,5 +1,7 @@
 from django.db import models
 
+from dashboard.models import PetCategory
+
 
 class Product(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -10,17 +12,8 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
         to_field="name",
     )
-    animal_type_choice = (
-        ("cats", "Cats"),
-        ("dogs", "Dogs"),
-        ("birds", "Birds"),
-        ("reptiles", "Reptiles"),
-        ("fish", "Fish"),
-        ("rodents", "Rodents"),
-        ("other", "Other"),
-    )
-    animal_type = models.CharField(
-        max_length=8, choices=animal_type_choice, default="other"
+    pet_type = models.ForeignKey(
+        PetCategory, on_delete=models.SET_NULL, null=True
     )
     picture = models.ImageField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)

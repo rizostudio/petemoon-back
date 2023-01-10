@@ -46,7 +46,7 @@ class GetItemSelectorTestCase(TestCase):
 
     def test_get_item_list(self):
         products, count = get_item_list(
-            pet_types=[self.product.animal_type],
+            pet_types=[self.product.pet_type.pet_category],
             category_slugs=[self.product.category.slug],
             max_price=self.pricing.price,
             min_price=self.lower_pricing.price_after_sale,
