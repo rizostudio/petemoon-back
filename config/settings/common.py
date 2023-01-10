@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = ("rest_framework",)
 LOCAL_APPS = (
     "accounts",
     "dashboard",
+    "product",
 )
 
 
@@ -148,8 +149,8 @@ USE_TZ = True
 
 STATIC_ROOT = get_env("STATIC_ROOT", default="/static/")
 STATIC_URL = get_env("STATIC_URL", default="/static/")
-MEDIA_ROOT = get_env("STATIC_ROOT", default="/media/")
-MEDIA_URL = get_env("STATIC_URL", default="/media/")
+MEDIA_ROOT = get_env("MEDIA_ROOT", default="/media/")
+MEDIA_URL = get_env("MEDIA_URL", default="/media/")
 static_file_env = get_env("STATICFILES_DIRS", optinal=True)
 STATICFILES_DIRS = (
     static_file_env.split(",") if static_file_env is not None else ["docs/"]

@@ -1,6 +1,10 @@
 from config.settings.common import *
 
 TEST_DISCOVER_PATTERN = "tests*.py"
+SECRET_KEY = (
+    "django-insecure-zmk1c2%=a2k@mj)e-ibe+4!-w9&(p9uan0*6i2vd$nkeh10uqf"
+)
+JWT_SECRET = SECRET_KEY
 
 # DATABASE CONFIGURATION
 DATABASES = {

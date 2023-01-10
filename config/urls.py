@@ -25,6 +25,7 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),  # TODO remove
     path("accounts/", include("accounts.urls")),
     path("dashboard/", include("dashboard.urls")),
+    path("product/", include("product.urls")),
 ]
 if SWAGGER_URL is not None:
     urlpatterns += [path(SWAGGER_URL, yaml_to_html)]

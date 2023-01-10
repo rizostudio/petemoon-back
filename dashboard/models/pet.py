@@ -4,9 +4,16 @@ from django.utils.translation import gettext_lazy as _
 
 from utils.choices import Choices
 
+class PetType(models.Model):
+    pet_type = models.CharField(max_length=256)
+
+class PetCategory(models.Model):
+    pet_category = models.CharField(max_length=256)
+    pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
+
 
 class Pet(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     type = models.PositiveSmallIntegerField(choices=Choices.PetType.choices)
     sex = models.CharField(choices=Choices.Sex.choices, max_length=1)

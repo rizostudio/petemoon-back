@@ -1,25 +1,34 @@
 from rest_framework import serializers
-from dashboard.models import Pet
+from dashboard.models import Pet, PetType, PetCategory
 
 
-class PetMidicalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pet
-        fields = [
-            'name',
-            'type',
-            'sex',
-            'species',
-            'birth_date',
-        ]
+class PetTypeSerializer(serializers.ModelSerializer):
+    pass
 
 
-class PetGeneralSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pet
-        fields = [
-            'weight',
-            'last_vaccine_date',
-            'underlying_disease',
-            'last_anti_parasitic_vaccine_date',
-        ]
+class PetSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField()
+    pet_type = serializers.CharField(source='pet_type.pet_type')
+    sex = serializers.CharField(max_length=1)
+    pet_category = serializers.CharField(source='pet_category.pet_category')
+    birth_date = serializers.DateField()
+    # medical
+    weight = serializers.FloatField(required=False)
+    last_vaccine_date = serializers.DateField(required=False)
+    underlying_disease = serializers.CharField(required=False)
+    last_anti_parasitic_vaccine_date = serializers.DateField(required=False)
+
+    def create(self, validated_data):
+        validated_data['pet_type'] = PetType.objects.get(
+            pet_type=validated_data['pet_type']['pet_type'])
+        validated_data['pet_category'] = PetCategory.objects.get(
+            pet_category=validated_data['pet_category']['pet_category'])
+
+        pet = Pet.objects.create(**validated_data)
+        return pet
+
+    def update(self, instance, validated_data):
+        instance.update(**validated_data)
+
+        return instance

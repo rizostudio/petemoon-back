@@ -4,20 +4,20 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
-from dashboard.serializers import OrderSerializer
-from dashboard.models import Order
+from dashboard.serializers import MessageSerializer
+from dashboard.models import Message
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
 
-class OrdersView(APIView):
-    serializer_class = OrderSerializer
+class MessageView(APIView):
+    serializer_class = MessageSerializer
     #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
            
-        order = Order.objects.filter(user=request.user)
+        order = Message.objects.filter(user=request.user)
         result = self.serializer_class(order,many=True).data
         return SuccessResponse(data=result)
 

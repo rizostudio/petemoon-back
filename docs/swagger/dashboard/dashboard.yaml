@@ -1,0 +1,216 @@
+  /dashboard/address/:
+    get:
+      operationId: dashboard_address_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_address_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    patch:
+      operationId: dashboard_address_partial_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    delete:
+      operationId: dashboard_address_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - dashboard
+    parameters: []
+  /dashboard/address/{id}:
+    get:
+      operationId: dashboard_address_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_address_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    patch:
+      operationId: dashboard_address_partial_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    delete:
+      operationId: dashboard_address_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - dashboard
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /dashboard/favorite:
+    get:
+      operationId: dashboard_favorite_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_favorite_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    delete:
+      operationId: dashboard_favorite_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - dashboard
+    parameters: []
+  /dashboard/favorite/{id}:
+    get:
+      operationId: dashboard_favorite_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_favorite_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    delete:
+      operationId: dashboard_favorite_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - dashboard
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /dashboard/orders:
+    get:
+      operationId: dashboard_orders_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    parameters: []
+  /dashboard/pet/:
+    get:
+      operationId: dashboard_pet_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_pet_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    patch:
+      operationId: dashboard_pet_partial_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    parameters: []
+  /dashboard/pet/{id}:
+    get:
+      operationId: dashboard_pet_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_pet_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - dashboard
+    patch:
+      operationId: dashboard_pet_partial_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - dashboard
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+definitions: {}
