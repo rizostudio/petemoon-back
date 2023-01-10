@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-from accounts.functions import send_sms
+from accounts.functions import send_sms_otp
 from accounts.models import OneTimePassword, User
 
 phone_number_regex = re.compile(r"^09\d{9}")
@@ -37,7 +37,7 @@ class SendOTP(APIView):
         else:
             user = User.objects.create_user(phone_number=phone_number)
         otp = OneTimePassword(user)
-        done = send_sms(phone_number, otp.code)
+        done = send_sms_otp(phone_number, otp.code)
         if not done:
             return Response(
                 {"success": False, "errors": [_("error in sending otp")]},
