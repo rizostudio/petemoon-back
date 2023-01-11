@@ -4,8 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from utils.choices import Choices
 
+
 class PetType(models.Model):
     pet_type = models.CharField(max_length=256)
+
 
 class PetCategory(models.Model):
     pet_category = models.CharField(max_length=256)
@@ -15,9 +17,10 @@ class PetCategory(models.Model):
 class Pet(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
-    type = models.PositiveSmallIntegerField(choices=Choices.PetType.choices)
+    pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
     sex = models.CharField(choices=Choices.Sex.choices, max_length=1)
-    species = models.CharField(max_length=128)
+    pet_category = models.ForeignKey(
+        PetCategory, on_delete=models.CASCADE, null=True)
     birth_date = models.DateField(null=True)
     photo = models.ImageField()
     # Medical
