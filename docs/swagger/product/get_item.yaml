@@ -1,0 +1,139 @@
+get:
+  tags:
+    - "Product"
+  summary: "Get product by Slug"
+  description: ""
+  operationId: "get_product_by_slug"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "slug"
+      description: "Slug of product"
+      required: true
+      type: "string"
+  responses:
+    200:
+      description: "Product found"
+      schema:
+        $ref: "#/definitions/Product"
+    400:
+      description: "Product not found"
+      schema:
+        $ref: "#/definitions/InvalidSlug"
+
+definitions:
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Cat Food"
+      category:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Food"
+          slug:
+            type: "string"
+            example: "food"
+          parent_catgory:
+            $ref: "#/definitions/Product/properties/category"
+            default: null
+        default: null
+      pet_type:
+        type: "object"
+        properties:
+          pet_category:
+            type: "string"
+            example: "Persian"
+          pet_type:
+            type: "object"
+            properties: 
+              pet_type:
+                type: "string"
+                example: "Cat"
+      picture:
+        type: "string"
+        example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+      details:
+        type: "string"
+        example: "This is a cat food"
+      specs:
+        type: "string"
+        format: "json"
+        example: {"weight": "1kg"}
+      brand:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Royal Canin"
+          slug:
+            type: "slug"
+            example: "royal-canin"
+      rating:
+        type: "number"
+        example: 4.5
+      price:
+        type: "int"
+        example: 100000
+      comments:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            user:
+              type: "string"
+              example: "user1"
+            title:
+              type: "string"
+              example: "This is a comment"
+            text:
+              type: "string"
+              example: "This is a comment"
+            rate:
+              type: "number"
+              example: 4.5
+            created_at:
+              type: "string"
+              format: "date-time"
+              example: "2018-01-01T00:00:00Z"
+      productpricing:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "int"
+              example: 1
+            price:
+              type: "int"
+              example: 100000
+            price_after_sale:
+              type: "int"
+              example: 90000
+            inventory:
+              type: "int"
+              example: 100
+            petshop:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Petshop 1"
+                slug:
+                  type: "string"
+                  example: "petshop-1"
+  InvalidSlug:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "array"
+        example: ["invalid slug"]

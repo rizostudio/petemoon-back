@@ -1,0 +1,121 @@
+get:
+  tags:
+    - "Product"
+  summary: "Get product List"
+  description: "filters and etc"
+  operationId: "get_product_list"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "query"
+      name: "limit"
+      description: "Limit of products"
+      required: false
+      type: "integer"
+      example: 10
+    - in: "query"
+      name: "offset"
+      description: "Offset of products"
+      required: false
+      type: "integer"
+      example: 0
+    - in: "query"
+      name: "pet_types"
+      description: "Pet types of products"
+      required: false
+      type: "string"
+      example: "cat,dog"
+    - in: "query"
+      name: "category_slugs"
+      description: "Category slugs of products"
+      required: false
+      type: "string"
+      example: "food,accessories"
+    - in: "query"
+      name: "brand_slugs"
+      description: "Brand slugs of products"
+      required: false
+      type: "string"
+      example: "royal-canin,pedigree"
+    - in: "query"
+      name: "max_price"
+      description: "Max price of products"
+      required: false
+      type: "integer"
+      example: 100000
+    - in: "query"
+      name: "min_price"
+      description: "Max price of products"
+      required: false
+      type: "integer"
+      example: 90000
+    - in: "query"
+      name: "order_by"
+      description: "Order by of products"
+      required: false
+      type: "string"
+      oneOf:
+        - "cheapest"
+        - "most_expensive"
+    - in: "query"
+      name: "search"
+      description: "Search of products"
+      required: false
+      type: "string"
+      example: "cat+food"
+  responses:
+    200:
+      description: "Product found"
+      schema:
+        $ref: "#/definitions/Product"
+
+definitions:
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Cat Food"
+      slug:
+        type: "string"
+        example: "cat-food"
+      category:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Food"
+          slug:
+            type: "string"
+            example: "food"
+          parent_catgory:
+            $ref: "#/definitions/Product/properties/category"
+            default: null
+        default: null
+      picture:
+        type: "string"
+        example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+      max_price:
+        type: "int"
+        example: 100000
+      min_price:
+        type: "int"
+        example: 90000
+      inventory:
+        type: "int"
+        example: 100
+      rating:
+        type: "number"
+        example: 4.5
+      best_seller:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Petshop 1"
+          slug:
+            type: "string"
+            example: "petshop-1"
+        default: null
