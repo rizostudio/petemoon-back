@@ -20,4 +20,4 @@ paths:
   /product:
     $ref: "./product/get_list.yaml"
   /product/{slug}:
-    $ref: "./product/get_item.yaml"
+    $ref: "./product/item.yaml"

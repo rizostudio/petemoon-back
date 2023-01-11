@@ -19,7 +19,60 @@ get:
       description: "Product found"
       schema:
         $ref: "#/definitions/Product"
+    404:
+      description: "Product not found"
+      schema:
+        $ref: "#/definitions/InvalidSlug"
+post:
+  tags:
+    - "Product"
+  summery: "Create Comment"
+  description: ""
+  operationId: "create_comment"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "slug"
+      description: "Slug of product"
+      required: true
+      type: "string"
+    - in: "body"
+      name: "body"
+      description: "Comment"
+      required: true
+      schema:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            example: "This is a comment"
+          text:
+            type: "string"
+            example: "This is a comment"
+          rate:
+            type: "int"
+            example: 4
+    - in: "header"
+      name: "Authorization"
+      description: "Bearer token must be here or in cookie"
+      required: false
+      schema:
+        type: "string"
+  responses:
+    201:
+      description: "Comment created"
+      schema:
+        $ref: "#/definitions/CommentSuccess"
     400:
+      description: "Invalid request"
+      schema:
+        $ref: "#/definitions/InvalidComment"
+    403:
+      description: "Forbidden"
+    404:
       description: "Product not found"
       schema:
         $ref: "#/definitions/InvalidSlug"
@@ -136,4 +189,40 @@ definitions:
         example: false
       errors:
         type: "array"
-        example: ["invalid slug"]
+        example: ["Product not found."]
+  InvalidComment:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "object"
+        properties:
+          title:
+            type: "array"
+            example: ["This field is required."]
+          text:
+            type: "array"
+            example: ["This field is required."]
+          rate:
+            type: "array"
+            example: ["This field is required."]
+  CommentSuccess:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            example: "This is a comment"
+          text:
+            type: "string"
+            example: "This is a comment"
+          rate:
+            type: "int"
+            example: 4
