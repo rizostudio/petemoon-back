@@ -17,3 +17,7 @@ paths:
     $ref: "./accounts/refresh.yaml"
   /accounts/register:
     $ref: "./accounts/register.yaml"
+  /product:
+    $ref: "./product/get_list.yaml"
+  /product/{slug}:
+    $ref: "./product/get_item.yaml"

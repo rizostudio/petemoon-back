@@ -20,6 +20,7 @@ class GetList(APIView):
                 "max_price": int(query_params.get("max_price", None)),
                 "min_price": int(query_params.get("min_price", None)),
                 "order_by": query_params.get("order_by"),
+                "search": query_params.get("search", "").split("+"),
             }
         except Exception:
             kw = {}

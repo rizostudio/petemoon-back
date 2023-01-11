@@ -1,3 +1,4 @@
+from django.db import connections
 from django.db.models import Avg, F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 
@@ -47,6 +48,7 @@ def get_item_list(
     min_price=None,
     brand_slugs=None,
     order_by=None,
+    search=None,
 ):
     base = (
         Product.objects.annotate(
@@ -97,6 +99,15 @@ def get_item_list(
         base = base.filter(max_price__gte=min_price)
     if order_by in valid_orderings:
         base = base.order_by(valid_orderings[order_by])
+    if (
+        search is not None
+        and len(search) > 0
+        and connections["default"].vendor == "postgresql"
+    ):
+        base_ = Q(name__search=search[0]) | Q(description__search=search[0])
+        for s in search[1:]:
+            base_ = base_ | Q(name__search=s) | Q(description__search=s)
+        base = base.filter(base_)
     end = limit + offset
     total = base.count()
     return base[offset:end], total
