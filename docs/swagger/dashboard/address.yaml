@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "address"
+  description: ""
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "Refresh token"
+      required: true
+      #schema:
+        #$ref: "#/definitions/RefreshToken"
+  responses:
+    200:
+      description: "Session refreshed successfully"
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "Invalid refresh token"
+      schema:
+        $ref: "#/definitions/InvalidRefreshToken"
+
