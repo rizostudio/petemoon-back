@@ -49,7 +49,7 @@ class GetItemViewTestCase(LiveServerTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertDictEqual(
             response.json(),
-            {"success": False, "errors": ["Item not found."]},
+            {"success": False, "errors": ["Product not found."]},
         )
 
     def test_200_response(self):

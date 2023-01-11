@@ -12,4 +12,4 @@ class GetItem(APIView):
         item = get_item_by_slug(slug)
         if item:
             return ok(ProductGetSerializer(item).data)
-        return not_found(errors=[_("Item not found.")])
+        return not_found(errors=[_("Product not found.")])
