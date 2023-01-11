@@ -66,7 +66,7 @@ content_type='application/json'):
         )
 
 
-def bad_request(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
+def bad_request(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse :
     return UnsuccessfulResponse(
         status_code=400,
         errors=errors,
