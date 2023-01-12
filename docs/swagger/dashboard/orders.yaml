@@ -1,0 +1,10 @@
+get:
+  operationId: dashboard_orders_list
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+parameters: []

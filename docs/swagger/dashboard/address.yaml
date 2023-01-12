@@ -1,25 +1,38 @@
-post:
-  tags:
-    - "address"
-  description: ""
-  consumes:
-    - "application/json"
-  produces:
-    - "application/json"
-  parameters:
-    - in: "body"
-      name: "body"
-      description: "Refresh token"
-      required: true
-      #schema:
-        #$ref: "#/definitions/RefreshToken"
-  responses:
-    200:
-      description: "Session refreshed successfully"
-      schema:
-        $ref: "#/definitions/Success"
-    400:
-      description: "Invalid refresh token"
-      schema:
-        $ref: "#/definitions/InvalidRefreshToken"
 
+  get:
+    operationId: dashboard_address_list
+    description: ''
+    parameters: []
+    responses:
+      '200':
+        description: ''
+    tags:
+      - dashboard
+  post:
+    operationId: dashboard_address_create
+    description: ''
+    parameters: []
+    responses:
+      '201':
+        description: ''
+    tags:
+      - dashboard
+  patch:
+    operationId: dashboard_address_partial_update
+    description: ''
+    parameters: []
+    responses:
+      '200':
+        description: ''
+    tags:
+      - dashboard
+  delete:
+    operationId: dashboard_address_delete
+    description: ''
+    parameters: []
+    responses:
+      '204':
+        description: ''
+    tags:
+      - dashboard
+  parameters: []

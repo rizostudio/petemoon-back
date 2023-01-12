@@ -21,3 +21,17 @@ paths:
     $ref: "./product/get_list.yaml"
   /product/{slug}:
     $ref: "./product/item.yaml"
+  /dashboard/address:
+    $ref: "./dashboard/address.yaml"
+  /dashboard/address/{id}:
+    $ref: "./dashboard/address_id.yaml"
+  /dashboard/favorite:
+    $ref: "./dashboard/favorite.yaml"
+  /dashboard/favorite/{id}:
+    $ref: "./dashboard/favorite_id.yaml"
+  /dashboard/orders:
+    $ref: "./dashboard/orders.yaml"
+  /dashboard/pet/:
+    $ref: "./dashboard/pet.yaml"
+  /dashboard/pet/{id}:
+    $ref: "./dashboard/pet_id.yaml"
