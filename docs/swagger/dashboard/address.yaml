@@ -2,21 +2,34 @@
   get:
     operationId: dashboard_address_list
     description: ''
-    parameters: []
+    parameters: 
+    schema:
+        $ref: "#/definitions/Address"
     responses:
       '200':
         description: ''
     tags:
       - dashboard
+
   post:
     operationId: dashboard_address_create
     description: ''
-    parameters: []
+    requestBody:
+        schema:
+        $ref: "#/definitions/Address"
+        content:
+        
+          application/json:
+              example:   # Sample object
+                id: 10
+                name: Jessica Smith
+
     responses:
       '201':
         description: ''
     tags:
       - dashboard
+
   patch:
     operationId: dashboard_address_partial_update
     description: ''
@@ -36,3 +49,28 @@
     tags:
       - dashboard
   parameters: []
+
+  definitions:
+  Address:
+    type: "object"
+    properties:
+      province:
+        type: "string"
+        format: "char"
+        example: "tehran"
+      city:
+        type: "string"
+        format: "char"
+      postal_code:
+        type: "string"
+        format: "char"
+      postal_address:
+        type: "string"
+        format: "char"
+      lat:
+        type: "string"
+        format: "char"
+      lon:
+        type: "string"
+        format: "char"
+
