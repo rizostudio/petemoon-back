@@ -1,0 +1,41 @@
+get:
+  operationId: dashboard_address_read
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+post:
+  operationId: dashboard_address_create
+  description: ''
+  parameters: []
+  responses:
+    '201':
+      description: ''
+  tags:
+    - dashboard
+patch:
+  operationId: dashboard_address_partial_update
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+delete:
+  operationId: dashboard_address_delete
+  description: ''
+  parameters: []
+  responses:
+    '204':
+      description: ''
+  tags:
+    - dashboard
+parameters:
+  - name: id
+    in: path
+    required: true
+    type: string
