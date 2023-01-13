@@ -10,6 +10,9 @@ class Address(models.Model):
     receiver = models.CharField(max_length=128)
     postal_code = models.CharField(max_length=10)
     postal_address = models.CharField(max_length=512)
+    lat = models.DecimalField(_('Latitude'), max_digits=10, decimal_places=8, null=True)
+    lon = models.DecimalField(_('Longitude'), max_digits=11, decimal_places=8, null=True)
+
 
     class Meta:
         verbose_name = _("Address")

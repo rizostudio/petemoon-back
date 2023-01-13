@@ -8,6 +8,7 @@ basePath: "/"
 schemes:
   - "http"
   - "https"
+  
 paths:
   /accounts/otp:
     $ref: "./accounts/send_otp.yaml"
@@ -21,3 +22,22 @@ paths:
     $ref: "./product/get_list.yaml"
   /product/{slug}:
     $ref: "./product/item.yaml"
+    
+  #dashboard
+  /dashboard/address:
+    $ref: "./dashboard/address.yaml"
+  /dashboard/address/{id}:
+    $ref: "./dashboard/address_id.yaml"
+
+  /dashboard/bookmark:
+    $ref: "./dashboard/bookmark.yaml"
+  /dashboard/bookmark/{id}:
+    $ref: "./dashboard/bookmark_id.yaml"
+
+  /dashboard/orders:
+    $ref: "./dashboard/orders.yaml"
+
+  /dashboard/pet/:
+    $ref: "./dashboard/pet.yaml"
+  /dashboard/pet/{id}:
+    $ref: "./dashboard/pet_id.yaml"

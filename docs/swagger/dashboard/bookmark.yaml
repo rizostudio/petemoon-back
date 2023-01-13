@@ -1,0 +1,43 @@
+get:
+  operationId: dashboard_bookmark_list
+  description: ''
+  summary: "get list of bookmarks"
+
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+
+post:
+  operationId: dashboard_bookmark_create
+  description: ''
+  summary: "add new product for bookmark"
+
+  parameters:
+  - in: "body"
+    name: "body"
+    description: "Add bookmark"
+    required: true
+    schema:
+      $ref: "#/definitions/Bookmark"
+  responses:
+    '201':
+      description: ''
+  tags:
+    - dashboard
+
+definitions:
+    Bookmark:
+      type: "object"
+      properties:
+        product_id:
+          type: "integer"
+          format: "int"
+          example: 1
+
+        
+
+
+

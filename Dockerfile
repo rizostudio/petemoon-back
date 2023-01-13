@@ -13,4 +13,4 @@ RUN pip install -r requirements/production.txt
 
 COPY . /petemoon-back
 
-EXPOSE 8000
+EXPOSE 8000 9000

@@ -8,10 +8,25 @@ from utils.choices import Choices
 class PetType(models.Model):
     pet_type = models.CharField(max_length=256)
 
+    class Meta:
+        verbose_name = _("PetType")
+        verbose_name_plural = _("PetTypes")
+
+    def __str__(self):
+        return self.pet_type
+
 
 class PetCategory(models.Model):
     pet_category = models.CharField(max_length=256)
     pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
+    slug = models.SlugField(unique=True, db_index=True)
+
+    class Meta:
+        verbose_name = _("PetCategory")
+        verbose_name_plural = _("PetCategorys")
+
+    def __str__(self):
+        return self.pet_category
 
 
 class Pet(models.Model):
