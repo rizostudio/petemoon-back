@@ -1,0 +1,32 @@
+get:
+  operationId: dashboard_pet_read
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+post:
+  operationId: dashboard_pet_create
+  description: ''
+  parameters: []
+  responses:
+    '201':
+      description: ''
+  tags:
+    - dashboard
+patch:
+  operationId: dashboard_pet_partial_update
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+parameters:
+  - name: id
+    in: path
+    required: true
+    type: string
