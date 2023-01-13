@@ -1,76 +1,62 @@
 
   get:
     operationId: dashboard_address_list
+    summary: "get list of users address"
     description: ''
     parameters: 
-    schema:
-        $ref: "#/definitions/Address"
     responses:
       '200':
-        description: ''
+        description: 'get address of user'
     tags:
       - dashboard
 
   post:
     operationId: dashboard_address_create
-    description: ''
-    requestBody:
-        schema:
-        $ref: "#/definitions/Address"
-        content:
-        
-          application/json:
-              example:   # Sample object
-                id: 10
-                name: Jessica Smith
+    summary: "add new address"
 
+    description: ''
+    parameters:
+    - in: "body"
+      name: "body"
+      description: "Add address"
+      required: true
+      schema:
+        $ref: "#/definitions/Address"
     responses:
       '201':
         description: ''
     tags:
       - dashboard
 
-  patch:
-    operationId: dashboard_address_partial_update
-    description: ''
-    parameters: []
-    responses:
-      '200':
-        description: ''
-    tags:
-      - dashboard
-  delete:
-    operationId: dashboard_address_delete
-    description: ''
-    parameters: []
-    responses:
-      '204':
-        description: ''
-    tags:
-      - dashboard
-  parameters: []
-
   definitions:
-  Address:
-    type: "object"
-    properties:
-      province:
-        type: "string"
-        format: "char"
-        example: "tehran"
-      city:
-        type: "string"
-        format: "char"
-      postal_code:
-        type: "string"
-        format: "char"
-      postal_address:
-        type: "string"
-        format: "char"
-      lat:
-        type: "string"
-        format: "char"
-      lon:
-        type: "string"
-        format: "char"
+    Address:
+      type: "object"
+      properties:
+        province:
+          type: "string"
+          format: "char"
+          example: "tehran"
+
+        city:
+          type: "string"
+          format: "char"
+          example: "tehran"
+
+        postal_code:
+          type: "string"
+          format: "char"
+          example: "78665752"
+
+        postal_address:
+          type: "string"
+          format: "char"
+          example: "tehran,azadi street"
+
+        lat:
+          type: "string"
+          format: "char"
+
+        lon:
+          type: "string"
+          format: "char"
 

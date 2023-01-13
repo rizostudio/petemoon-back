@@ -1,25 +1,15 @@
-get:
-  operationId: dashboard_pet_read
-  description: ''
-  parameters: []
-  responses:
-    '200':
-      description: ''
-  tags:
-    - dashboard
-post:
-  operationId: dashboard_pet_create
-  description: ''
-  parameters: []
-  responses:
-    '201':
-      description: ''
-  tags:
-    - dashboard
 patch:
   operationId: dashboard_pet_partial_update
+  summary: "update pet"
+
   description: ''
-  parameters: []
+  parameters:     
+    - in: "body"
+      name: "body"
+      description: "Add address"
+      required: true
+      schema:
+        $ref: "#/definitions/Pet"
   responses:
     '200':
       description: ''
@@ -30,3 +20,32 @@ parameters:
     in: path
     required: true
     type: string
+
+
+definitions:
+    Pet:
+      type: "object"
+      properties:
+        weight:
+          type: "float"
+          example: "30.3"
+
+        last_vaccine_date:
+          type: "string"
+          format: "char"
+          example: "2022-12-29"
+
+        postal_code:
+          type: "string"
+          format: "char"
+          example: "78665752"
+
+        underlying_disease:
+          type: "string"
+          format: "char"
+          example: "HIV"
+
+        last_anti_parasitic_vaccine_date:
+          type: "string"
+          format: "char"
+          example: "2022-12-29"

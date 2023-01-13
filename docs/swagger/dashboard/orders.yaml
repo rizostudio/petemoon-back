@@ -1,5 +1,6 @@
 get:
   operationId: dashboard_orders_list
+  summary: "get list of user orders"
   description: ''
   parameters: []
   responses:
@@ -7,4 +8,3 @@ get:
       description: ''
   tags:
     - dashboard
-parameters: []
