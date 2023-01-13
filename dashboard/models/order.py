@@ -11,7 +11,7 @@ class Order(models.Model):
     order_id = models.CharField(max_length=128)
     status = models.CharField(choices=Choices.Order.choices, max_length=128)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey("dashboard.Product", on_delete=models.CASCADE)
+    product = models.ForeignKey("product.Product", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Order")

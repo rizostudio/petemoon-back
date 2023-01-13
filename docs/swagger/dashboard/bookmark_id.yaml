@@ -1,0 +1,15 @@
+delete:
+  operationId: dashboard_favorite_delete
+  summary: "delete bookmark"
+  description: ''
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: string
+
+  responses:
+    '204':
+      description: ''
+  tags:
+    - dashboard

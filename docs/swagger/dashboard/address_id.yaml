@@ -1,41 +1,61 @@
-get:
-  operationId: dashboard_address_read
-  description: ''
-  parameters: []
-  responses:
-    '200':
-      description: ''
-  tags:
-    - dashboard
-post:
-  operationId: dashboard_address_create
-  description: ''
-  parameters: []
-  responses:
-    '201':
-      description: ''
-  tags:
-    - dashboard
-patch:
-  operationId: dashboard_address_partial_update
-  description: ''
-  parameters: []
-  responses:
-    '200':
-      description: ''
-  tags:
-    - dashboard
-delete:
-  operationId: dashboard_address_delete
-  description: ''
-  parameters: []
-  responses:
-    '204':
-      description: ''
-  tags:
-    - dashboard
-parameters:
-  - name: id
-    in: path
-    required: true
-    type: string
+  patch:
+    operationId: dashboard_address_partial_update
+    description: ''
+    summary: "partial update of address by id"
+
+    parameters:
+    - in: "body"
+      name: "body"
+      description: "Add address"
+      required: true
+      schema:
+        $ref: "#/definitions/Address"
+    responses:
+      '200':
+        description: 'partial update of address'
+    tags:
+      - dashboard
+
+  delete:
+    operationId: dashboard_address_delete
+    summary: "delete address by id"
+
+    description: 'delete address of user by id'
+    responses:
+      '204':
+        description: 'detete'
+    tags:
+      - dashboard
+
+
+  definitions:
+    Address:
+      type: "object"
+      properties:
+        province:
+          type: "string"
+          format: "char"
+          example: "tehran"
+
+        city:
+          type: "string"
+          format: "char"
+          example: "tehran"
+
+        postal_code:
+          type: "string"
+          format: "char"
+          example: "78665752"
+
+        postal_address:
+          type: "string"
+          format: "char"
+          example: "tehran,azadi street"
+
+        lat:
+          type: "string"
+          format: "char"
+          
+        lon:
+          type: "string"
+          format: "char"

@@ -1,28 +1,54 @@
 get:
   operationId: dashboard_pet_list
+  summary: "get list of users pet"
   description: ''
-  parameters: []
   responses:
     '200':
       description: ''
   tags:
     - dashboard
+
 post:
   operationId: dashboard_pet_create
+  summary: "add new pet"
+
   description: ''
-  parameters: []
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "Add Pet"
+      required: true
+      schema:
+        $ref: "#/definitions/Pet"  
   responses:
     '201':
       description: ''
   tags:
     - dashboard
-patch:
-  operationId: dashboard_pet_partial_update
-  description: ''
-  parameters: []
-  responses:
-    '200':
-      description: ''
-  tags:
-    - dashboard
-parameters: []
+
+definitions:
+    Pet:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          format: "char"
+          example: "malmal"
+
+        pet_type:
+          type: "string"
+          format: "char"
+          example: "ghosfand"
+
+        sex:
+          type: "string"
+          format: "char"
+          example: "M"
+
+        birth_date:
+          type: "string"
+          format: "char"
+          example: "2020-12-2"
+
+
+
