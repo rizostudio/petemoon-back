@@ -1,0 +1,10 @@
+get:
+  operationId: dashboard_message_list
+  summary: "get messages for user"
+  description: ''
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+
