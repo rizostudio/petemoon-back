@@ -19,7 +19,7 @@ class PetType(models.Model):
 class PetCategory(models.Model):
     pet_category = models.CharField(max_length=256)
     pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
-    slug = models.SlugField(unique=True, db_index=True)
+    slug = models.SlugField(unique=True, db_index=True, null=True)
 
     class Meta:
         verbose_name = _("PetCategory")
