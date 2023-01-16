@@ -20,10 +20,10 @@ definitions:
         data:
           example:
             my_pet:
-              name: wqed
-              pet_type: ph
+              name: jessi
+              pet_type: dog
               sex: M
-              pet_category: 3f34f
+              pet_category: bouldag
               birth_date: '2023-01-17'
               weight: 35000
               last_vaccine_date: '2023-01-17'
