@@ -14,10 +14,10 @@ class SendOTPViewTestCase(LiveServerTestCase):
         self.rc = RequestsClient()
         self.faker = faker.Faker()
 
-    def make_request(self, phone_number):
+    def make_request(self, phone_number, user_type=None):
         return self.rc.post(
             f"{self.live_server_url}/accounts/otp/",
-            json={"phone_number": phone_number},
+            json={"phone_number": phone_number, "user_type": user_type},
         )
 
     def test_400_response(self):
@@ -50,11 +50,13 @@ class SendOTPViewTestCase(LiveServerTestCase):
         with patch(
             "accounts.views.send_otp.send_sms_otp", new=lambda *_: True
         ):
-            response = self.make_request(phone_number)
+            response = self.make_request(phone_number, user_type="petshop")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(OneTimePassword.otp_exist(phone_number))
         self.assertTrue(
-            User.objects.filter(phone_number=phone_number).exists()
+            User.objects.filter(
+                phone_number=phone_number, user_type="petshop"
+            ).exists()
         )
         self.assertIn("otp_id", response.json().get("data"))
         self.assertTrue(response.json().get("success"))
