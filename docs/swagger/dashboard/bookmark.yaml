@@ -23,8 +23,12 @@ post:
     schema:
       $ref: "#/definitions/Bookmark"
   responses:
-    '201':
-      description: ''
+    201:
+      schema:
+        $ref: "#/definitions/Bookmark"
+    400:
+      schema:
+        $ref: "#/definitions/InvalidBookmark"
   tags:
     - dashboard
 
@@ -33,10 +37,17 @@ definitions:
       type: "object"
       properties:
         product_id:
-          type: "integer"
+          type: "object"
           format: "int"
           example: 1
-
+    InvalidBookmark:
+      type: "object"
+      properties:         
+        errors:
+          product_id:
+            type: "object"
+            format: "array"
+            example: ["This field is required."]
         
 
 

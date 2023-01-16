@@ -11,7 +11,7 @@
       schema:
         $ref: "#/definitions/Address"
     responses:
-      '200':
+      200:
         description: 'partial update of address'
     tags:
       - dashboard
@@ -22,8 +22,12 @@
 
     description: 'delete address of user by id'
     responses:
-      '204':
-        description: 'detete'
+      200:
+          description: 'address deleted successfuly'
+      400:
+          description: "Invalid Address"
+          schema:
+            $ref: "#/definitions/InvalidAddress"
     tags:
       - dashboard
 
@@ -59,3 +63,13 @@
         lon:
           type: "string"
           format: "char"
+
+    InvalidAddress:
+      type: "object"
+      properties:
+        errors:
+          type: "object"
+          example: "address does not exist"
+
+
+            
