@@ -4,8 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
-from dashboard.serializers import OrderSerializer
-from dashboard.models import Order
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from dashboard.serializers import BookmarkSerializer

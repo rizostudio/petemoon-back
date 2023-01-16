@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dashboard.models import Order
+from shopping_cart.models import Order
 
 
 class OrderSerializer(serializers.ModelSerializer):

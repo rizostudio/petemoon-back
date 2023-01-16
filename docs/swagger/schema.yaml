@@ -42,5 +42,5 @@ paths:
   /dashboard/pet/{id}:
     $ref: "./dashboard/pet_id.yaml"
 
-  /dashboard/message/:
-    $ref: "./dashboard/message.yaml"
+  /dashboard/over-view:
+    $ref: "./dashboard/over_view.yaml"
