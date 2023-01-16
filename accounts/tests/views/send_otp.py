@@ -35,7 +35,9 @@ class SendOTPViewTestCase(LiveServerTestCase):
             response.json(), {"success": False, "errors": ["otp already sent"]}
         )
         user = UserFactory()
-        with patch("accounts.views.send_otp.send_sms", new=lambda *_: False):
+        with patch(
+            "accounts.views.send_otp.send_sms_otp", new=lambda *_: False
+        ):
             response = self.make_request(user.phone_number)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(
@@ -45,7 +47,9 @@ class SendOTPViewTestCase(LiveServerTestCase):
 
     def test_200_response(self):
         phone_number = self.faker.numerify("09#########")
-        with patch("accounts.views.send_otp.send_sms", new=lambda *_: True):
+        with patch(
+            "accounts.views.send_otp.send_sms_otp", new=lambda *_: True
+        ):
             response = self.make_request(phone_number)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(OneTimePassword.otp_exist(phone_number))
