@@ -7,9 +7,9 @@ from rest_framework import exceptions
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
-from .utils import add_to_cart, get_cart
+from ..utils import add_to_cart, get_cart
 from product.models.pricing import ProductPricing
-from .serializers import ProductInCartSerializer
+from ..serializers.cart import ProductInCartSerializer
 
 class CartView(APIView):
 

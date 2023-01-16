@@ -5,8 +5,8 @@
     description: ''
     parameters: 
     responses:
-      '200':
-        description: 'get address of user'
+      200:
+        description: ''
     tags:
       - dashboard
 
@@ -23,8 +23,12 @@
       schema:
         $ref: "#/definitions/Address"
     responses:
-      '201':
-        description: ''
+      201:
+        description: 'address added successfuly'
+      400:
+          description: "Invalid Address"
+          schema:
+            $ref: "#/definitions/InvalidAddress"
     tags:
       - dashboard
 
@@ -60,3 +64,39 @@
           type: "string"
           format: "char"
 
+    InvalidAddress:
+      type: "object"
+      properties:
+        success:
+          type: "boolean"
+          example: false
+          
+        errors:
+          type: "object"
+          province:
+            type: "array"
+            format: "char"
+            example: ["This field is required."]
+
+        city:
+          type: "array"
+          format: "char"
+          example: ["This field is required."]
+
+        postal_code:
+          type: "array"
+          format: "char"
+          example: ["This field is required."]
+
+        postal_address:
+          type: "array"
+          format: "char"
+          example: ["This field is required."]
+
+        lat:
+          type: "array"
+          example: ["This field is required."]
+
+        lon:
+          type: "array"
+          example: ["This field is required."]
