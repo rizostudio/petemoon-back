@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from accounts.models.user import User
+from dashboard.models import Wallet
 
 
 class UserProfile(models.Model):
@@ -14,6 +15,7 @@ class UserProfile(models.Model):
     referal_code = models.CharField(max_length=16, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    wallet = models.ForeignKey(Wallet, null=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "user profile"
