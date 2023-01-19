@@ -1,0 +1,50 @@
+
+  get:
+    operationId: get shopping carts products
+    summary: get shopping carts products
+    description: ''
+    parameters: 
+    responses:
+      200:
+          schema:
+            $ref: "#/definitions/GetCart"
+    tags:
+      - cart
+
+  # post:
+  #   operationId: dashboard_address_create
+  #   summary: "add new address"
+
+  #   description: ''
+  #   parameters:
+  #   - in: "body"
+  #     name: "body"
+  #     description: "Add address"
+  #     required: true
+  #     schema:
+  #      # $ref: "#/definitions/Address"
+  #   responses:
+  #     200:
+  #       description: 'address added successfuly'
+  #     400:
+  #         description: "Invalid Address"
+  #         schema:
+  #          # $ref: "#/definitions/InvalidAddress"
+  #   tags:
+  #     - dashboard
+
+  definitions:
+    GetCart:
+      type: "object"
+      properties:
+          success: true
+          example:
+            data:
+            - id: 2
+              price: 333
+              price_after_sale: 3
+              petshop: pet shopekabar
+              picture:
+              count: 2
+              products_accumulative_price: 666
+            - total_price: 666
