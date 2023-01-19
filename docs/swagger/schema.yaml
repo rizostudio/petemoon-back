@@ -42,9 +42,14 @@ paths:
   /dashboard/pet/{id}:
     $ref: "./dashboard/pet_id.yaml"
 
+<<<<<<< HEAD
   /dashboard/message/:
     $ref: "./dashboard/message.yaml"
 
   #shopping cart
   /cart/add-product/:
     $ref: "./cart/product.yaml"
+=======
+  /dashboard/over-view:
+    $ref: "./dashboard/over_view.yaml"
+>>>>>>> dashboard_overview

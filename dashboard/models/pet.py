@@ -37,7 +37,7 @@ class Pet(models.Model):
     pet_category = models.ForeignKey(
         PetCategory, on_delete=models.CASCADE, null=True)
     birth_date = models.DateField(null=True)
-    photo = models.ImageField(null=True)
+    photo = models.ImageField(blank=True,null=True)
     # Medical
     weight = models.FloatField()
     last_vaccine_date = models.DateField(null=True)

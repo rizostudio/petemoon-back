@@ -13,3 +13,4 @@ admin.site.register(Message)
 #TODO for test 
 admin.site.register(UserProfile)
 admin.site.register(User)
+admin.site.register(Wallet)
