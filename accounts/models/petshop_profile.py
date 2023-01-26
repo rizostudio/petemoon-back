@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models.user import User
 
@@ -16,10 +17,21 @@ class PetshopProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     city = models.CharField(max_length=64, null=True, blank=True)
     postal_region = models.CharField(max_length=64, null=True, blank=True)
+    national_id_validator = RegexValidator(
+        r"^(\d{10})?$", message=_("Invalid national ID.")
+    )
+    national_id = models.CharField(
+        max_length=10,
+        validators=[national_id_validator],
+        null=True,
+        blank=True,
+    )
     national_card = models.ImageField(null=True, blank=True)
     estimated_item_count = models.IntegerField(default=0)
     gender = models.CharField(max_length=64, null=True, blank=True)
-    sheba_number_validator = RegexValidator(r"^(IR\d{24})?$")
+    sheba_number_validator = RegexValidator(
+        r"^(IR\d{24})?$", message=_("Invalid sheba.")
+    )
     sheba_number = models.CharField(
         max_length=26,
         validators=[sheba_number_validator],
@@ -40,6 +52,7 @@ class PetshopProfile(models.Model):
         return bool(
             self.address
             and self.gender
+            and self.national_id
             and self.national_card
             and self.city
             and self.postal_region
