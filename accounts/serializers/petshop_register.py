@@ -36,9 +36,7 @@ class Stage2PetShopSerializer(serializers.Serializer):
     sheba_number = serializers.CharField(
         max_length=26, validators=[sheba_number_validator], required=True
     )
-    estimated_item_count = serializers.IntegerField(
-        min_value=0, required=False, default=0
-    )
+    estimated_item_count = serializers.IntegerField(min_value=1, required=True)
 
     class Meta:
         fields = "__all__"

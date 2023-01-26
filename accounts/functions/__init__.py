@@ -7,3 +7,5 @@ from accounts.functions.petshop_register import (
     apply_stage_3,
     check_petshop_register_stage,
 )
+
+apply_stage = [apply_stage_0, apply_stage_1, apply_stage_2, apply_stage_3]
