@@ -26,6 +26,7 @@ class PetshopProfile(models.Model):
         null=True,
         blank=True,
     )
+    is_approved = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "petshop profile"
