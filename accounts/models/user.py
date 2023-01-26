@@ -56,4 +56,17 @@ class User(AbstractUser):
 
     @property
     def is_registered(self):
-        return self.first_name != "" and self.last_name != ""
+        if self.user_type == "petshop":
+            if not hasattr(self, "petshop_profile"):
+                return False
+            petshop_profile = self.petshop_profile
+            if not hasattr(petshop_profile, "shops"):
+                return False
+            shop = petshop_profile.shop
+            return bool(
+                self.first_name
+                and self.last_name
+                and petshop_profile.is_complete
+                and shop.is_complete
+            )
+        return bool(self.first_name and self.last_name)
