@@ -36,7 +36,7 @@ definitions:
   RefreshToken:
     type: "object"
     properties:
-      refresh_token:
+      refresh:
         type: "string"
         format: "uuid"
   Success:
@@ -48,9 +48,8 @@ definitions:
       data:
         type: "object"
         properties:
-          access_token:
+          refresh_token:
             type: "string"
-            format: "uuid"
   InvalidRefreshToken:
     type: "object"
     properties:
