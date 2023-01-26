@@ -18,6 +18,7 @@ class PetshopProfile(models.Model):
     postal_region = models.CharField(max_length=64, null=True, blank=True)
     national_card = models.ImageField(null=True, blank=True)
     estimated_delivery_time = models.IntegerField(default=0)
+    gender = models.CharField(max_length=64, null=True, blank=True)
 
     class Meta:
         verbose_name = "petshop profile"
