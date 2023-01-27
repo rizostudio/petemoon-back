@@ -1,9 +1,11 @@
 from django.urls import path
 
-from .views import PetShopProductsView
+from .views import PetShopProductPricingView, ProductsView
 
 urlpatterns = [
-    path("products", PetShopProductsView.as_view(), name="products"),
-    path("products/<int:id>", PetShopProductsView.as_view(), name="products"),
+    path("product-pricing", PetShopProductPricingView.as_view(), name="product-pricing"),
+    path("product-pricing/<int:id>", PetShopProductPricingView.as_view(), name="product-pricing"),
+    path("products", ProductsView.as_view(), name="products"),
+
 
 ]
