@@ -1,6 +1,7 @@
 from django.urls import path
 
 from accounts.views import (
+    Logout,
     Refresh,
     Register,
     RegisterPetshop,
@@ -16,4 +17,5 @@ urlpatterns = [
     path(
         "register/petshop/", RegisterPetshop.as_view(), name="register_petshop"
     ),
+    path("logout/", Logout.as_view(), name="logout"),
 ]

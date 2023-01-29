@@ -20,6 +20,8 @@ paths:
     $ref: "./accounts/register.yaml"
   /accounts/register/petshop:
     $ref: "./accounts/register_petshop.yaml"
+  /accounts/logout:
+    $ref: "./accounts/logout.yaml"
 
   #product
   /product:

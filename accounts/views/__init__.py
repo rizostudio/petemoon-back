@@ -1,3 +1,4 @@
+from accounts.views.logout import Logout
 from accounts.views.refresh import Refresh
 from accounts.views.register import Register
 from accounts.views.register_petshop import RegisterPetshop
