@@ -18,6 +18,10 @@ paths:
     $ref: "./accounts/refresh.yaml"
   /accounts/register:
     $ref: "./accounts/register.yaml"
+  /accounts/register/petshop:
+    $ref: "./accounts/register_petshop.yaml"
+
+  #product
   /product:
     $ref: "./product/get_list.yaml"
   /product/{slug}:
