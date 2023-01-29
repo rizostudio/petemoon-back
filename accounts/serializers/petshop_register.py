@@ -15,7 +15,7 @@ class Stage0PetShopSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=64, required=True)
     gender = serializers.CharField(max_length=64, required=True)
     national_id = serializers.CharField(
-        max_length=10, required=True, validators=national_id_validator
+        max_length=10, required=True, validators=[national_id_validator]
     )
 
     class Meta:

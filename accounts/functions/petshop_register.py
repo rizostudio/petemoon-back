@@ -94,7 +94,7 @@ def apply_stage_2(user: User, data, **kw):
 def apply_stage_3(user: User, files, **kw):
     profile = PetshopProfile.objects.get(user=user)
     if "national_card" not in files:
-        return False, {"national_card": ["national_card is required"]}
+        return False, {"national_card": ["This field is required."]}
     try:
         profile.national_card = files["national_card"]
         profile.save()
