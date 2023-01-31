@@ -1,0 +1,42 @@
+get:
+  operationId: dashboard_over_view
+  summary: "overview"
+  description: ''
+  responses:
+    200:
+      description: ''
+      schema:
+        $ref: "#/definitions/Overview"
+  tags:
+    - dashboard
+
+
+definitions:
+    Overview:
+      type: "object"
+      properties:
+        success: 
+          example : "true"
+        data:
+          example:
+            my_pet:
+              name: jessi
+              pet_type: dog
+              sex: M
+              pet_category: bouldag
+              birth_date: '2023-01-17'
+              weight: 35000
+              last_vaccine_date: '2023-01-17'
+              underlying_disease: qewd
+              last_anti_parasitic_vaccine_date: '2023-01-17'
+            wallet: 45000000
+            orders:
+              delivered: 4
+              canceled: 1
+              ongoing: 2
+            total_price: "122323"
+            orders_count: 3
+
+
+
+

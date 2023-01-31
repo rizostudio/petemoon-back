@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 class Message(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     context = models.TextField()
+    title = models.CharField(max_length=256,null=True)
+
 
     class Meta:
         verbose_name = _("Message")

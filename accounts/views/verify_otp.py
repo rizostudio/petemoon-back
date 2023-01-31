@@ -30,6 +30,7 @@ class VerifyOTP(APIView):
                 "data": {
                     "refresh_token": refresh,
                     "is_registered": user.is_registered,
+                    "user_type": user.user_type,
                 },
             },
             status=status.HTTP_200_OK,

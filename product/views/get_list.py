@@ -24,7 +24,10 @@ class GetList(APIView):
             }
         except Exception:
             kw = {}
-        items, count = get_item_list(**kw)
+        try:
+            items, count = get_item_list(**kw)
+        except Exception as e:
+            print(e)
         return ok(
             {
                 "products": ProductListSerializer(items, many=True).data,

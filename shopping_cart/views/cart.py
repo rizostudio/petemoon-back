@@ -9,11 +9,12 @@ from config.exceptions import CustomException
 
 from ..utils import add_to_cart, get_cart
 from product.models.pricing import ProductPricing
-from ..serializers.cart import ProductInCartSerializer
+from ..serializers.cart import CartGetSerializer, CartPostSerializer
+
 
 class CartView(APIView):
 
-    serializer_class = ProductInCartSerializer
+    serializer_class = CartGetSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -22,13 +23,15 @@ class CartView(APIView):
             if redis_cart != None:
                 products = []
                 total_price = 0
-                for key,value in redis_cart.items():
+                for key, value in redis_cart.items():
                     product_in_cart = ProductPricing.objects.get(id=key)
                     product_in_cart.count = value
-                    product_in_cart.products_accumulative_price = product_in_cart.count * product_in_cart.price 
+                    product_in_cart.products_accumulative_price = product_in_cart.count * \
+                        product_in_cart.price
                     total_price += product_in_cart.products_accumulative_price
-                    products.append(ProductInCartSerializer(product_in_cart).data)
-                products.append({"total_price":total_price})
+                    products.append(CartGetSerializer(product_in_cart).data)
+
+                products.append({"total_price": total_price})
             else:
                 raise CustomException(detail=_("Shopping cart is empty"))
             return SuccessResponse(data=products)
@@ -38,14 +41,13 @@ class CartView(APIView):
 
 
     def post(self, request):
-        serialized_data = self.serializer_class(data=request.data)
+        serialized_data = CartPostSerializer(data=request.data)
         try:
+            
             if serialized_data.is_valid(raise_exception=True):
-                print(serialized_data.validated_data['id'])
-                add_to_cart(
-                    request.user.id, serialized_data.validated_data['id'],
-                     serialized_data.validated_data['count'])
-                return SuccessResponse(data={"message": _("prodct added to your cart successfuly")})
+                add_to_cart(request.user.id, serialized_data.validated_data['cart'])
+
+                return SuccessResponse(data={"message": _("Cart saved successfuly")})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:

@@ -54,6 +54,14 @@ definitions:
           refresh_token:
             type: "string"
             format: "uuid"
+          is_registered:
+            type: "boolean"
+          user_type:
+            type: "string"
+            oneOf:
+              - "normal"
+              - "petshop"
+              - "vet"
   InvalidOTP:
     type: "object"
     properties:

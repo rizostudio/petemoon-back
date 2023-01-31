@@ -19,7 +19,6 @@ class UserProfileView(APIView):
     def get(self, request):
            
         result = self.serializer_class(self.request.user).data
-        print(result)
         return SuccessResponse(data=result)
 
     def patch(self, request):

@@ -14,7 +14,7 @@ post:
       description: "Phone number to send OTP to"
       required: true
       schema:
-        $ref: "#/definitions/PhoneNumber"
+        $ref: "#/definitions/Request"
   responses:
     200:
       description: "OTP sent successfully"
@@ -26,12 +26,19 @@ post:
         $ref: "#/definitions/InvalidPhoneNumber"
 
 definitions:
-  PhoneNumber:
+  Request:
     type: "object"
     properties:
       phone_number:
         type: "string"
         example: "09123456789"
+      user_type:
+        type: "string"
+        oneOf:
+          - "normal"
+          - "petshop"
+          - "vet"
+        default: null
   Success:
     type: "object"
     properties:

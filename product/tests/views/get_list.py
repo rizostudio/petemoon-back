@@ -40,7 +40,7 @@ class GetListViewTestCase(LiveServerTestCase):
 
     def test_200_response(self):
         response = self.make_request(
-            pet_types=[self.product.pet_type.pet_category],
+            pet_types=[self.product.pet_type.slug],
             category_slugs=[self.product.category.slug],
             max_price=self.pricing.price,
             min_price=self.lower_pricing.price_after_sale,

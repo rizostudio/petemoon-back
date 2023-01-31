@@ -83,3 +83,7 @@ def refresh(token):
     cache.delete(data_access)
     user_id = jwt_data.get("user_id")
     return __gen_tokens(user_id=user_id)
+
+
+def expire(token):
+    cache.delete(token)
