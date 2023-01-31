@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class ProductInCartSerializer(serializers.Serializer):
+class CartGetSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     price = serializers.IntegerField(read_only=True)
     price_after_sale = serializers.IntegerField(read_only=True)
@@ -10,3 +10,6 @@ class ProductInCartSerializer(serializers.Serializer):
     count = serializers.IntegerField()
     products_accumulative_price = serializers.IntegerField(read_only=True)
     total_price = serializers.IntegerField(read_only=True)
+
+class CartPostSerializer(serializers.Serializer):
+    cart = serializers.JSONField()
