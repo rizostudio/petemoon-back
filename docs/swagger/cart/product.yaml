@@ -15,7 +15,7 @@ post:
   operationId: cart_add_product
   summary: "add products to cart"
 
-  description: ''
+  description: 'first item (key)is product id and value is count'
   parameters:
   - in: "body"
     name: "body"
@@ -49,11 +49,7 @@ definitions:
   PostCart:
       type: "object"
       properties:
-        id: 
-          example: 2
+        "2": 
+          example: 1
           type: "int"
-        count:
-          example: 2
-          type: "int"
-
 

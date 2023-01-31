@@ -46,5 +46,5 @@ paths:
     $ref: "./dashboard/message.yaml"
 
   #shopping cart
-  /cart/product:
+  /cart:
     $ref: "./cart/product.yaml"

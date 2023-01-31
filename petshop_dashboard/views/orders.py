@@ -9,7 +9,7 @@ from config.exceptions import CustomException
 from product.models import ProductPricing
 from ..serializers import PetShopOrdersSerializer
 from product.models import Petshop
-from shopping_cart.models import Order
+from shopping_cart.models import Order, PetShopOrder
 
 
 class OrdersView(APIView):
@@ -18,8 +18,10 @@ class OrdersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        orders = Order.objects.filter(
-            products__petshop__owner__user=request.user)
+
+        orders = PetShopOrder.objects.filter(
+            product__petshop__owner__user=request.user)
+
         result = self.serializer_class(orders, many=True).data
         return SuccessResponse(data=result)
 

@@ -11,8 +11,6 @@ from dashboard.models import Address
 from product.models import ProductPricing
 
 
-
-
 class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     order_id = models.CharField(max_length=128,default=uuid.uuid4)
@@ -35,7 +33,19 @@ class Order(models.Model):
         return str(self.order_id)
 
 
-# @receiver(post_save, sender=Order)
-# def create_petshop_order(sender, instance, created, **kwargs):
-#     if created and instance.user_type == "petshop":
-#         PetshopProfile.objects.create(user=instance)
+class PetShopOrder(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=128)
+    product = models.ForeignKey(ProductPricing,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    
+    class Meta:
+        verbose_name = _("PetShopOrder")
+        verbose_name_plural = _("PetShopOrders")
+
+
+    # @receiver(post_save, sender=Order)
+    # def create_petshop_order(sender, instance, created, **kwargs):
+    #     print(instance.products.all())
+    #     for product in instance.products.all():
+    #         print(product)

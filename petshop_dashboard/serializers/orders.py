@@ -9,10 +9,10 @@ from dashboard.serializers import AddressSerializer
 class PetShopOrdersSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     order_id = serializers.CharField()
-    status = serializers.CharField()
-    address = AddressSerializer()
-    products = ProductPricingSerializer(many=True)
-    total_price = serializers.IntegerField()
-    created_at = serializers.DateTimeField()
-    products_count = serializers.IntegerField()
+    #status = serializers.CharField()
+    #address = AddressSerializer()
+    product = ProductPricingSerializer()
+    #total_price = serializers.IntegerField()
+    #created_at = serializers.DateTimeField()
+    #products_count = serializers.IntegerField()
 
