@@ -16,3 +16,4 @@ class PetCategoryFactory(factory.django.DjangoModelFactory):
 
     pet_category = factory.Faker("name")
     pet_type = factory.SubFactory(PetTypeFactory)
+    slug = factory.Faker("slug")
