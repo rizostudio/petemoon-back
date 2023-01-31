@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
 from dashboard.serializers import OrderSerializer
-from dashboard.models import Order
+from shopping_cart.models import Order
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 

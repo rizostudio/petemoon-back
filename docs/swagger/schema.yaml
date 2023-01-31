@@ -50,3 +50,7 @@ paths:
 
   /dashboard/message/:
     $ref: "./dashboard/message.yaml"
+
+  #shopping cart
+  /cart/product:
+    $ref: "./cart/product.yaml"

@@ -16,3 +16,4 @@ class Choices(object):
     class Order(models.TextChoices):
         DELIVERED = "DELIVERED",_("Delivered")
         CANCELED = "CANCELED",_("Canceled")
+        ONGOING = "ONGOING",_("ongoing")
