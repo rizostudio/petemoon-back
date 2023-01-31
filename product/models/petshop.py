@@ -17,3 +17,7 @@ class Petshop(models.Model):
         on_delete=models.SET_NULL,
         related_name="shops",
     )
+
+    @property
+    def is_complete(self):
+        return bool(self.name)
