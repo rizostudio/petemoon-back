@@ -44,8 +44,7 @@ class PetshopProfile(models.Model):
         verbose_name = "petshop profile"
         verbose_name_plural = "petshop profiles"
 
-    def __str__(self):
-        return self.name
+
 
     @property
     def is_complete(self):
