@@ -26,9 +26,13 @@ paths:
   #product
   /product:
     $ref: "./product/get_list.yaml"
+  /product/filters/:
+    $ref: "./product/get_filters.yaml"
   /product/{slug}:
     $ref: "./product/item.yaml"
-    
+  /product/{slug}/pricing:
+    $ref: "./product/add_update_pricing.yaml"
+
   #dashboard
   /dashboard/address:
     $ref: "./dashboard/address.yaml"

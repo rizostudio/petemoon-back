@@ -1,0 +1,41 @@
+get:
+  tags:
+    - "Product"
+  summary: "Get filters"
+  description: "Get filters for filtering in list view"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  responses:
+    200:
+      description: "Filters"
+      schema:
+        $ref: "#/definitions/Filters"
+definitions:
+  Filters:
+    type: "object"
+    properties:
+      brands:
+        type: "array"
+        items:
+          $ref: "#/definitions/Filter"
+      categories:
+        type: "array"
+        items:
+          $ref: "#/definitions/Filter"
+      pet_types:
+        type: "array"
+        items:
+          $ref: "#/definitions/Filter"
+      max_price:
+        type: "integer"
+      min_price:
+        type: "integer"
+  Filter:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      slug:
+        type: "string"

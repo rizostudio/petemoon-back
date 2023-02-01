@@ -1,0 +1,86 @@
+patch:
+  tags:
+    - "Product"
+  summary: "Update product price and stock"
+  description: "Update product price and stock"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "slug"
+      description: "Slug of product"
+      required: true
+      type: "string"
+    - in: "body"
+      name: "body"
+      description: "ProductPricing"
+      required: true
+      schema:
+        type: "object"
+        properties:
+          price:
+            type: "integer"
+            example: 100000
+          stock:
+            type: "integer"
+            example: 100
+    - in: "header"
+      name: "Authorization"
+      description: "Bearer token must be here or in cookie"
+      required: True
+  responses:
+    200:
+      description: "Product updated"
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "Invalid request"
+      schema:
+        $ref: "#/definitions/InvalidRequest"
+    403:
+      description: "Forbidden if user is not a verified seller"
+    404:
+      description: "Product not found"
+      schema:
+        $ref: "#/definitions/InvalidSlug"
+definitions:
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+        description: "success"
+      data:
+        type: "object"
+        properties:
+          message:
+            type: "string"
+            example: "Pricing added."
+  InvalidRequest:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+        description: "success"
+      errors:
+        type: "object"
+        example: {
+                    "price": ["This field is required."],
+                    "inventory": ["This field is required."],
+                }
+  InvalidSlug:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+        description: "success"
+      errors:
+        type: "object"
+        example: {
+                    "message": "Product not found.",
+                }
