@@ -16,7 +16,7 @@ class PricingSelectorTestCase(TestCase):
         inventory = random.randint(1, 100)
         price = random.randint(1, 100)
         add_update_pricing(
-            pet_shop_id=self.petshop.id,
+            petshop_id=self.petshop.id,
             product_id=self.product.id,
             price=price,
             inventory=inventory,
@@ -30,3 +30,22 @@ class PricingSelectorTestCase(TestCase):
                 price_after_sale=None,
             ).exists()
         )
+        pricing = ProductPricing.objects.filter(
+            product=self.product,
+            inventory=inventory,
+            price=price,
+            petshop=self.petshop,
+            price_after_sale=None,
+        ).first()
+
+        inventory = random.randint(1, 100)
+        price = random.randint(1, 100)
+        add_update_pricing(
+            petshop_id=self.petshop.id,
+            product_id=self.product.id,
+            price=price,
+            inventory=inventory,
+        )
+        pricing.refresh_from_db()
+        self.assertEqual(pricing.inventory, inventory)
+        self.assertEqual(pricing.price, price)

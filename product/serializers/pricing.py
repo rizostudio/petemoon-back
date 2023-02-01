@@ -10,3 +10,11 @@ class ProductPricingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductPricing
         fields = ("id", "price", "price_after_sale", "inventory", "petshop")
+
+
+class AddPricingSerializer(serializers.Serializer):
+    price = serializers.IntegerField(required=True)
+    inventory = serializers.IntegerField(required=True)
+
+    class Meta:
+        fields = ("price", "inventory")
