@@ -116,3 +116,11 @@ def get_item_list(
     end = limit + offset
     total = base.count()
     return base[offset:end], total
+
+
+def get_product_id_by_slug(product_slug):
+    return (
+        Product.objects.filter(slug=product_slug)
+        .values_list("id", flat=True)
+        .first()
+    )

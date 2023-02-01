@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from product.selectors import get_item_by_slug, get_item_list
+from product.selectors import (
+    get_item_by_slug,
+    get_item_list,
+    get_product_id_by_slug,
+)
 from product.tests.fakers import (
     CommentFactory,
     ProductFactory,
@@ -56,3 +60,8 @@ class GetItemSelectorTestCase(TestCase):
         self.assertEqual(count, 1)
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0], self.product)
+
+    def test_get_product_id_by_slug(self):
+        self.assertEqual(
+            self.product.id, get_product_id_by_slug(self.product.slug)
+        )
