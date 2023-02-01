@@ -60,7 +60,7 @@ LOCAL_APPS = (
     "dashboard",
     "product",
     "shopping_cart",
-    "petshop_dashboard"
+    "petshop_dashboard",
 )
 
 
@@ -204,3 +204,5 @@ KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="verify-otp")
 # SWAGGER CONFIGURATION
 SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 # END SWAGGER CONFIGURATION
+
+APPEND_SLASH = True
