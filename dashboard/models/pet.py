@@ -7,6 +7,10 @@ from utils.choices import Choices
 
 class PetType(models.Model):
     pet_type = models.CharField(max_length=256)
+    pet_type_choices = Choices.PetType.choices
+    specific_type = models.IntegerField(
+        null=True, blank=True, choices=pet_type_choices
+    )
 
     class Meta:
         verbose_name = _("PetType")
@@ -35,9 +39,10 @@ class Pet(models.Model):
     pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
     sex = models.CharField(choices=Choices.Sex.choices, max_length=1)
     pet_category = models.ForeignKey(
-        PetCategory, on_delete=models.CASCADE, null=True)
+        PetCategory, on_delete=models.CASCADE, null=True
+    )
     birth_date = models.DateField(null=True)
-    photo = models.ImageField(blank=True,null=True)
+    photo = models.ImageField(blank=True, null=True)
     # Medical
     weight = models.FloatField()
     last_vaccine_date = models.DateField(null=True)

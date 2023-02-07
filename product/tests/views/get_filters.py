@@ -36,6 +36,20 @@ class GetFiltersViewTestCase(LiveServerTestCase):
                     "slug": self.product.pet_type.slug,
                 }
             ],
+            "pet_categories": [
+                {
+                    "id": 1,
+                    "name": "Dog",
+                },
+                {
+                    "id": 2,
+                    "name": "Cat",
+                },
+                {
+                    "id": 3,
+                    "name": "Bird",
+                },
+            ],
             "max_price": self.max_price,
             "min_price": self.min_price,
         }

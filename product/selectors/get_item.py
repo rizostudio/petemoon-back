@@ -43,6 +43,7 @@ def get_item_list(
     limit=16,
     offset=0,
     pet_types=None,
+    pet_categories=None,
     category_slugs=None,
     max_price=None,
     min_price=None,
@@ -99,6 +100,10 @@ def get_item_list(
         base = base.filter(max_price__gte=min_price)
     if order_by in valid_orderings:
         base = base.order_by(valid_orderings[order_by])
+    if pet_categories is not None and len(pet_categories) > 0:
+        base = base.filter(
+            pet_type__pet_type__specific_type__in=pet_categories
+        )
     if (
         search is not None
         and len(search) > 0

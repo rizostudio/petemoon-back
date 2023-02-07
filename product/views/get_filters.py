@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from config.responses import ok
 from dashboard.models import PetCategory
 from product.models import Brand, Category, ProductPricing
+from utils.choices import Choices
 
 
 class GetFilters(APIView):
@@ -24,11 +25,15 @@ class GetFilters(APIView):
                 Coalesce("price_after_sale", "price"),
             )
         )["min_price"]
+        pet_categories = [
+            {"id": i[0], "name": i[1]} for i in Choices.PetType.choices
+        ]
         data = {
             "brands": brands,
             "categories": categories,
             "pet_types": pet_types,
             "max_price": max_price,
             "min_price": min_price,
+            "pet_categories": pet_categories,
         }
         return ok(data)
