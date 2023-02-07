@@ -3,6 +3,7 @@ from django.test import TestCase
 from product.selectors import (
     get_item_by_slug,
     get_item_list,
+    get_on_sales,
     get_product_id_by_slug,
 )
 from product.tests.fakers import (
@@ -65,3 +66,8 @@ class GetItemSelectorTestCase(TestCase):
         self.assertEqual(
             self.product.id, get_product_id_by_slug(self.product.slug)
         )
+
+    def test_get_on_sales(self):
+        result = get_on_sales(1, 0)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], self.product)

@@ -124,3 +124,35 @@ def get_product_id_by_slug(product_slug):
         .values_list("id", flat=True)
         .first()
     )
+
+
+def get_on_sales(limit=16, offset=0):
+    end = limit + offset
+    return (
+        Product.objects.filter(productpricing__price_after_sale__isnull=False)
+        .annotate(
+            rating=Avg(
+                "comments__rate",
+                filter=Q(
+                    comments__published=True, comments__product__slug=F("slug")
+                ),
+            )
+        )
+        .annotate(min_price=Min("productpricing__price_after_sale"))
+        .annotate(max_price=Max("productpricing__price"))
+        .annotate(price=F("min_price"))
+        .annotate(
+            inventory=Sum(
+                "productpricing__inventory",
+                filter=Q(productpricing__product=F("id")),
+            )
+        )
+        .filter(
+            productpricing__price_after_sale__lt=F("productpricing__price"),
+        )
+        .annotate(
+            discount=F("productpricing__price")
+            - F("productpricing__price_after_sale")
+        )
+        .order_by("discount")[offset:end]
+    )
