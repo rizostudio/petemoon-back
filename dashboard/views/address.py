@@ -16,9 +16,16 @@ class AddressView(APIView):
     #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        address = Address.objects.filter(user=request.user)
-        result = self.serializer_class(address,many=True).data
+    def get(self, request, id=None):
+        if id:
+
+            address = Address.objects.get(id=id,user=request.user)
+            result = self.serializer_class(address).data
+
+        else:
+            address = Address.objects.filter(user=request.user)
+            result = self.serializer_class(address,many=True).data
+
         return SuccessResponse(data=result)
 
 
