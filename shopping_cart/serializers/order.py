@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from dashboard.serializers import AddressSerializer
 from product.serializers.pricing import ProductPricingSerializer
-from shopping_cart.models import Order, PetShopOrder
+from shopping_cart.models import Order,PetShopOrder
 from dashboard.models import Address
 from ..utils import order_completion
 from django.db import transaction
@@ -28,11 +28,10 @@ class OrderPostSerializer(serializers.Serializer):
         order = Order.objects.create(**validated_data)
         order.address = address
         for product in products:
+            PetShopOrder.objects.create(user_order=order,price=product.price,product=product)
             order.products.add(product)
+
         order.save()
-        for product in order.products.all():
-            PetShopOrder.objects.create(
-                user=order.user,order_id=order.order_id,product=product)
 
 
         order_completion(validated_data['total_price'], validated_data['user'])
