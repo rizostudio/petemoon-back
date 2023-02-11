@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import RequestsClient
 from slugify import slugify
 
-from accounts.functions import login
+from accounts.functions import get_user_data, login
 from accounts.tests.fakers import UserFactory, fake_image
 
 
@@ -108,6 +108,7 @@ class RegisterPetshopViewTestCase(LiveServerTestCase):
         profile = self.user.petshop_profile
         self.assertEqual(profile.gender, data["gender"])
         self.assertEqual(profile.national_id, data["national_id"])
+        self.assertEqual(response.json()["data"], {"user_data": {}})
 
         # stage 1
         response = self.make_request(token=self.token, stage=1)
@@ -140,6 +141,7 @@ class RegisterPetshopViewTestCase(LiveServerTestCase):
         self.assertEqual(shop.name, data["store_name"])
         slug = slugify(data["store_name"])
         self.assertEqual(shop.slug[: len(slug)], slug)
+        self.assertEqual(response.json()["data"], {"user_data": {}})
 
         # stage 2
         response = self.make_request(token=self.token, stage=2)
@@ -165,6 +167,7 @@ class RegisterPetshopViewTestCase(LiveServerTestCase):
         self.assertEqual(
             profile.estimated_item_count, data["estimated_item_count"]
         )
+        self.assertEqual(response.json()["data"], {"user_data": {}})
 
         # stage 3
         response = self.make_request(token=self.token, stage=3)
@@ -182,3 +185,6 @@ class RegisterPetshopViewTestCase(LiveServerTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         profile.refresh_from_db()
         self.assertIsNotNone(profile.national_card)
+        self.assertEqual(
+            response.json()["data"], {"user_data": get_user_data(self.user)}
+        )
