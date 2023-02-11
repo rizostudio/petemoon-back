@@ -101,9 +101,47 @@ definitions:
       data:
         type: "object"
         properties:
-          message:
-            type: "string"
-            example: "stage completed"
+          user_data:
+            description: "user data if registeration is completed"
+            type: "object"
+            properties:
+              first_name:
+                type: "string"
+                example: "John"
+              last_name:
+                type: "string"
+                example: "Doe"
+              gender:
+                type: "string"
+                example: "مرد"
+              national_id:
+                type: "string"
+                example: "1234567890"
+              city:
+                type: "string"
+                example: "تهران"
+              postal_region:
+                type: "string"
+                example: "تهران"
+              address:
+                type: "string"
+                example: "خیابان شهید بهشتی"
+              store_name:
+                type: "string"
+                example: "فروشگاه ممد"
+              store_slug:
+                type: "string"
+                example: "فروشگاه-ممد"
+              sheba_number:
+                type: "string"
+                example: "IR123456789012345678901234"
+              estimated_item_count:
+                type: "integer"
+                example: 100
+              national_card:
+                type: "string"
+                format: "uri"
+                example: "http://example.com/national_card.jpg"
   InvalidRequest:
     type: "object"
     properties:
