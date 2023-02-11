@@ -34,9 +34,9 @@ class Order(models.Model):
 
 
 class PetShopOrder(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    order_id = models.CharField(max_length=128)
+    user_order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(ProductPricing,on_delete=models.CASCADE)
+    price = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     
     class Meta:

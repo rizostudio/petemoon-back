@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Sum
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -7,86 +8,71 @@ from rest_framework import exceptions
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from product.models import ProductPricing
-from ..serializers import PetShopOrdersSerializer
+from ..serializers import OrdersSerializer
 from product.models import Petshop
 from shopping_cart.models import Order, PetShopOrder
 
 
+
 class OrdersView(APIView):
 
-    serializer_class = PetShopOrdersSerializer
+    serializer_class = OrdersSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        query_params = self.request.query_params
+        if query_params['orders_type']=='recent':
+            orders = Order.objects.filter(
+            products__petshop__owner__user=request.user).distinct().order_by('-created_at')
 
-        orders = PetShopOrder.objects.filter(
-            product__petshop__owner__user=request.user)
+        if query_params['orders_type']=='completed':
+
+            orders = Order.objects.filter(
+                products__petshop__owner__user=request.user,status="DELIVERED").distinct()
+
+        if orders:
+            price_count = 0
+            for order in orders:
+                d = PetShopOrder.objects.filter(user_order=order)
+                
+                p = d.aggregate(Sum('price'))
+                order.total_price = p['price__sum']
+
+                order.product=d
+            for product in d:
+                price_count += product.price
 
         result = self.serializer_class(orders, many=True).data
         return SuccessResponse(data=result)
 
-#     def patch(self, request, id=None):
-#         serialized_data = self.serializer_class(
-#             request.user, data=request.data, partial=True)
+class SingleOrderView(APIView):
 
-#         try:
-#             if serialized_data.is_valid(raise_exception=True):
+    serializer_class = OrdersSerializer
+    permission_classes = [IsAuthenticated]
 
-#                 product_pricing = ProductPricing.objects.filter(
-#                     petshop__owner__user=request.user, id=id)
+    def get(self, request):
+        query_params = self.request.query_params
+        if query_params['orders_type']=='recent':
+            orders = Order.objects.filter(
+            products__petshop__owner__user=request.user).distinct().order_by('-created_at')
 
-#                 serialized_data.update(
-#                     instance=product_pricing, validated_data=serialized_data.validated_data)
+        if query_params['orders_type']=='completed':
 
-#                 return SuccessResponse(data={"message": _("product updated successfuly")})
+            orders = Order.objects.filter(
+                products__petshop__owner__user=request.user,status="DELIVERED").distinct()
 
-#         except CustomException as e:
-#             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-#         except exceptions.ValidationError as e:
-#             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        if orders:
+            price_count = 0
+            for order in orders:
+                d = PetShopOrder.objects.filter(user_order=order)
+                
+                p = d.aggregate(Sum('price'))
+                order.total_price = p['price__sum']
 
-#     def post(self, request):
-#         serialized_data = self.serializer_class(data=request.data)
-#         petshop = Petshop.objects.get(owner__user=request.user)
-#         try:
-#             if serialized_data.is_valid(raise_exception=True):
-#                 try:
-#                     from product.models import Product
-#                     serialized_data.validated_data["product"] = Product.objects.get(id=serialized_data.validated_data["product_id"])
-#                     product_pricing = ProductPricing.objects.create(serialized_data.validated_data)
-#                 except CustomException :
-#                     raise CustomException(detail="IUHUIOG")
-#             return SuccessResponse(data={"message":_("Product pricing added successfuly")})
-#         except CustomException as e:
-#             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-#         except exceptions.ValidationError as e:
-#             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+                order.product=d
+            for product in d:
+                price_count += product.price
 
-# class ProductsView(APIView):
+        result = self.serializer_class(orders, many=True).data
+        return SuccessResponse(data=result)
 
-#     serializer_class = ProductListSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request):
-#         query_params = self.request.query_params
-#         try:
-#             kw = {
-#                 "limit": int(query_params.get("limit", "16")),
-#                 "offset": int(query_params.get("limit", "0")),
-#                 "pet_types": query_params.get("pet_types", "").split(","),
-#                 "category_slugs": query_params.get("category_slugs", "").split(
-#                     ","
-#                 ),
-#                 "brand_slugs": query_params.get("brand_slugs", "").split(","),
-#                 "max_price": int(query_params.get("max_price", None)),
-#                 "min_price": int(query_params.get("min_price", None)),
-#                 "order_by": query_params.get("order_by"),
-#                 "search": query_params.get("search", "").split("+"),
-#             }
-#         except CustomException:
-#             kw = {}
-#         try:
-#             items, count = get_item_list(**kw)
-#         except CustomException as e:
-#             raise e
-#         return SuccessResponse({"products": self.serializer_class(items, many=True).data, "count": count, })
