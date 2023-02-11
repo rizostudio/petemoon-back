@@ -62,6 +62,10 @@ definitions:
               - "normal"
               - "petshop"
               - "vet"
+          user_data:
+            default: {}
+            type: "object"
+            description: "User data if user is registered"
   InvalidOTP:
     type: "object"
     properties:
