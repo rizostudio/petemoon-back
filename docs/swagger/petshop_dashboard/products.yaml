@@ -1,0 +1,13 @@
+get:
+  operationId: petshop_dashboard_products
+  summary: "list of petshops product"
+  description: ''
+  responses:
+    200:
+      description: ''
+
+  tags:
+    - petshop-dashboard
+
+
+

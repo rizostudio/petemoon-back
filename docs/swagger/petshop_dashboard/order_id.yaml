@@ -1,0 +1,10 @@
+get:
+  operationId: single order
+  summary: "get list of user orders"
+  description: ''
+  parameters: []
+  responses:
+    '200':
+      description: ''
+  tags:
+    - petshop-dashboard

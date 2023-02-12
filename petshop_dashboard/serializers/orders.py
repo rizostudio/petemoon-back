@@ -6,9 +6,11 @@ from dashboard.models import Address
 from dashboard.serializers import AddressSerializer
 
 class PetShopOrdersSerializer(serializers.ModelSerializer):
-   class Meta:
+    product = ProductPricingSerializer()
+    class Meta:
         model = PetShopOrder
         fields = '__all__'
+
 
 
 class OrdersSerializer(serializers.Serializer):
@@ -21,6 +23,7 @@ class OrdersSerializer(serializers.Serializer):
     products_count = serializers.IntegerField()
 
 
+
 class ProductsSerializer(serializers.Serializer):
     image = serializers.ImageField()
     name = serializers.CharField()
@@ -29,7 +32,8 @@ class ProductsSerializer(serializers.Serializer):
     total_price = serializers.IntegerField()
 
 class UserDetailsSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    order_date = serializers.DateTimeField()
+    name = serializers.CharField(source='user.first_name')
+    order_date = serializers.DateTimeField(source='created_at')
     order_id = serializers.CharField()
+    reciver = serializers.CharField(source='address.receiver')
     
