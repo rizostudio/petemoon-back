@@ -40,6 +40,12 @@ definitions:
           format: "char"
           example: "ghosfand"
 
+        pet_category:
+          type: "string"
+          format: "char"
+          example: "chaharpa"
+
+
         sex:
           type: "string"
           format: "char"
@@ -49,6 +55,25 @@ definitions:
           type: "string"
           format: "char"
           example: "2020-12-2"
+
+        weight:
+          type: "float"
+          example: "30.3"
+
+        last_vaccine_date:
+          type: "string"
+          format: "char"
+          example: "2022-12-29"
+
+        underlying_disease:
+          type: "string"
+          format: "char"
+          example: "HIV"
+
+        last_anti_parasitic_vaccine_date:
+          type: "string"
+          format: "char"
+          example: "2022-12-29"
 
 
 

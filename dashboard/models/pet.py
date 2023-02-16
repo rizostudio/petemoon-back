@@ -39,7 +39,7 @@ class Pet(models.Model):
     birth_date = models.DateField(null=True)
     photo = models.ImageField(blank=True,null=True)
     # Medical
-    weight = models.FloatField()
+    weight = models.FloatField(null=True)
     last_vaccine_date = models.DateField(null=True)
     underlying_disease = models.CharField(max_length=128, null=True)
     last_anti_parasitic_vaccine_date = models.DateField(null=True)

@@ -1,0 +1,43 @@
+get:
+  operationId: get_user_profile
+  summary: "get users profile information"
+  description: ''
+  responses:
+    '200':
+      description: ''
+  tags:
+    - dashboard
+
+patch:
+  operationId: edit_user_profile
+  summary: "edite users information"
+
+  description: ''
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "edit profile"
+      required: true
+      schema:
+        $ref: "#/definitions/User"  
+  responses:
+    '201':
+      description: ''
+  tags:
+    - dashboard
+
+definitions:
+    User:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+          format: "char"
+          example: "gholam@gmail.com"
+
+        birth_date:
+          type: "string"
+          format: "char"
+          example: "2022-01-10"
+
+    
