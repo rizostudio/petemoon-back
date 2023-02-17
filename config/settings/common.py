@@ -184,7 +184,7 @@ OTP_TTL = int(get_env("OTP_TTL", default="120"))
 
 # JWT SETIINGS
 ACCESS_TTL = int(get_env("ACCESS_TTL", default="300"))
-REFRESH_TTL = int(get_env("REFRESH_TTL", default="1440"))
+REFRESH_TTL = int(get_env("REFRESH_TTL", default="2"))  # days
 # END JWT SETTINGS
 
 # REST FRAMEWORK CONFIGURATION
