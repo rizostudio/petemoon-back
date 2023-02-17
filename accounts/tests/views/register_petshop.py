@@ -33,9 +33,11 @@ class RegisterPetshopViewTestCase(LiveServerTestCase):
             headers = {"ACCESS": f"Bearer {token}"}
         return self.client.patch(url, json=data, files=files, headers=headers)
 
-    def test_403_response(self):
+    def test_401_response(self):
         response = self.make_request()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_403_response(self):
         response = self.make_request(token=self.not_pethshop_token)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

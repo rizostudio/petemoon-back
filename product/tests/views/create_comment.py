@@ -23,9 +23,9 @@ class CreateCommentViewTestCase(LiveServerTestCase):
             headers=headers,
         )
 
-    def test_403_response(self):
+    def test_401_response(self):
         response = self.make_request(slug=self.product.slug)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_404_response(self):
         response = self.make_request(
