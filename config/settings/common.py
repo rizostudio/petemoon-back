@@ -60,7 +60,8 @@ LOCAL_APPS = (
     "dashboard",
     "product",
     "shopping_cart",
-    "petshop_dashboard"
+    "petshop_dashboard",
+    "payment",
 )
 
 
