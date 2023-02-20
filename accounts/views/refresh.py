@@ -26,7 +26,7 @@ class Refresh(APIView):
         response.set_cookie(
             "HTTP_ACCESS",
             f"Bearer {access}",
-            max_age=ACCESS_TTL,
+            max_age=ACCESS_TTL * 24 * 3600,
             httponly=True,
             samesite="Lax",
         )

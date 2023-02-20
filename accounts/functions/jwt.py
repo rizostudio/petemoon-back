@@ -22,7 +22,7 @@ def __gen_tokens(user_id):
     data["type"] = "refresh"
     data["access"] = access_token
     refresh_token = gen_token(data=data)
-    cache.set(access_token, "", timeout=ACCESS_TTL)
+    cache.set(access_token, "", timeout=ACCESS_TTL * 24 * 3600)
     cache.set(refresh_token, "", timeout=REFRESH_TTL * 24 * 3600)
     return access_token, refresh_token
 
@@ -48,7 +48,7 @@ def validate_token(token, check_time=True):
         return False
     if "type" not in data.keys():
         return False
-    delta = timedelta(seconds=ACCESS_TTL)
+    delta = timedelta(days=ACCESS_TTL)
     if data.get("type") == "refresh":
         if not __has_keys(data, "user_id", "created_at", "type", "access"):
             return False
