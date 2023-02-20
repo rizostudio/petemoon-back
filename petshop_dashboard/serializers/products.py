@@ -27,10 +27,7 @@ class ProductPricingSerializer(serializers.Serializer):
         return instance
 
     def create(self, validated_data):
-
         product_id = validated_data.pop('product_id')
-
-
         return "product_pricing"
 
 class ProductListSerializer(serializers.ModelSerializer):

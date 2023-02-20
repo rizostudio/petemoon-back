@@ -60,3 +60,11 @@ paths:
   #shopping cart
   /cart:
     $ref: "./cart/product.yaml"
+
+  #petshop dashboard
+  /petshop-dashboard/orders:
+    $ref: "./petshop_dashboard/orders.yaml"
+  /petshop-dashboard/orders/{id}:
+    $ref: "./petshop_dashboard/order_id.yaml"
+  /petshop-dashboard/products:
+    $ref: "./petshop_dashboard/products.yaml"
