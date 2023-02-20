@@ -57,6 +57,12 @@ paths:
   /dashboard/message/:
     $ref: "./dashboard/message.yaml"
 
+  /dashboard/user-profile:
+    $ref: "./dashboard/user_profile.yaml"
+
+  /dashboard/over-view:
+    $ref: "./dashboard/over_view.yaml"
+    
   #shopping cart
   /cart:
     $ref: "./cart/product.yaml"
