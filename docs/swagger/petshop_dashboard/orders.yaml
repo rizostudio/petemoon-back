@@ -1,0 +1,23 @@
+get:
+  operationId: petshop_dashboard_orders_list
+  summary: "get list of petshop orders"
+  description: ''
+  parameters:
+    - in: "query"
+      name: "orders_type"
+      description: "type of orders"
+      required: true
+      type: "char"
+      example: recent
+    - in: "query"
+      name: "orders_type"
+      description: "type of orders"
+      required: true
+      type: "char"
+      example: completed
+  responses:
+    '200':
+      description: ''
+  tags:
+    - petshop-dashboard
+

@@ -1,6 +1,11 @@
 from django.test import TestCase
 
-from product.selectors import get_item_by_slug, get_item_list
+from product.selectors import (
+    get_item_by_slug,
+    get_item_list,
+    get_on_sales,
+    get_product_id_by_slug,
+)
 from product.tests.fakers import (
     CommentFactory,
     ProductFactory,
@@ -47,6 +52,7 @@ class GetItemSelectorTestCase(TestCase):
     def test_get_item_list(self):
         products, count = get_item_list(
             pet_types=[self.product.pet_type.slug],
+            pet_categories=[self.product.pet_type.pet_type.specific_type],
             category_slugs=[self.product.category.slug],
             max_price=self.pricing.price,
             min_price=self.lower_pricing.price_after_sale,
@@ -56,3 +62,13 @@ class GetItemSelectorTestCase(TestCase):
         self.assertEqual(count, 1)
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0], self.product)
+
+    def test_get_product_id_by_slug(self):
+        self.assertEqual(
+            self.product.id, get_product_id_by_slug(self.product.slug)
+        )
+
+    def test_get_on_sales(self):
+        result = get_on_sales(1, 0)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], self.product)

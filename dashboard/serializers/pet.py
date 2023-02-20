@@ -9,9 +9,9 @@ class PetTypeSerializer(serializers.ModelSerializer):
 class PetSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
-    pet_type = serializers.CharField(source='pet_type.pet_type')
+    pet_type = serializers.CharField(source='pet_type.pet_type',required=False)
     sex = serializers.CharField(max_length=1)
-    pet_category = serializers.CharField(source='pet_category.pet_category')
+    pet_category = serializers.CharField(source='pet_category.pet_category',required=False)
     birth_date = serializers.DateField()
     # medical
     weight = serializers.FloatField(required=False)

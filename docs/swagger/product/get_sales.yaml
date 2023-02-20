@@ -1,9 +1,9 @@
 get:
   tags:
     - "Product"
-  summary: "Get product List"
-  description: "filters and etc"
-  operationId: "get_product_list"
+  summary: "Get product sale list for home page"
+  description: ""
+  operationId: "get_product_sale_list"
   consumes:
     - "application/json"
   produces:
@@ -21,56 +21,6 @@ get:
       required: false
       type: "integer"
       example: 0
-    - in: "query"
-      name: "pet_types"
-      description: "Pet types of products"
-      required: false
-      type: "string"
-      example: "cat,dog"
-    - in: "query"
-      name: "pet_categories"
-      description: "Pet categories of products"
-      required: false
-      type: "integer"
-      example: 1
-    - in: "query"
-      name: "category_slugs"
-      description: "Category slugs of products"
-      required: false
-      type: "string"
-      example: "food,accessories"
-    - in: "query"
-      name: "brand_slugs"
-      description: "Brand slugs of products"
-      required: false
-      type: "string"
-      example: "royal-canin,pedigree"
-    - in: "query"
-      name: "max_price"
-      description: "Max price of products"
-      required: false
-      type: "integer"
-      example: 100000
-    - in: "query"
-      name: "min_price"
-      description: "Max price of products"
-      required: false
-      type: "integer"
-      example: 90000
-    - in: "query"
-      name: "order_by"
-      description: "Order by of products"
-      required: false
-      type: "string"
-      oneOf:
-        - "cheapest"
-        - "most_expensive"
-    - in: "query"
-      name: "search"
-      description: "Search of products"
-      required: false
-      type: "string"
-      example: "cat+food"
   responses:
     200:
       description: "Product found"

@@ -26,6 +26,20 @@ definitions:
     Pet:
       type: "object"
       properties:
+        name:
+          type: "string"
+          format: "char"
+          example: "malmal"
+        sex:
+          type: "string"
+          format: "char"
+          example: "M"
+
+        birth_date:
+          type: "string"
+          format: "char"
+          example: "2020-12-2"
+
         weight:
           type: "float"
           example: "30.3"
@@ -34,11 +48,6 @@ definitions:
           type: "string"
           format: "char"
           example: "2022-12-29"
-
-        postal_code:
-          type: "string"
-          format: "char"
-          example: "78665752"
 
         underlying_disease:
           type: "string"
