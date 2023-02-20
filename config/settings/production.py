@@ -22,9 +22,9 @@ DATABASES = {
 # END DATABASE CONFIGURATION
 
 # CORSHEADERS CONFIGURATION
-CORS_ALLOWED_ORIGINS = ["api.petemoon.com", "petemoon.com", "localhost"]
-CSRF_COOKIE_DOMAIN = ["api.petemoon.com", "petemoon.com", "localhost"]
-CSRF_TRUSTED_ORIGINS = ["api.petemoon.com", "petemoon.com", "localhost"]
+CORS_ALLOWED_ORIGINS = get_env("CORS_ALLOWED_ORIGINS").split(",")
+CSRF_COOKIE_DOMAIN = get_env("CSRF_COOKIE_DOMAIN").split(",")
+CSRF_TRUSTED_ORIGINS = get_env("CSRF_TRUSTED_ORIGINS").split(",")
 CORS_REPLACE_HTTPS_REFERER = True
 CORS_ALLOW_CREDENTIALS = True
 MIDDLEWARE += ("corsheaders.middleware.CorsMiddleware",)
