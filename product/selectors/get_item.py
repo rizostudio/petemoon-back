@@ -43,6 +43,7 @@ def get_item_list(
     limit=16,
     offset=0,
     pet_types=None,
+    pet_categories=None,
     category_slugs=None,
     max_price=None,
     min_price=None,
@@ -99,6 +100,10 @@ def get_item_list(
         base = base.filter(max_price__gte=min_price)
     if order_by in valid_orderings:
         base = base.order_by(valid_orderings[order_by])
+    if pet_categories is not None and len(pet_categories) > 0:
+        base = base.filter(
+            pet_type__pet_type__specific_type__in=pet_categories
+        )
     if (
         search is not None
         and len(search) > 0
@@ -116,3 +121,37 @@ def get_item_list(
     end = limit + offset
     total = base.count()
     return base[offset:end], total
+
+
+def get_product_id_by_slug(product_slug):
+    return (
+        Product.objects.filter(slug=product_slug)
+        .values_list("id", flat=True)
+        .first()
+    )
+
+
+def get_on_sales(limit=16, offset=0):
+    end = limit + offset
+    return (
+        Product.objects.filter(
+            productpricing__price_after_sale__isnull=False,
+            productpricing__price_after_sale__lt=F("productpricing__price"),
+        )
+        .annotate(
+            rating=Avg(
+                "comments__rate",
+                filter=Q(
+                    comments__published=True, comments__product__slug=F("slug")
+                ),
+            )
+        )
+        .annotate(min_price=Min("productpricing__price_after_sale"))
+        .annotate(max_price=Max("productpricing__price"))
+        .annotate(price=F("min_price"))
+        .annotate(
+            discount=F("productpricing__price")
+            - F("productpricing__price_after_sale")
+        )
+        .order_by("discount")[offset:end]
+    )

@@ -13,6 +13,9 @@ class GetList(APIView):
                 "limit": int(query_params.get("limit", "16")),
                 "offset": int(query_params.get("limit", "0")),
                 "pet_types": query_params.get("pet_types", "").split(","),
+                "pet_categories": list(
+                    map(int, query_params.get("pet_categories", "").split(","))
+                ),
                 "category_slugs": query_params.get("category_slugs", "").split(
                     ","
                 ),

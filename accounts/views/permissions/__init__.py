@@ -1,1 +1,1 @@
-from accounts.views.permissions.is_petshop import IsPetShop
+from accounts.views.permissions.is_petshop import IsPetShop, IsPetShopApproved

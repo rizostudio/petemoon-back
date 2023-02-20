@@ -44,8 +44,6 @@ class PetshopProfile(models.Model):
         verbose_name = "petshop profile"
         verbose_name_plural = "petshop profiles"
 
-
-
     @property
     def is_complete(self):
         return bool(

@@ -26,9 +26,15 @@ paths:
   #product
   /product:
     $ref: "./product/get_list.yaml"
+  /product/filters/:
+    $ref: "./product/get_filters.yaml"
+  /product/sales:
+    $ref: "./product/get_sales.yaml"
   /product/{slug}:
     $ref: "./product/item.yaml"
-    
+  /product/{slug}/pricing:
+    $ref: "./product/add_update_pricing.yaml"
+
   #dashboard
   /dashboard/address:
     $ref: "./dashboard/address.yaml"
@@ -51,6 +57,20 @@ paths:
   /dashboard/message/:
     $ref: "./dashboard/message.yaml"
 
+  /dashboard/user-profile:
+    $ref: "./dashboard/user_profile.yaml"
+
+  /dashboard/over-view:
+    $ref: "./dashboard/over_view.yaml"
+    
   #shopping cart
   /cart:
     $ref: "./cart/product.yaml"
+
+  #petshop dashboard
+  /petshop-dashboard/orders:
+    $ref: "./petshop_dashboard/orders.yaml"
+  /petshop-dashboard/orders/{id}:
+    $ref: "./petshop_dashboard/order_id.yaml"
+  /petshop-dashboard/products:
+    $ref: "./petshop_dashboard/products.yaml"

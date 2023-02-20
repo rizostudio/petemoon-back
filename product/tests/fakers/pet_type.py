@@ -8,6 +8,7 @@ class PetTypeFactory(factory.django.DjangoModelFactory):
         model = PetType
 
     pet_type = factory.Faker("name")
+    specific_type = factory.Faker("pyint", min_value=1, max_value=3)
 
 
 class PetCategoryFactory(factory.django.DjangoModelFactory):

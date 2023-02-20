@@ -60,7 +60,7 @@ LOCAL_APPS = (
     "dashboard",
     "product",
     "shopping_cart",
-    "petshop_dashboard"
+    "petshop_dashboard",
 )
 
 
@@ -184,7 +184,7 @@ OTP_TTL = int(get_env("OTP_TTL", default="120"))
 
 # JWT SETIINGS
 ACCESS_TTL = int(get_env("ACCESS_TTL", default="300"))
-REFRESH_TTL = int(get_env("REFRESH_TTL", default="86400"))
+REFRESH_TTL = int(get_env("REFRESH_TTL", default="2"))  # days
 # END JWT SETTINGS
 
 # REST FRAMEWORK CONFIGURATION
@@ -204,3 +204,5 @@ KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="verify-otp")
 # SWAGGER CONFIGURATION
 SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 # END SWAGGER CONFIGURATION
+
+APPEND_SLASH = True
