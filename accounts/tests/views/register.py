@@ -23,9 +23,9 @@ class RegisterViewTestCase(LiveServerTestCase):
             headers={"ACCESS": f"Bearer {access}"},
         )
 
-    def test_403_response(self):
+    def test_401_response(self):
         response = self.make_request()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_400_response(self):
         response = self.make_request(
