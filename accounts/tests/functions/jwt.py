@@ -56,7 +56,7 @@ class JWTFunctionsTestCase(TestCase):
 
         self.assertFalse(validate_token(token="not cacehd"))
 
-        cache.set("invalid cached token", "", timeout=ACCESS_TTL)
+        cache.set("invalid cached token", "", timeout=ACCESS_TTL * 24 * 3600)
         self.assertFalse(validate_token(token="invalid cached token"))
 
     def test_validate_token_jwt_function_with_inavlid_data(self):
@@ -66,7 +66,7 @@ class JWTFunctionsTestCase(TestCase):
             payload={
                 "created_at": created_at,
             },
-            ttl=ACCESS_TTL,
+            ttl=ACCESS_TTL * 24 * 3600,
         )
         self.assertFalse(
             validate_token(token=invalid_access_with_missing_type)
@@ -77,7 +77,7 @@ class JWTFunctionsTestCase(TestCase):
                 "created_at": created_at,
                 "type": "invalid",
             },
-            ttl=ACCESS_TTL,
+            ttl=ACCESS_TTL * 24 * 3600,
         )
         self.assertFalse(validate_token(token=invalid_token_with_invalid_type))
 
@@ -87,7 +87,7 @@ class JWTFunctionsTestCase(TestCase):
                 "created_at": created_at,
                 "type": "refresh",
             },
-            ttl=REFRESH_TTL * 60,
+            ttl=REFRESH_TTL * 24 * 3600,
         )
         self.assertFalse(validate_token(token=invalid_refresh_with_no_access))
 
@@ -98,7 +98,7 @@ class JWTFunctionsTestCase(TestCase):
                 "type": "refresh",
                 "access": invalid_access_with_missing_type,
             },
-            ttl=REFRESH_TTL * 60,
+            ttl=REFRESH_TTL * 24 * 3600,
         )
         self.assertFalse(validate_token(token=refresh_with_invalid_access))
 
@@ -109,7 +109,7 @@ class JWTFunctionsTestCase(TestCase):
                 "created_at": created_at,
                 "type": "access",
             },
-            ttl=ACCESS_TTL,
+            ttl=ACCESS_TTL * 24 * 3600,
         )
         self.assertFalse(validate_token(token=access_with_invalid_user))
 
@@ -119,7 +119,7 @@ class JWTFunctionsTestCase(TestCase):
                 "created_at": created_at,
                 "type": "access",
             },
-            ttl=ACCESS_TTL,
+            ttl=ACCESS_TTL * 24 * 3600,
         )
 
         refresh_with_invalid_user = self.create_token(
@@ -129,7 +129,7 @@ class JWTFunctionsTestCase(TestCase):
                 "type": "refresh",
                 "access": valid_access,
             },
-            ttl=REFRESH_TTL * 60,
+            ttl=REFRESH_TTL * 24 * 3600,
         )
         self.assertFalse(validate_token(token=refresh_with_invalid_user))
 
@@ -142,7 +142,7 @@ class JWTFunctionsTestCase(TestCase):
                 "created_at": created_at,
                 "type": "access",
             },
-            ttl=ACCESS_TTL,
+            ttl=ACCESS_TTL * 24 * 3600,
         )
         valid_refresh = self.create_token(
             payload={
@@ -151,32 +151,30 @@ class JWTFunctionsTestCase(TestCase):
                 "type": "refresh",
                 "access": valid_access,
             },
-            ttl=REFRESH_TTL * 60,
+            ttl=REFRESH_TTL * 24 * 3600,
         )
         self.assertTrue(validate_token(token=valid_access))
         self.assertTrue(validate_token(token=valid_refresh))
 
-        with freeze_time(timezone.now() + timedelta(seconds=ACCESS_TTL + 1)):
+        with freeze_time(
+            timezone.now() + timedelta(days=ACCESS_TTL, seconds=1)
+        ):
             self.assertFalse(validate_token(valid_access))
         with freeze_time(
-            timezone.now() + timedelta(minutes=REFRESH_TTL * 60 + 1)
+            timezone.now() + timedelta(days=REFRESH_TTL, seconds=1)
         ):
             self.assertFalse(validate_token(token=valid_refresh))
 
     def test_refresh_token_jwt_function(self):
         tokens = login(self.user)
         with freeze_time(timezone.now() + timedelta(seconds=2)):
-            new_access_token, new_refresh_token = refresh(
-                tokens[1]
-            )
+            new_access_token, new_refresh_token = refresh(tokens[1])
         self.assertTrue(validate_token(new_access_token))
         self.assertTrue(validate_token(new_refresh_token))
         self.assertFalse(cache.has_key(tokens[0]))
         self.assertFalse(cache.has_key(tokens[1]))
 
         with self.assertRaises(ValueError):
-            refresh(
-                tokens[1]
-            )  # refresh_token is now invalid
+            refresh(tokens[1])  # refresh_token is now invalid
         with self.assertRaises(ValueError):
             refresh(new_access_token)  # access is not refresh
