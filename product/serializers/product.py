@@ -2,13 +2,25 @@ from django.db.models import Avg, Max, Min, Sum
 from django.db.models.functions import Coalesce
 from rest_framework import serializers
 
-from product.models import Product
+from product.models import Picture, Product, Spec
 from product.serializers.brand import BrandSerializer
 from product.serializers.category import CategorySerializer
 from product.serializers.comments import CommentSerializer
 from product.serializers.pet_type import PetCategorySerializer
 from product.serializers.petshop import PetshopSerializer
 from product.serializers.pricing import ProductPricingSerializer
+
+
+class PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Picture
+        fields = ("picture",)
+
+
+class SpecSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Spec
+        fields = ("name", "value")
 
 
 class ProductGetSerializer(serializers.ModelSerializer):
@@ -20,6 +32,8 @@ class ProductGetSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField(read_only=True)
     pet_type = PetCategorySerializer(read_only=True)
     best_pricing = serializers.SerializerMethodField(read_only=True)
+    pictures = PictureSerializer(many=True, read_only=True)
+    specs = SpecSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -36,6 +50,7 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "comments",
             "productpricing",
             "best_pricing",
+            "pictures",
         )
 
     def get_price(self, obj):

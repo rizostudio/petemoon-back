@@ -116,9 +116,24 @@ definitions:
         type: "string"
         example: "This is a cat food"
       specs:
-        type: "string"
-        format: "json"
-        example: {"weight": "1kg"}
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+              example: "Weight"
+            value:
+              type: "string"
+              example: "1kg"
+      pictures:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            picture:
+              type: "string"
+              example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
       brand:
         type: "object"
         properties:
