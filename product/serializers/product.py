@@ -19,6 +19,7 @@ class ProductGetSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     pet_type = PetCategorySerializer(read_only=True)
+    best_pricing = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
@@ -34,6 +35,7 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "price",
             "comments",
             "productpricing",
+            "best_pricing",
         )
 
     def get_price(self, obj):
@@ -44,6 +46,21 @@ class ProductGetSerializer(serializers.ModelSerializer):
             .aggregate(price_min=Min(Coalesce("price_after_sale", "price")))
             .get("price_min")
         )
+
+    def get_best_pricing(self, obj):
+        best_price = self.get_price(obj)
+        if best_price is None:
+            return None
+        return ProductPricingSerializer(
+            (
+                obj.productpricing_set.filter(
+                    inventory__gt=0, price=best_price
+                )
+                | obj.productpricing_set.filter(
+                    inventory__gt=0, price_after_sale=best_price
+                )
+            ).first()
+        ).data
 
     def get_rating(self, obj):
         return (
