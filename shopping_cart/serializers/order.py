@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from dashboard.serializers import AddressSerializer
 from product.serializers.pricing import ProductPricingSerializer
-from shopping_cart.models import Order,PetShopOrder
+from shopping_cart.models import Order, PetShopOrder
 from dashboard.models import Address
 from ..utils import order_completion
 from django.db import transaction
 #from shopping_cart.serializers  import ShippingSerializer
 from .. models import Shipping
+from payment.services.create_transaction import create_transaction
 
 
 class OrderGetSerializer(serializers.Serializer):
@@ -36,12 +37,16 @@ class OrderPostSerializer(serializers.Serializer):
         order.shipping_method = shipping_method
 
         for product in products:
-            PetShopOrder.objects.create(user_order=order,price=product.price,product=product)
+            PetShopOrder.objects.create(
+                user_order=order, price=product.price, product=product)
             order.products.add(product)
 
         order.save()
 
-
-        order_completion(validated_data['total_price'], validated_data['user'])
+        create_transaction(
+            user=validated_data.get("user"), 
+            amount=order.total_price,
+            order=order, transaction_type="order",
+            description="some descriptoin")
 
         return order
