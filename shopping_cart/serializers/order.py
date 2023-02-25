@@ -5,6 +5,8 @@ from shopping_cart.models import Order,PetShopOrder
 from dashboard.models import Address
 from ..utils import order_completion
 from django.db import transaction
+#from shopping_cart.serializers  import ShippingSerializer
+from .. models import Shipping
 
 
 class OrderGetSerializer(serializers.Serializer):
@@ -14,6 +16,7 @@ class OrderGetSerializer(serializers.Serializer):
     address = AddressSerializer()
     products = ProductPricingSerializer(many=True)
     total_price = serializers.IntegerField()
+    shipping_method = "ShippingSerializer()"
 
 
 class OrderPostSerializer(serializers.Serializer):
@@ -25,8 +28,13 @@ class OrderPostSerializer(serializers.Serializer):
         address = validated_data.pop("address")
         address = Address.objects.get(id=address)
         products = validated_data.pop("products")
+        shipping = validated_data.pop("shipping_method")
+        shipping_method = Shipping.objects.get(id=shipping)
         order = Order.objects.create(**validated_data)
+
         order.address = address
+        order.shipping_method = shipping_method
+
         for product in products:
             PetShopOrder.objects.create(user_order=order,price=product.price,product=product)
             order.products.add(product)
