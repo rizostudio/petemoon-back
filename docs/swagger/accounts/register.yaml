@@ -58,9 +58,22 @@ definitions:
       data:
         type: "object"
         properties:
-          message:
-            type: "string"
-            example: "registeration completed"
+          user_data:
+            type: "object"
+            properties:
+              first_name:
+                type: "string"
+                example: "John"
+              last_name:
+                type: "string"
+                example: "Doe"
+              email:
+                type: "string"
+                example: "JohnDoe@example.com"
+                default: null
+              phone_number:
+                type: "string"
+                example: "+1234567890"
   InvalidProfile:
     type: "object"
     properties:

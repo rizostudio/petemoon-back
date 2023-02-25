@@ -25,3 +25,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
         user_id = token_data.get("user_id")
         user = get_user(id=user_id)
         return (user, None)
+
+    def authenticate_header(self, request):
+        return "Bearer"

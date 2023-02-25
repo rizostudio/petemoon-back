@@ -2,6 +2,7 @@ from django.test import LiveServerTestCase
 from rest_framework import status
 from rest_framework.test import RequestsClient
 
+from accounts.functions import get_user_data
 from accounts.models import OneTimePassword
 from accounts.tests.fakers import UserFactory
 
@@ -32,4 +33,11 @@ class VerifyOTPViewTestCase(LiveServerTestCase):
             response.json()["data"].get("is_registered"), user.is_registered
         )
         self.assertIn("refresh_token", response.json()["data"])
+        if user.is_registered:
+            user_data = get_user_data(user)
+        else:
+            user_data = {}
+        self.assertDictEqual(
+            response.json()["data"].get("user_data"), user_data
+        )
         self.assertIn("HTTP_ACCESS", response.cookies)

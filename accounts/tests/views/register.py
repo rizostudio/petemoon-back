@@ -3,7 +3,7 @@ from django.test import LiveServerTestCase
 from rest_framework import status
 from rest_framework.test import RequestsClient
 
-from accounts.functions import login
+from accounts.functions import get_user_data, login
 from accounts.tests.fakers import UserFactory
 
 
@@ -23,9 +23,9 @@ class RegisterViewTestCase(LiveServerTestCase):
             headers={"ACCESS": f"Bearer {access}"},
         )
 
-    def test_403_response(self):
+    def test_401_response(self):
         response = self.make_request()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_400_response(self):
         response = self.make_request(
@@ -63,12 +63,13 @@ class RegisterViewTestCase(LiveServerTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.json()["success"])
-        self.assertDictEqual(
-            response.json()["data"], {"message": "registeration completed"}
-        )
         self.user.refresh_from_db()
         self.assertTrue(self.user.is_registered)
         self.assertEqual(self.user.email, data["email"])
         self.assertEqual(self.user.first_name, data["first_name"])
         self.assertEqual(self.user.last_name, data["last_name"])
         self.assertEqual(self.user.profile.referal_code, data["referal_code"])
+        self.assertDictEqual(
+            response.json()["data"],
+            {"user_data": get_user_data(user=self.user)},
+        )

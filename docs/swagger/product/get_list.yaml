@@ -28,6 +28,12 @@ get:
       type: "string"
       example: "cat,dog"
     - in: "query"
+      name: "pet_categories"
+      description: "Pet categories of products"
+      required: false
+      type: "integer"
+      example: 1
+    - in: "query"
       name: "category_slugs"
       description: "Category slugs of products"
       required: false
@@ -69,7 +75,9 @@ get:
     200:
       description: "Product found"
       schema:
-        $ref: "#/definitions/Product"
+        type: "array"
+        items:
+          $ref: "#/definitions/Product"
 
 definitions:
   Product:

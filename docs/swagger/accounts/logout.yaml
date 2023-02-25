@@ -1,0 +1,21 @@
+get:
+  tags:
+    - "accounts"
+  summary: "Logout"
+  description: "Logout"
+  operationId: "accounts_logout"
+  responses:
+    200:
+      description: "Logout"
+      schema:
+        type: "object"
+        properties:
+          success:
+            type: "boolean"
+            example: true
+          data:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Logged out"

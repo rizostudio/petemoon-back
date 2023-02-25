@@ -23,7 +23,7 @@ def __gen_tokens(user_id):
     data["access"] = access_token
     refresh_token = gen_token(data=data)
     cache.set(access_token, "", timeout=ACCESS_TTL)
-    cache.set(refresh_token, "", timeout=REFRESH_TTL * 60)
+    cache.set(refresh_token, "", timeout=REFRESH_TTL * 24 * 3600)
     return access_token, refresh_token
 
 
@@ -55,7 +55,7 @@ def validate_token(token, check_time=True):
         access = data.get("access")
         if not validate_token(access, check_time=False):
             return False
-        delta = timedelta(minutes=REFRESH_TTL)
+        delta = timedelta(days=REFRESH_TTL)
     elif data.get("type") != "access" or not __has_keys(
         data, "user_id", "created_at", "type"
     ):
@@ -83,3 +83,7 @@ def refresh(token):
     cache.delete(data_access)
     user_id = jwt_data.get("user_id")
     return __gen_tokens(user_id=user_id)
+
+
+def expire(token):
+    cache.delete(token)

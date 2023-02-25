@@ -1,0 +1,172 @@
+patch:
+  tags:
+    - "accounts"
+  summary: "complete petshop profile"
+  details: "auth needed"
+  auth: true
+  consumes:
+    - "application/json"
+    - "multipart/form-data"
+  produces:
+    - "application/json"
+  parameters:
+    - in: "body"
+      name: "body"
+      description: "petshop profile data for stage 0 - 2"
+      required: false
+      schema:
+        $ref: "#/definitions/Profile"
+    - in: "header"
+      name: "Authorization"
+      description: "Bearer token must be here or in cookie"
+      required: false
+      schema:
+        type: "string"
+    - in: "formData"
+      name: "national_card"
+      description: "national card when stage is 3 is required"
+      required: false
+      type: "file"
+    - in: "query"
+      name: "stage"
+      description: "stage of profile"
+      required: true
+      type: "integer"
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+  responses:
+    200:
+      description: "petshop profile updated"
+      schema:
+        $ref: "#/definitions/Success"
+    400:
+      description: "invalid request"
+      schema:
+        $ref: "#/definitions/InvalidRequest"
+    403:
+      description: "forbidden"
+definitions:
+  Profile:
+    type: "object"
+    properties:
+      first_name:
+        type: "string"
+        example: "John"
+        description: "stge 0"
+      last_name:
+        type: "string"
+        example: "Doe"
+        description: "stge 0"
+      gender:
+        type: "string"
+        example: "مرد"
+        description: "stge 0"
+      national_id:
+        type: "string"
+        example: "1234567890"
+        description: "stge 0"
+      city:
+        type: "string"
+        example: "تهران"
+        description: "stge 1"
+      postal_region:
+        type: "string"
+        example: "تهران"
+        description: "stge 1"
+      address:
+        type: "string"
+        example: "خیابان شهید بهشتی"
+        description: "stge 1"
+      store_name:
+        type: "string"
+        example: "فروشگاه ممد"
+        description: "stge 1"
+      sheba_number:
+        type: "string"
+        example: "IR123456789012345678901234"
+        description: "stge 2"
+      estimated_item_count:
+        type: "integer"
+        example: 100
+        description: "stge 2"
+  Success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      data:
+        type: "object"
+        properties:
+          user_data:
+            description: "user data if registeration is completed"
+            type: "object"
+            properties:
+              first_name:
+                type: "string"
+                example: "John"
+              last_name:
+                type: "string"
+                example: "Doe"
+              gender:
+                type: "string"
+                example: "مرد"
+              national_id:
+                type: "string"
+                example: "1234567890"
+              city:
+                type: "string"
+                example: "تهران"
+              postal_region:
+                type: "string"
+                example: "تهران"
+              address:
+                type: "string"
+                example: "خیابان شهید بهشتی"
+              store_name:
+                type: "string"
+                example: "فروشگاه ممد"
+              store_slug:
+                type: "string"
+                example: "فروشگاه-ممد"
+              sheba_number:
+                type: "string"
+                example: "IR123456789012345678901234"
+              estimated_item_count:
+                type: "integer"
+                example: 100
+              national_card:
+                type: "string"
+                format: "uri"
+                example: "http://example.com/national_card.jpg"
+  InvalidRequest:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      errors:
+        type: "object"
+        properties:
+          stage:
+            type: "string"
+            oneOf:
+              - "invalid stage"
+              - "user already registered"
+              - "stage 0 is not completed"
+              - "stage 1 is not completed"
+              - "stage 2 is not completed"
+          first_name: ["This field is required."]
+          last_name: ["This field is required."]
+          gender: ["This field is required."]
+          national_id: ["This field is required."]
+          city: ["This field is required."]
+          postal_region: ["This field is required."]
+          address: ["This field is required."]
+          store_name: ["This field is required."]
+          sheba_number: ["This field is required."]
+          estimated_item_count: ["This field is required."]
+          national_card: ["This field is required."]
