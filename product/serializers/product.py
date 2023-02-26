@@ -2,13 +2,25 @@ from django.db.models import Avg, Max, Min, Sum
 from django.db.models.functions import Coalesce
 from rest_framework import serializers
 
-from product.models import Product
+from product.models import Picture, Product, Spec
 from product.serializers.brand import BrandSerializer
 from product.serializers.category import CategorySerializer
 from product.serializers.comments import CommentSerializer
 from product.serializers.pet_type import PetCategorySerializer
 from product.serializers.petshop import PetshopSerializer
 from product.serializers.pricing import ProductPricingSerializer
+
+
+class PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Picture
+        fields = ("picture",)
+
+
+class SpecSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Spec
+        fields = ("name", "value")
 
 
 class ProductGetSerializer(serializers.ModelSerializer):
@@ -19,6 +31,9 @@ class ProductGetSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     pet_type = PetCategorySerializer(read_only=True)
+    best_pricing = serializers.SerializerMethodField(read_only=True)
+    pictures = PictureSerializer(many=True, read_only=True)
+    specs = SpecSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -34,6 +49,8 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "price",
             "comments",
             "productpricing",
+            "best_pricing",
+            "pictures",
         )
 
     def get_price(self, obj):
@@ -44,6 +61,21 @@ class ProductGetSerializer(serializers.ModelSerializer):
             .aggregate(price_min=Min(Coalesce("price_after_sale", "price")))
             .get("price_min")
         )
+
+    def get_best_pricing(self, obj):
+        best_price = self.get_price(obj)
+        if best_price is None:
+            return None
+        return ProductPricingSerializer(
+            (
+                obj.productpricing_set.filter(
+                    inventory__gt=0, price=best_price
+                )
+                | obj.productpricing_set.filter(
+                    inventory__gt=0, price_after_sale=best_price
+                )
+            ).first()
+        ).data
 
     def get_rating(self, obj):
         return (

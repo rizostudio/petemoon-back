@@ -32,9 +32,11 @@ class AddUpdatePricingViewTestCase(LiveServerTestCase):
             headers={"Authorization": f"Bearer {token}"},
         )
 
-    def test_403_response(self):
+    def test_401_response(self):
         response = self.make_request(self.product.slug)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_403_response(self):
         response = self.make_request(
             self.product.slug, token=self.none_petshop_token
         )
