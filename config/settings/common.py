@@ -61,6 +61,7 @@ LOCAL_APPS = (
     "product",
     "shopping_cart",
     "petshop_dashboard",
+    "payment",
 )
 
 
@@ -206,3 +207,10 @@ SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 # END SWAGGER CONFIGURATION
 
 APPEND_SLASH = True
+
+# ZARRINPAL CONFIGURATION
+ZARRINPAL_MERCHANT_ID = get_env("ZARRINPAL_MERCHANT_ID", default="")
+ZARRINPAL_URL = get_env(
+    "ZARRINPAL_URL", default="https://api.zarinpal.com/pg/"
+)
+# END ZARRINPAL CONFIGURATION

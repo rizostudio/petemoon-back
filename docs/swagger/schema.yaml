@@ -26,6 +26,8 @@ paths:
   #product
   /product:
     $ref: "./product/get_list.yaml"
+  /product/top_sellers/:
+    $ref: "./product/get_top_sellers.yaml"
   /product/filters/:
     $ref: "./product/get_filters.yaml"
   /product/sales:
