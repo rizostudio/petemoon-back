@@ -5,3 +5,4 @@ from product.selectors.get_item import (
     get_product_id_by_slug,
 )
 from product.selectors.pricing import add_update_pricing
+from product.selectors.top_seller import get_top_seller
