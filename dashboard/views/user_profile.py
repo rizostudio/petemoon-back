@@ -28,9 +28,10 @@ class UserProfileView(APIView):
             if serialized_data.is_valid(raise_exception=True):
 
 
-                serialized_data.update(instance=request.user,validated_data=serialized_data.validated_data)
+                user_profile = serialized_data.update(
+                    instance=request.user,validated_data=serialized_data.validated_data)
 
-                return SuccessResponse(data={"message":_("Profile updated successfuly")})
+                return SuccessResponse(data=UserProfileSerializer(user_profile).data)
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
