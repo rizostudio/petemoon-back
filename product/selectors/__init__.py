@@ -4,5 +4,6 @@ from product.selectors.get_item import (
     get_on_sales,
     get_product_id_by_slug,
 )
+from product.selectors.get_related_products import get_related_products
 from product.selectors.pricing import add_update_pricing
 from product.selectors.top_seller import get_top_seller
