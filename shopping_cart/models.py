@@ -8,6 +8,7 @@ from utils.choices import Choices
 from dashboard.models import Address
 from product.models import ProductPricing
 
+from .utils import random_N_chars_str
 
 class Shipping(models.Model):
     method = models.CharField(max_length=128)
@@ -15,7 +16,7 @@ class Shipping(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    order_id = models.CharField(max_length=128,default=uuid.uuid4)
+    order_id = models.CharField(max_length=128,default=random_N_chars_str(12))
     status = models.CharField(choices=Choices.Order.choices, max_length=128)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     products = models.ManyToManyField(ProductPricing)
