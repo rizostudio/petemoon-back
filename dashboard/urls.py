@@ -1,6 +1,8 @@
 from django.urls import path
 from dashboard.views import (
-    AddressView, PetView, OrdersView, BookmarkView, MessageView, UserProfileView, OverViewView)
+    AddressView, PetView, OrdersView, 
+    BookmarkView, MessageView, UserProfileView, 
+    OverViewView, PetTypeView, PetCategoryView)
 
 
 urlpatterns = [
@@ -8,6 +10,8 @@ urlpatterns = [
     path('address/<int:id>', AddressView.as_view(), name='address'),
     path('pet/', PetView.as_view(), name='pet'),
     path('pet/<int:id>', PetView.as_view(), name='pet'),
+    path('pet-type', PetTypeView.as_view(), name='pet-type'),
+    path('pet-category/<int:id>', PetCategoryView.as_view(), name='pet-category'),
     path('orders', OrdersView.as_view(), name='orders'),
     path('bookmark', BookmarkView.as_view(), name='bookmark'),
     path('bookmark/<int:id>', BookmarkView.as_view(), name='bookmark'),

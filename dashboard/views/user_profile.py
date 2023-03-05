@@ -13,7 +13,6 @@ from config.exceptions import CustomException
 
 class UserProfileView(APIView):
     serializer_class = UserProfileSerializer
-    #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

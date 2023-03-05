@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
 from config.responses import SuccessResponse, UnsuccessfulResponse
-from dashboard.serializers import PetSerializer
-from dashboard.models import Pet
+from dashboard.serializers import PetSerializer, PetTypeSerializer, PetCategorySerializer
+from dashboard.models import Pet, PetType, PetCategory
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
@@ -53,4 +53,24 @@ class PetView(APIView):
 
 
 class PetTypeView(APIView):
-    pass
+    serializer_class = PetTypeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+           
+        pet_type = PetType.objects.all()
+        result = self.serializer_class(pet_type,many=True).data
+        return SuccessResponse(data=result)
+    
+
+class PetCategoryView(APIView):
+    serializer_class = PetTypeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+        pet_type = PetType.objects.get(id=id)
+        pet_category = PetCategory.objects.filter(pet_type=pet_type)
+        result = self.serializer_class(pet_category,many=True).data
+        return SuccessResponse(data=result)
+    
+    
