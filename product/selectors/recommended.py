@@ -31,7 +31,7 @@ def get_top_sales():
     return Product.objects.filter(id__in=last_month_sales_ids)
 
 
-def get_recommended_products(user: User | None) -> list:
+def get_recommended_products(user) -> list:
     """
     Returns list of recommended products for user
     """
