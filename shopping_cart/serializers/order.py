@@ -35,7 +35,8 @@ class OrderPostSerializer(serializers.Serializer):
 
         order.address = address
         order.shipping_method = shipping_method
-
+        order.total_price += shipping_method.price
+        
         for product in products:
             PetShopOrder.objects.create(
                 user_order=order, price=product.price, product=product)

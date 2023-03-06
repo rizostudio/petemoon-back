@@ -3,8 +3,16 @@ from dashboard.models import Pet, PetType, PetCategory
 
 
 class PetTypeSerializer(serializers.ModelSerializer):
-    pass
+        class Meta:
+            model = PetType
+            fields = "__all__"
+         
 
+class PetCategorySerializer(serializers.ModelSerializer):
+        class Meta:
+            model = PetCategory
+            fields = "__all__"
+         
 
 class PetSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -18,7 +26,8 @@ class PetSerializer(serializers.Serializer):
     last_vaccine_date = serializers.DateField(required=False)
     underlying_disease = serializers.CharField(required=False)
     last_anti_parasitic_vaccine_date = serializers.DateField(required=False)
-
+    photo = serializers.ImageField()
+    
     def create(self, validated_data):
         validated_data['pet_type'] = PetType.objects.get(
             pet_type=validated_data['pet_type']['pet_type'])
