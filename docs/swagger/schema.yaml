@@ -30,6 +30,8 @@ paths:
     $ref: "./product/get_top_sellers.yaml"
   /product/filters/:
     $ref: "./product/get_filters.yaml"
+  /product/recommended/:
+    $ref: "./product/get_recommended.yaml"
   /product/sales:
     $ref: "./product/get_sales.yaml"
   /product/{slug}:
