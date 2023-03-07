@@ -22,9 +22,9 @@ DATABASES = {
 # END DATABASE CONFIGURATION
 
 # CORSHEADERS CONFIGURATION
-CORS_ALLOWED_ORIGINS = get_env("CORS_ALLOWED_ORIGINS").split(",")
-CSRF_COOKIE_DOMAIN = get_env("CSRF_COOKIE_DOMAIN").split(",")
-CSRF_TRUSTED_ORIGINS = get_env("CSRF_TRUSTED_ORIGINS").split(",")
+CORS_ALLOWED_ORIGINS = ["https://*.petemoon.com","http://localhost:3000","http://127.0.0.1:3000"]
+CSRF_COOKIE_DOMAIN = '*'
+CSRF_TRUSTED_ORIGINS = ["https://*.petemoon.com"]
 CORS_REPLACE_HTTPS_REFERER = True
 CORS_ALLOW_CREDENTIALS = True
 MIDDLEWARE += ("corsheaders.middleware.CorsMiddleware",)
@@ -32,3 +32,5 @@ MIDDLEWARE += ("corsheaders.middleware.CorsMiddleware",)
 DEBUG = get_env("DEBUG") == "True"
 
 JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
+
+ALLOWED_HOSTS=['*']
