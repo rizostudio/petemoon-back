@@ -220,6 +220,10 @@ definitions:
                 slug:
                   type: "string"
                   example: "petshop-1"
+      related_products:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductList"
   InvalidSlug:
     type: "object"
     properties:
@@ -265,3 +269,50 @@ definitions:
           rate:
             type: "int"
             example: 4
+  ProductList:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Cat Food"
+      slug:
+        type: "string"
+        example: "cat-food"
+      category:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Food"
+          slug:
+            type: "string"
+            example: "food"
+          parent_catgory:
+            $ref: "#/definitions/Product/properties/category"
+            default: null
+        default: null
+      picture:
+        type: "string"
+        example: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+      max_price:
+        type: "int"
+        example: 100000
+      min_price:
+        type: "int"
+        example: 90000
+      inventory:
+        type: "int"
+        example: 100
+      rating:
+        type: "number"
+        example: 4.5
+      best_seller:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Petshop 1"
+          slug:
+            type: "string"
+            example: "petshop-1"
+        default: null

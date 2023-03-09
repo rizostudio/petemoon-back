@@ -4,6 +4,7 @@ from product.views import (
     AddUpdatePricing,
     GetFilters,
     GetList,
+    GetRecommended,
     GetSales,
     GetTopSellers,
     SingleItem,
@@ -14,6 +15,7 @@ urlpatterns = [
     path("filters/", GetFilters.as_view(), name="get_filters"),
     path("top-sellers/", GetTopSellers.as_view(), name="get_top_sellers"),
     path("sales/", GetSales.as_view(), name="get_sales"),
+    path("recommended/", GetRecommended.as_view(), name="get_recommended"),
     path("<slug:slug>/", SingleItem.as_view(), name="item_detail"),
     path(
         "<slug:slug>/pricing/",
