@@ -31,3 +31,5 @@ MIDDLEWARE += ("corsheaders.middleware.CorsMiddleware",)
 DEBUG = get_env("DEBUG") == "True"
 
 JWT_SECRET = get_env("JWT_SECRET", default=SECRET_KEY)
+
+ALLOWED_HOSTS=['*']
