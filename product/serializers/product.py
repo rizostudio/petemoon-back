@@ -38,6 +38,7 @@ class ProductGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
+            "id",
             "name",
             "category",
             "pet_type",
@@ -108,6 +109,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
+            "id",
             "name",
             "slug",
             "category",
