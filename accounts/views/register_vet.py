@@ -24,7 +24,7 @@ class VetRegisterView(APIView):
         try:
             if serialized_data.is_valid(raise_exception=True):
 
-
+                print(request.user.profile)
                 vet_profile = serialized_data.update(
                     instance=request.user.profile,validated_data=serialized_data.validated_data)
 
