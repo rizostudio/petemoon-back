@@ -5,3 +5,4 @@ from accounts.models.petshop_profile import (
 )
 from accounts.models.user import User
 from accounts.models.user_profile import UserProfile, create_user_profile
+from accounts.models.vet_profile import *
