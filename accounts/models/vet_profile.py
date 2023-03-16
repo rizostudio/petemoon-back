@@ -9,11 +9,11 @@ from accounts.models.user import User
 
 class VetProfile(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="petshop_profile"
+        User, on_delete=models.CASCADE, related_name="vet_profile"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    medical_number = models.CharField(max_length=10)
+    medical_number = models.CharField(max_length=10, null=True, blank=True)
 
     national_card_front = models.FileField(null=True, blank=True)
     national_card_back = models.FileField(null=True, blank=True)
@@ -22,11 +22,11 @@ class VetProfile(models.Model):
     military_card = models.FileField(null=True,blank=True) 
 
     gender = models.CharField(max_length=64, null=True, blank=True)
-    birth_date = models.DateTimeField()
-    university = models.CharField(max_length=255)
-    expertise = models.CharField(max_length=255)
-    pet_type_experience = models.CharField(max_length=255)
-    pet_category_fav = models.CharField(max_length=255)
+    birth_date = models.DateTimeField(null=True, blank=True)
+    university = models.CharField(max_length=255, null=True, blank=True)
+    expertise = models.CharField(max_length=255, null=True, blank=True)
+    pet_type_experience = models.CharField(max_length=255, null=True, blank=True)
+    pet_category_fav = models.CharField(max_length=255, null=True, blank=True)
 
     is_approved = models.BooleanField(default=False)
 
