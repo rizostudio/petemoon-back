@@ -8,12 +8,15 @@ from ..serializers import PotentialTimeSerializer
 from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
+from accounts.views.permissions import IsVet
+
+from accounts.models import VetProfile
 
 
 class PotentialTimeView(APIView):
 
     serializer_class = PotentialTimeSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsVet]
 
 
 
@@ -38,17 +41,29 @@ class PotentialTimeView(APIView):
 
 
 
-    def patch(self, request, id=None):
-        serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
+class AvailableReserveTimeView(APIView):
 
+    serializer_class = PotentialTimeSerializer
+    permission_classes = [IsVet]
+
+
+
+    def post(self, request):
+        serialized_data = self.serializer_class(data=request.data)
         try:
-            if serialized_data.is_valid(raise_exception=True):
+            serialized_data.is_valid()
+            vet_profile = VetProfile.objects.get(user=request.user)
+            times = serialized_data.validated_data.get("time")
+            reserved_time = vet_profile.reserve_times
+            
+            for time in times:
+                if time in reserved_time:
+                    pass
+                else:
+                    vet_profile.reserve_times.add(time)
+            
 
-                address = Address.objects.filter(id=id)
-
-                serialized_data.update(instance=address,validated_data=serialized_data.validated_data)
-
-                return SuccessResponse(data={"message":_("Address updated successfuly")})
+            return SuccessResponse(data=times)
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
@@ -56,14 +71,6 @@ class PotentialTimeView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
 
-    def delete(self, request, id=None):
-        try:
-            try:
-                address = Address.objects.get(id=id).delete()
-            except Address.DoesNotExist:
-                raise CustomException(detail=_("address does not exist"))
 
-            return SuccessResponse(data={"message":_("Address deleted successfuly")})
-                
-        except CustomException as e:
-            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)       
+
+       

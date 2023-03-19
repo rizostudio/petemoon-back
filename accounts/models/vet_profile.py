@@ -28,6 +28,7 @@ class VetProfile(models.Model):
     pet_type_experience = models.CharField(max_length=255, null=True, blank=True)
     pet_category_fav = models.CharField(max_length=255, null=True, blank=True)
 
+    reserve_times = models.ManyToManyField("ReserveTimes",blank=True)
     is_approved = models.BooleanField(default=False)
 
     class Meta:
