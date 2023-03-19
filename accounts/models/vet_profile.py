@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models.user import User
-
+from vet.models import ReserveTimes
 
 class VetProfile(models.Model):
     user = models.OneToOneField(
@@ -28,7 +28,7 @@ class VetProfile(models.Model):
     pet_type_experience = models.CharField(max_length=255, null=True, blank=True)
     pet_category_fav = models.CharField(max_length=255, null=True, blank=True)
 
-    reserve_times = models.ManyToManyField("ReserveTimes",blank=True)
+    reserve_times = models.ManyToManyField(ReserveTimes,blank=True,related_name="vet_reserve_times")
     is_approved = models.BooleanField(default=False)
 
     class Meta:
