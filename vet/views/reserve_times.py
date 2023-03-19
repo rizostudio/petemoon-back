@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
-from dashboard.serializers import AddressSerializer
+from ..serializers import PotentialTimeSerializer
 from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
@@ -12,36 +12,30 @@ from config.exceptions import CustomException
 
 class PotentialTimeView(APIView):
 
-    serializer_class = AddressSerializer
+    serializer_class = PotentialTimeSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        duration = self.request.query_params.get("stage", 0)
-        delta = 2
-        date_list = []
-        from datetime import datetime, timedelta
-
-        for i in range(delta.days*24):
-            start_date = start_date + timedelta(minutes=duration)
-                    # If time does not exists in site
-                        
-            defined_reserve_time = start_date.strftime()
-
-            date_list.append(start_date.strftime())
-
-        return SuccessResponse(data=date_list)
 
 
     def post(self, request):
         serialized_data = self.serializer_class(data=request.data)
         try:
-            if serialized_data.is_valid(raise_exception=True):
-                serialized_data.save(user=request.user)
-                return SuccessResponse(data={"message":_("Address added successfuly")})
+            serialized_data.is_valid()
+            time = serialized_data.validated_data.get("time")
+
+            date_list = []
+            from datetime import datetime, timedelta
+            for i in range(36):
+                time = time + timedelta(minutes=30)
+                date_list.append(time)
+            return SuccessResponse(data=date_list)
+
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
+
 
 
     def patch(self, request, id=None):
