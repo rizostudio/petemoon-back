@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from accounts.models.user import User
 from vet.models import ReserveTimes
 
+
 class VetProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="vet_profile"
@@ -14,7 +15,7 @@ class VetProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     medical_number = models.CharField(max_length=10, null=True, blank=True)
-
+    photo = models.ImageField(null=True,blank=True)
     national_card_front = models.FileField(null=True, blank=True)
     national_card_back = models.FileField(null=True, blank=True)
     birth_certificate = models.FileField(null=True,blank=True)
@@ -34,7 +35,8 @@ class VetProfile(models.Model):
     class Meta:
         verbose_name = "Vet Profile"
         verbose_name_plural = "Vet Profiles"
-
+    about = models.TextField(null=True)
+    
     @property
     def is_complete(self):
         return bool(

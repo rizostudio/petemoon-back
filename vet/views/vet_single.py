@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
-from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer
+from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer, VetSingleSerializer
 from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
@@ -14,31 +14,21 @@ from accounts.models import VetProfile
 
 from ..models import ReserveTimes
 
-class PotentialTimeView(APIView):
 
-    serializer_class = PotentialTimeSerializer
+class VetSingleView(APIView):
+
     permission_classes = [IsVet]
+    serializer_class = VetSingleSerializer
 
-
-
-    def post(self, request):
-        serialized_data = self.serializer_class(data=request.data)
+    def get(self, request, id=None):
         try:
-            serialized_data.is_valid()
-            time = serialized_data.validated_data.get("time")
-
-            date_list = []
-            from datetime import datetime, timedelta
-            for i in range(36):
-                time = time + timedelta(minutes=30)
-                date_list.append(time)
-            return SuccessResponse(data=date_list)
-
+            
+            vet = VetProfile.objects.get(user=request.user)
+            serialized_data = self.serializer_class(vet).data
+            
+            return SuccessResponse(data=serialized_data)
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-        except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-
 
 
 
@@ -46,6 +36,7 @@ class AvailableReserveTimeView(APIView):
 
     serializer_class = AvailableTimeSerializer
     permission_classes = [IsVet]
+
 
     def get(self, request):
            

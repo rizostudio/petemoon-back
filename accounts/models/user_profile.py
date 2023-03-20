@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from accounts.models.user import User
 from dashboard.models import Wallet
 
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile"
