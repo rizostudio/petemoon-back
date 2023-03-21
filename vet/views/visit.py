@@ -34,16 +34,13 @@ class VisitView(APIView):
     def post(self, request):
         serialized_data = self.serializer_class(data=request.data)
         try:
-            serialized_data.is_valid()
-
-            serialized_data.save()
-            return SuccessResponse(data="times")
+            if serialized_data.is_valid(raise_exception=True):
+                serialized_data.save(user=request.user)
+            return SuccessResponse(data={"message":_("Visit added successfuly")})
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-
-
-
-       
+        
+     

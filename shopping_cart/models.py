@@ -16,7 +16,7 @@ class Shipping(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    order_id = models.CharField(max_length=128,default=random_N_chars_str(12))
+    order_id = models.CharField(max_length=128, unique=True,blank=True)
     status = models.CharField(choices=Choices.Order.choices, max_length=128)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     products = models.ManyToManyField(ProductPricing)
@@ -35,6 +35,11 @@ class Order(models.Model):
     def __str__(self):
         return str(self.order_id)
 
+    def save(self):
+        self.order_id = default=random_N_chars_str(12)
+            # Generate ID once, then check the db. If exists, keep trying.
+          
+        super(Order, self).save()
 
 class PetShopOrder(models.Model):
     user_order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)

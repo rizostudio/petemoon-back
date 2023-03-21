@@ -19,3 +19,8 @@ class Choices(object):
         SENDING = "SENDING",_("sending")
         PAY_PENDING = "PAY_PENDING",_("payment_pending")
         PROCESSING = "PROCESSING",_("processing")
+
+    class Visit(models.TextChoices):
+        CANCELED = "CANCELED",_("Canceled")
+        DONE = "DONE",_("Done")
+        PENDING = "PENDING",_("Pending")
