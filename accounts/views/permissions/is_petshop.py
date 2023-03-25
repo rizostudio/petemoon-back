@@ -16,3 +16,10 @@ class IsPetShopApproved(IsPetShop):
             and hasattr(request.user, "petshop_profile")
             and request.user.petshop_profile.is_approved
         )
+
+class IsVet(IsAuthenticated):
+    def has_permission(self, request, view):
+        return (
+            super().has_permission(request, view)
+            and request.user.user_type == "vet"
+        )

@@ -54,6 +54,7 @@ class SendOTP(APIView):
                 phone_number=phone_number, user_type=user_type
             )
         otp = OneTimePassword(user)
+        print(otp.code)
         done = send_sms_otp(phone_number, otp.code)
         if not done:
             return Response(
