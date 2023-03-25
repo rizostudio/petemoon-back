@@ -62,6 +62,7 @@ LOCAL_APPS = (
     "shopping_cart",
     "petshop_dashboard",
     "payment",
+    'vet'
 )
 
 

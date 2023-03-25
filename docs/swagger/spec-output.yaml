@@ -1,0 +1,2801 @@
+swagger: "2.0"
+info:
+  description: this is the swagger documentation for Petemoon project's APIs
+  version: 1.0.0
+  title: Petemoon API
+host: api.petemoon.com
+basePath: /
+schemes:
+  - http
+  - https
+paths:
+  /accounts/otp:
+    post:
+      tags:
+        - accounts
+      summary: Send OTP to user's phone number
+      description: ""
+      operationId: send_otp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Phone number to send OTP to
+          required: true
+          schema:
+            type: object
+            properties:
+              phone_number:
+                type: string
+                example: "09123456789"
+              user_type:
+                type: string
+                oneOf:
+                  - normal
+                  - petshop
+                  - vet
+                default: null
+      responses:
+        "200":
+          description: OTP sent successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  otp_id:
+                    type: string
+                    format: uuid
+        "400":
+          description: Invalid phone number
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: array
+                example:
+                  - invalid phone number
+                  - otp already sent
+                  - error in sending otp
+    definitions:
+      Request:
+        type: object
+        properties:
+          phone_number:
+            type: string
+            example: "09123456789"
+          user_type:
+            type: string
+            oneOf:
+              - normal
+              - petshop
+              - vet
+            default: null
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              otp_id:
+                type: string
+                format: uuid
+      InvalidPhoneNumber:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: array
+            example:
+              - invalid phone number
+              - otp already sent
+              - error in sending otp
+  /accounts/otp/verify:
+    post:
+      tags:
+        - accounts
+      summary: Verify OTP
+      description: ""
+      operationId: verify_otp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: OTP to verify
+          required: true
+          schema:
+            type: object
+            properties:
+              otp_id:
+                type: string
+                format: uuid
+              otp_code:
+                type: string
+                example: "123456"
+      responses:
+        "200":
+          description: OTP verified successfully
+          headers:
+            Set-Cookie:
+              description: >
+                Contains the session cookie named `HTTP_ACCESS`. Pass this
+                cookie back in subsequent requests.
+              schema:
+                type: string
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  refresh_token:
+                    type: string
+                    format: uuid
+                  is_registered:
+                    type: boolean
+                  user_type:
+                    type: string
+                    oneOf:
+                      - normal
+                      - petshop
+                      - vet
+                  user_data:
+                    default: {}
+                    type: object
+                    description: User data if user is registered
+        "400":
+          description: Invalid OTP
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: array
+                example:
+                  - otp is invalid
+    definitions:
+      OTP:
+        type: object
+        properties:
+          otp_id:
+            type: string
+            format: uuid
+          otp_code:
+            type: string
+            example: "123456"
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              refresh_token:
+                type: string
+                format: uuid
+              is_registered:
+                type: boolean
+              user_type:
+                type: string
+                oneOf:
+                  - normal
+                  - petshop
+                  - vet
+              user_data:
+                default: {}
+                type: object
+                description: User data if user is registered
+      InvalidOTP:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: array
+            example:
+              - otp is invalid
+  /accounts/refresh:
+    post:
+      tags:
+        - accounts
+      summary: Refresh session
+      description: ""
+      operationId: refresh
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Refresh token
+          required: true
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+                format: uuid
+      responses:
+        "200":
+          description: Session refreshed successfully
+          headers:
+            Set-Cookie:
+              description: >
+                Contains the session cookie named `HTTP_ACCESS`. Pass this
+                cookie back in subsequent requests.
+              schema:
+                type: string
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  refresh_token:
+                    type: string
+        "400":
+          description: Invalid refresh token
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: array
+                example:
+                  - refresh is invalid
+    definitions:
+      RefreshToken:
+        type: object
+        properties:
+          refresh:
+            type: string
+            format: uuid
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              refresh_token:
+                type: string
+      InvalidRefreshToken:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: array
+            example:
+              - refresh is invalid
+  /accounts/register:
+    patch:
+      tags:
+        - accounts
+      summary: complete user profile
+      details: auth needed
+      auth: true
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: user profile
+          required: true
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+                example: John
+              last_name:
+                type: string
+                example: Doe
+              email:
+                type: string
+                example: example@mail.com
+              referal_code:
+                type: string
+                default: null
+        - in: header
+          name: Authorization
+          description: Bearer token must be here or in cookie
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: user profile updated
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  user_data:
+                    type: object
+                    properties:
+                      first_name:
+                        type: string
+                        example: John
+                      last_name:
+                        type: string
+                        example: Doe
+                      email:
+                        type: string
+                        example: JohnDoe@example.com
+                        default: null
+                      phone_number:
+                        type: string
+                        example: "+1234567890"
+        "400":
+          description: invalid request
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: array
+                example:
+                  - user is already registered
+                  - incorrect data
+                  - email: email is already registered
+                    first_name: first name is required
+                    last_name: last name is required
+        "403":
+          description: forbidden
+          schema: null
+    definitions:
+      Profile:
+        type: object
+        properties:
+          first_name:
+            type: string
+            example: John
+          last_name:
+            type: string
+            example: Doe
+          email:
+            type: string
+            example: example@mail.com
+          referal_code:
+            type: string
+            default: null
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              user_data:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                    example: John
+                  last_name:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    example: JohnDoe@example.com
+                    default: null
+                  phone_number:
+                    type: string
+                    example: "+1234567890"
+      InvalidProfile:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: array
+            example:
+              - user is already registered
+              - incorrect data
+              - email: email is already registered
+                first_name: first name is required
+                last_name: last name is required
+  /accounts/register/petshop:
+    patch:
+      tags:
+        - accounts
+      summary: complete petshop profile
+      details: auth needed
+      auth: true
+      consumes:
+        - application/json
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: petshop profile data for stage 0 - 2
+          required: false
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+                example: John
+                description: stge 0
+              last_name:
+                type: string
+                example: Doe
+                description: stge 0
+              gender:
+                type: string
+                example: مرد
+                description: stge 0
+              national_id:
+                type: string
+                example: "1234567890"
+                description: stge 0
+              city:
+                type: string
+                example: تهران
+                description: stge 1
+              postal_region:
+                type: string
+                example: تهران
+                description: stge 1
+              address:
+                type: string
+                example: خیابان شهید بهشتی
+                description: stge 1
+              store_name:
+                type: string
+                example: فروشگاه ممد
+                description: stge 1
+              sheba_number:
+                type: string
+                example: IR123456789012345678901234
+                description: stge 2
+              estimated_item_count:
+                type: integer
+                example: 100
+                description: stge 2
+        - in: header
+          name: Authorization
+          description: Bearer token must be here or in cookie
+          required: false
+          schema:
+            type: string
+        - in: formData
+          name: national_card
+          description: national card when stage is 3 is required
+          required: false
+          type: file
+        - in: query
+          name: stage
+          description: stage of profile
+          required: true
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+      responses:
+        "200":
+          description: petshop profile updated
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  user_data:
+                    description: user data if registeration is completed
+                    type: object
+                    properties:
+                      first_name:
+                        type: string
+                        example: John
+                      last_name:
+                        type: string
+                        example: Doe
+                      gender:
+                        type: string
+                        example: مرد
+                      national_id:
+                        type: string
+                        example: "1234567890"
+                      city:
+                        type: string
+                        example: تهران
+                      postal_region:
+                        type: string
+                        example: تهران
+                      address:
+                        type: string
+                        example: خیابان شهید بهشتی
+                      store_name:
+                        type: string
+                        example: فروشگاه ممد
+                      store_slug:
+                        type: string
+                        example: فروشگاه-ممد
+                      sheba_number:
+                        type: string
+                        example: IR123456789012345678901234
+                      estimated_item_count:
+                        type: integer
+                        example: 100
+                      national_card:
+                        type: string
+                        format: uri
+                        example: http://example.com/national_card.jpg
+        "400":
+          description: invalid request
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: object
+                properties:
+                  stage:
+                    type: string
+                    oneOf:
+                      - invalid stage
+                      - user already registered
+                      - stage 0 is not completed
+                      - stage 1 is not completed
+                      - stage 2 is not completed
+                  first_name:
+                    - This field is required.
+                  last_name:
+                    - This field is required.
+                  gender:
+                    - This field is required.
+                  national_id:
+                    - This field is required.
+                  city:
+                    - This field is required.
+                  postal_region:
+                    - This field is required.
+                  address:
+                    - This field is required.
+                  store_name:
+                    - This field is required.
+                  sheba_number:
+                    - This field is required.
+                  estimated_item_count:
+                    - This field is required.
+                  national_card:
+                    - This field is required.
+        "403":
+          description: forbidden
+    definitions:
+      Profile:
+        type: object
+        properties:
+          first_name:
+            type: string
+            example: John
+            description: stge 0
+          last_name:
+            type: string
+            example: Doe
+            description: stge 0
+          gender:
+            type: string
+            example: مرد
+            description: stge 0
+          national_id:
+            type: string
+            example: "1234567890"
+            description: stge 0
+          city:
+            type: string
+            example: تهران
+            description: stge 1
+          postal_region:
+            type: string
+            example: تهران
+            description: stge 1
+          address:
+            type: string
+            example: خیابان شهید بهشتی
+            description: stge 1
+          store_name:
+            type: string
+            example: فروشگاه ممد
+            description: stge 1
+          sheba_number:
+            type: string
+            example: IR123456789012345678901234
+            description: stge 2
+          estimated_item_count:
+            type: integer
+            example: 100
+            description: stge 2
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              user_data:
+                description: user data if registeration is completed
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                    example: John
+                  last_name:
+                    type: string
+                    example: Doe
+                  gender:
+                    type: string
+                    example: مرد
+                  national_id:
+                    type: string
+                    example: "1234567890"
+                  city:
+                    type: string
+                    example: تهران
+                  postal_region:
+                    type: string
+                    example: تهران
+                  address:
+                    type: string
+                    example: خیابان شهید بهشتی
+                  store_name:
+                    type: string
+                    example: فروشگاه ممد
+                  store_slug:
+                    type: string
+                    example: فروشگاه-ممد
+                  sheba_number:
+                    type: string
+                    example: IR123456789012345678901234
+                  estimated_item_count:
+                    type: integer
+                    example: 100
+                  national_card:
+                    type: string
+                    format: uri
+                    example: http://example.com/national_card.jpg
+      InvalidRequest:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: object
+            properties:
+              stage:
+                type: string
+                oneOf:
+                  - invalid stage
+                  - user already registered
+                  - stage 0 is not completed
+                  - stage 1 is not completed
+                  - stage 2 is not completed
+              first_name:
+                - This field is required.
+              last_name:
+                - This field is required.
+              gender:
+                - This field is required.
+              national_id:
+                - This field is required.
+              city:
+                - This field is required.
+              postal_region:
+                - This field is required.
+              address:
+                - This field is required.
+              store_name:
+                - This field is required.
+              sheba_number:
+                - This field is required.
+              estimated_item_count:
+                - This field is required.
+              national_card:
+                - This field is required.
+  /accounts/logout:
+    get:
+      tags:
+        - accounts
+      summary: Logout
+      description: Logout
+      operationId: accounts_logout
+      responses:
+        "200":
+          description: Logout
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out
+  /product:
+    get:
+      tags:
+        - Product
+      summary: Get product List
+      description: filters and etc
+      operationId: get_product_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          description: Limit of products
+          required: false
+          type: integer
+          example: 10
+        - in: query
+          name: offset
+          description: Offset of products
+          required: false
+          type: integer
+          example: 0
+        - in: query
+          name: pet_types
+          description: Pet types of products
+          required: false
+          type: string
+          example: cat,dog
+        - in: query
+          name: pet_categories
+          description: Pet categories of products
+          required: false
+          type: integer
+          example: 1
+        - in: query
+          name: category_slugs
+          description: Category slugs of products
+          required: false
+          type: string
+          example: food,accessories
+        - in: query
+          name: brand_slugs
+          description: Brand slugs of products
+          required: false
+          type: string
+          example: royal-canin,pedigree
+        - in: query
+          name: max_price
+          description: Max price of products
+          required: false
+          type: integer
+          example: 100000
+        - in: query
+          name: min_price
+          description: Max price of products
+          required: false
+          type: integer
+          example: 90000
+        - in: query
+          name: order_by
+          description: Order by of products
+          required: false
+          type: string
+          oneOf:
+            - cheapest
+            - most_expensive
+        - in: query
+          name: search
+          description: Search of products
+          required: false
+          type: string
+          example: cat+food
+      responses:
+        "200":
+          description: Product found
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Cat Food
+                slug:
+                  type: string
+                  example: cat-food
+                category:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Food
+                    slug:
+                      type: string
+                      example: food
+                    parent_catgory:
+                      $ref: "#/paths/~1product/definitions/Product/properties/category/properties/par\
+                        ent_catgory"
+                  default: null
+                picture:
+                  type: string
+                  example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+                max_price:
+                  type: int
+                  example: 100000
+                min_price:
+                  type: int
+                  example: 90000
+                inventory:
+                  type: int
+                  example: 100
+                rating:
+                  type: number
+                  example: 4.5
+                best_seller:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Petshop 1
+                    slug:
+                      type: string
+                      example: petshop-1
+                  default: null
+    definitions:
+      Product:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Cat Food
+          slug:
+            type: string
+            example: cat-food
+          category:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Food
+              slug:
+                type: string
+                example: food
+              parent_catgory:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Food
+                  slug:
+                    type: string
+                    example: food
+                  parent_catgory:
+                    $ref: "#/paths/~1product/definitions/Product/properties/category/properties/par\
+                      ent_catgory"
+                default: null
+            default: null
+          picture:
+            type: string
+            example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          max_price:
+            type: int
+            example: 100000
+          min_price:
+            type: int
+            example: 90000
+          inventory:
+            type: int
+            example: 100
+          rating:
+            type: number
+            example: 4.5
+          best_seller:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Petshop 1
+              slug:
+                type: string
+                example: petshop-1
+            default: null
+  /product/top_sellers/:
+    get:
+      tags:
+        - Product
+      summary: Get Best Sellers
+      operationId: get_top_sellers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+                description: success
+              data:
+                type: array
+                items:
+                  $ref: "#/paths/~1product~1top_sellers~1/definitions/Success/properties/data/ite\
+                    ms"
+    definitions:
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+            description: success
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Petshop A
+                slug:
+                  type: string
+                  example: petshop-a
+                average_rating:
+                  type: number
+                  example: 4.5
+      Seller:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Petshop A
+          slug:
+            type: string
+            example: petshop-a
+          average_rating:
+            type: number
+            example: 4.5
+  /product/filters/:
+    get:
+      tags:
+        - Product
+      summary: Get filters
+      description: Get filters for filtering in list view
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Filters
+          schema:
+            type: object
+            properties:
+              brands:
+                type: array
+                items:
+                  $ref: "#/paths/~1product~1filters~1/definitions/Filters/properties/brands/items"
+              categories:
+                type: array
+                items:
+                  $ref: "#/paths/~1product~1filters~1/definitions/Filters/properties/brands/items"
+              pet_types:
+                type: array
+                items:
+                  $ref: "#/paths/~1product~1filters~1/definitions/Filters/properties/brands/items"
+              pet_categories:
+                default:
+                  - id: 1
+                    name: Dog
+                  - id: 2
+                    name: Cat
+                  - id: 3
+                    name: Bird
+              max_price:
+                type: integer
+              min_price:
+                type: integer
+    definitions:
+      Filters:
+        type: object
+        properties:
+          brands:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                slug:
+                  type: string
+          categories:
+            type: array
+            items:
+              $ref: "#/paths/~1product~1filters~1/definitions/Filters/properties/brands/items"
+          pet_types:
+            type: array
+            items:
+              $ref: "#/paths/~1product~1filters~1/definitions/Filters/properties/brands/items"
+          pet_categories:
+            default:
+              - id: 1
+                name: Dog
+              - id: 2
+                name: Cat
+              - id: 3
+                name: Bird
+          max_price:
+            type: integer
+          min_price:
+            type: integer
+      Filter:
+        type: object
+        properties:
+          name:
+            type: string
+          slug:
+            type: string
+  /product/recommended/:
+    get:
+      tags:
+        - Product
+      summary: Get product recommended list for home page
+      description: ""
+      operationId: get_product_recommended_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Product found
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Cat Food
+                slug:
+                  type: string
+                  example: cat-food
+                category:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Food
+                    slug:
+                      type: string
+                      example: food
+                    parent_catgory:
+                      $ref: "#/paths/~1product~1recommended~1/definitions/Product/properties/category\
+                        /properties/parent_catgory"
+                  default: null
+                picture:
+                  type: string
+                  example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+                max_price:
+                  type: int
+                  example: 100000
+                min_price:
+                  type: int
+                  example: 90000
+                inventory:
+                  type: int
+                  example: 100
+                rating:
+                  type: number
+                  example: 4.5
+                best_seller:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Petshop 1
+                    slug:
+                      type: string
+                      example: petshop-1
+                  default: null
+    definitions:
+      Product:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Cat Food
+          slug:
+            type: string
+            example: cat-food
+          category:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Food
+              slug:
+                type: string
+                example: food
+              parent_catgory:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Food
+                  slug:
+                    type: string
+                    example: food
+                  parent_catgory:
+                    $ref: "#/paths/~1product~1recommended~1/definitions/Product/properties/category\
+                      /properties/parent_catgory"
+                default: null
+            default: null
+          picture:
+            type: string
+            example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          max_price:
+            type: int
+            example: 100000
+          min_price:
+            type: int
+            example: 90000
+          inventory:
+            type: int
+            example: 100
+          rating:
+            type: number
+            example: 4.5
+          best_seller:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Petshop 1
+              slug:
+                type: string
+                example: petshop-1
+            default: null
+  /product/sales:
+    get:
+      tags:
+        - Product
+      summary: Get product sale list for home page
+      description: ""
+      operationId: get_product_sale_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          description: Limit of products
+          required: false
+          type: integer
+          example: 10
+        - in: query
+          name: offset
+          description: Offset of products
+          required: false
+          type: integer
+          example: 0
+      responses:
+        "200":
+          description: Product found
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Cat Food
+                slug:
+                  type: string
+                  example: cat-food
+                category:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Food
+                    slug:
+                      type: string
+                      example: food
+                    parent_catgory:
+                      $ref: "#/paths/~1product~1sales/definitions/Product/properties/category/propert\
+                        ies/parent_catgory"
+                  default: null
+                picture:
+                  type: string
+                  example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+                max_price:
+                  type: int
+                  example: 100000
+                min_price:
+                  type: int
+                  example: 90000
+                inventory:
+                  type: int
+                  example: 100
+                rating:
+                  type: number
+                  example: 4.5
+                best_seller:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Petshop 1
+                    slug:
+                      type: string
+                      example: petshop-1
+                  default: null
+    definitions:
+      Product:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Cat Food
+          slug:
+            type: string
+            example: cat-food
+          category:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Food
+              slug:
+                type: string
+                example: food
+              parent_catgory:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Food
+                  slug:
+                    type: string
+                    example: food
+                  parent_catgory:
+                    $ref: "#/paths/~1product~1sales/definitions/Product/properties/category/propert\
+                      ies/parent_catgory"
+                default: null
+            default: null
+          picture:
+            type: string
+            example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          max_price:
+            type: int
+            example: 100000
+          min_price:
+            type: int
+            example: 90000
+          inventory:
+            type: int
+            example: 100
+          rating:
+            type: number
+            example: 4.5
+          best_seller:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Petshop 1
+              slug:
+                type: string
+                example: petshop-1
+            default: null
+  "/product/{slug}":
+    get:
+      tags:
+        - Product
+      summary: Get product by Slug
+      description: ""
+      operationId: get_product_by_slug
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: slug
+          description: Slug of product
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Product found
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Cat Food
+              category:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Food
+                  slug:
+                    type: string
+                    example: food
+                  parent_catgory:
+                    $ref: "#/paths/~1product~1%7Bslug%7D/definitions/Product/properties/category/pr\
+                      operties/parent_catgory"
+                default: null
+              pet_type:
+                type: object
+                properties:
+                  pet_category:
+                    type: string
+                    example: Persian
+                  pet_type:
+                    type: object
+                    properties:
+                      pet_type:
+                        type: string
+                        example: Cat
+              picture:
+                type: string
+                example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+              details:
+                type: string
+                example: This is a cat food
+              specs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Weight
+                    value:
+                      type: string
+                      example: 1kg
+              pictures:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    picture:
+                      type: string
+                      example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+              brand:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Royal Canin
+                  slug:
+                    type: slug
+                    example: royal-canin
+              rating:
+                type: number
+                example: 4.5
+              price:
+                type: int
+                example: 100000
+              comments:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user:
+                      type: string
+                      example: user1
+                    title:
+                      type: string
+                      example: This is a comment
+                    text:
+                      type: string
+                      example: This is a comment
+                    rate:
+                      type: number
+                      example: 4.5
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: 2018-01-01T00:00:00Z
+              best_pricing:
+                type: object
+                properties:
+                  id:
+                    type: int
+                    example: 1
+                  price:
+                    type: int
+                    example: 100000
+                  price_after_sale:
+                    type: int
+                    example: 90000
+                  inventory:
+                    type: int
+                    example: 100
+                  petshop:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Petshop 1
+                      slug:
+                        type: string
+                        example: petshop-1
+              productpricing:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: int
+                      example: 1
+                    price:
+                      type: int
+                      example: 100000
+                    price_after_sale:
+                      type: int
+                      example: 90000
+                    inventory:
+                      type: int
+                      example: 100
+                    petshop:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Petshop 1
+                        slug:
+                          type: string
+                          example: petshop-1
+              related_products:
+                type: array
+                items:
+                  $ref: "#/paths/~1product~1%7Bslug%7D/definitions/Product/properties/related_pro\
+                    ducts/items"
+        "404":
+          description: Product not found
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: array
+                example:
+                  - Product not found.
+    post:
+      tags:
+        - Product
+      summery: Create Comment
+      description: ""
+      operationId: create_comment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: slug
+          description: Slug of product
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Comment
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: This is a comment
+              text:
+                type: string
+                example: This is a comment
+              rate:
+                type: int
+                example: 4
+        - in: header
+          name: Authorization
+          description: Bearer token must be here or in cookie
+          required: false
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Comment created
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              data:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: This is a comment
+                  text:
+                    type: string
+                    example: This is a comment
+                  rate:
+                    type: int
+                    example: 4
+        "400":
+          description: Invalid request
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: object
+                properties:
+                  title:
+                    type: array
+                    example:
+                      - This field is required.
+                  text:
+                    type: array
+                    example:
+                      - This field is required.
+                  rate:
+                    type: array
+                    example:
+                      - This field is required.
+        "403":
+          description: Forbidden
+        "404":
+          description: Product not found
+          schema:
+            $ref: "#/paths/~1product~1%7Bslug%7D/get/responses/404/schema"
+    definitions:
+      Product:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Cat Food
+          category:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Food
+              slug:
+                type: string
+                example: food
+              parent_catgory:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Food
+                  slug:
+                    type: string
+                    example: food
+                  parent_catgory:
+                    $ref: "#/paths/~1product~1%7Bslug%7D/definitions/Product/properties/category/pr\
+                      operties/parent_catgory"
+                default: null
+            default: null
+          pet_type:
+            type: object
+            properties:
+              pet_category:
+                type: string
+                example: Persian
+              pet_type:
+                type: object
+                properties:
+                  pet_type:
+                    type: string
+                    example: Cat
+          picture:
+            type: string
+            example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          details:
+            type: string
+            example: This is a cat food
+          specs:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Weight
+                value:
+                  type: string
+                  example: 1kg
+          pictures:
+            type: array
+            items:
+              type: object
+              properties:
+                picture:
+                  type: string
+                  example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          brand:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Royal Canin
+              slug:
+                type: slug
+                example: royal-canin
+          rating:
+            type: number
+            example: 4.5
+          price:
+            type: int
+            example: 100000
+          comments:
+            type: array
+            items:
+              type: object
+              properties:
+                user:
+                  type: string
+                  example: user1
+                title:
+                  type: string
+                  example: This is a comment
+                text:
+                  type: string
+                  example: This is a comment
+                rate:
+                  type: number
+                  example: 4.5
+                created_at:
+                  type: string
+                  format: date-time
+                  example: 2018-01-01T00:00:00Z
+          best_pricing:
+            type: object
+            properties:
+              id:
+                type: int
+                example: 1
+              price:
+                type: int
+                example: 100000
+              price_after_sale:
+                type: int
+                example: 90000
+              inventory:
+                type: int
+                example: 100
+              petshop:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Petshop 1
+                  slug:
+                    type: string
+                    example: petshop-1
+          productpricing:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: int
+                  example: 1
+                price:
+                  type: int
+                  example: 100000
+                price_after_sale:
+                  type: int
+                  example: 90000
+                inventory:
+                  type: int
+                  example: 100
+                petshop:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Petshop 1
+                    slug:
+                      type: string
+                      example: petshop-1
+          related_products:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Cat Food
+                slug:
+                  type: string
+                  example: cat-food
+                category:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Food
+                    slug:
+                      type: string
+                      example: food
+                    parent_catgory:
+                      $ref: "#/paths/~1product~1%7Bslug%7D/definitions/Product/properties/category/pr\
+                        operties/parent_catgory"
+                  default: null
+                picture:
+                  type: string
+                  example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+                max_price:
+                  type: int
+                  example: 100000
+                min_price:
+                  type: int
+                  example: 90000
+                inventory:
+                  type: int
+                  example: 100
+                rating:
+                  type: number
+                  example: 4.5
+                best_seller:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Petshop 1
+                    slug:
+                      type: string
+                      example: petshop-1
+                  default: null
+      InvalidSlug:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: array
+            example:
+              - Product not found.
+      InvalidComment:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: object
+            properties:
+              title:
+                type: array
+                example:
+                  - This field is required.
+              text:
+                type: array
+                example:
+                  - This field is required.
+              rate:
+                type: array
+                example:
+                  - This field is required.
+      CommentSuccess:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          data:
+            type: object
+            properties:
+              title:
+                type: string
+                example: This is a comment
+              text:
+                type: string
+                example: This is a comment
+              rate:
+                type: int
+                example: 4
+      ProductList:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Cat Food
+          slug:
+            type: string
+            example: cat-food
+          category:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Food
+              slug:
+                type: string
+                example: food
+              parent_catgory:
+                $ref: "#/paths/~1product~1%7Bslug%7D/definitions/Product/properties/category/pr\
+                  operties/parent_catgory"
+            default: null
+          picture:
+            type: string
+            example: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          max_price:
+            type: int
+            example: 100000
+          min_price:
+            type: int
+            example: 90000
+          inventory:
+            type: int
+            example: 100
+          rating:
+            type: number
+            example: 4.5
+          best_seller:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Petshop 1
+              slug:
+                type: string
+                example: petshop-1
+            default: null
+  "/product/{slug}/pricing":
+    patch:
+      tags:
+        - Product
+      summary: Update product price and stock
+      description: Update product price and stock
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: slug
+          description: Slug of product
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ProductPricing
+          required: true
+          schema:
+            type: object
+            properties:
+              price:
+                type: integer
+                example: 100000
+              stock:
+                type: integer
+                example: 100
+        - in: header
+          name: Authorization
+          description: Bearer token must be here or in cookie
+          required: true
+      responses:
+        "200":
+          description: Product updated
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+                description: success
+              data:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pricing added.
+        "400":
+          description: Invalid request
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+                description: success
+              errors:
+                type: object
+                example:
+                  price:
+                    - This field is required.
+                  inventory:
+                    - This field is required.
+        "403":
+          description: Forbidden if user is not a verified seller
+        "404":
+          description: Product not found
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+                description: success
+              errors:
+                type: object
+                example:
+                  message: Product not found.
+    definitions:
+      Success:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+            description: success
+          data:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Pricing added.
+      InvalidRequest:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+            description: success
+          errors:
+            type: object
+            example:
+              price:
+                - This field is required.
+              inventory:
+                - This field is required.
+      InvalidSlug:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+            description: success
+          errors:
+            type: object
+            example:
+              message: Product not found.
+  /dashboard/address:
+    get:
+      operationId: dashboard_address_list
+      summary: get list of users address
+      description: ""
+      parameters: null
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_address_create
+      summary: add new address
+      description: ""
+      parameters:
+        - in: body
+          name: body
+          description: Add address
+          required: true
+          schema:
+            type: object
+            properties:
+              province:
+                type: string
+                format: char
+                example: tehran
+              city:
+                type: string
+                format: char
+                example: tehran
+              postal_code:
+                type: string
+                format: char
+                example: "78665752"
+              postal_address:
+                type: string
+                format: char
+                example: tehran,azadi street
+              lat:
+                type: string
+                format: char
+              lon:
+                type: string
+                format: char
+      responses:
+        "201":
+          description: address added successfuly
+        "400":
+          description: Invalid Address
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              errors:
+                type: object
+                province:
+                  type: array
+                  format: char
+                  example:
+                    - This field is required.
+              city:
+                type: array
+                format: char
+                example:
+                  - This field is required.
+              postal_code:
+                type: array
+                format: char
+                example:
+                  - This field is required.
+              postal_address:
+                type: array
+                format: char
+                example:
+                  - This field is required.
+              lat:
+                type: array
+                example:
+                  - This field is required.
+              lon:
+                type: array
+                example:
+                  - This field is required.
+      tags:
+        - dashboard
+    definitions:
+      Address:
+        type: object
+        properties:
+          province:
+            type: string
+            format: char
+            example: tehran
+          city:
+            type: string
+            format: char
+            example: tehran
+          postal_code:
+            type: string
+            format: char
+            example: "78665752"
+          postal_address:
+            type: string
+            format: char
+            example: tehran,azadi street
+          lat:
+            type: string
+            format: char
+          lon:
+            type: string
+            format: char
+      InvalidAddress:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          errors:
+            type: object
+            province:
+              type: array
+              format: char
+              example:
+                - This field is required.
+          city:
+            type: array
+            format: char
+            example:
+              - This field is required.
+          postal_code:
+            type: array
+            format: char
+            example:
+              - This field is required.
+          postal_address:
+            type: array
+            format: char
+            example:
+              - This field is required.
+          lat:
+            type: array
+            example:
+              - This field is required.
+          lon:
+            type: array
+            example:
+              - This field is required.
+  "/dashboard/address/{id}":
+    patch:
+      operationId: dashboard_address_partial_update
+      description: ""
+      summary: partial update of address by id
+      parameters:
+        - in: body
+          name: body
+          description: Add address
+          required: true
+          schema:
+            type: object
+            properties:
+              province:
+                type: string
+                format: char
+                example: tehran
+              city:
+                type: string
+                format: char
+                example: tehran
+              postal_code:
+                type: string
+                format: char
+                example: "78665752"
+              postal_address:
+                type: string
+                format: char
+                example: tehran,azadi street
+              lat:
+                type: string
+                format: char
+              lon:
+                type: string
+                format: char
+      responses:
+        "200":
+          description: partial update of address
+      tags:
+        - dashboard
+    delete:
+      operationId: dashboard_address_delete
+      summary: delete address by id
+      description: delete address of user by id
+      responses:
+        "200":
+          description: address deleted successfuly
+        "400":
+          description: Invalid Address
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+                example: address does not exist
+      tags:
+        - dashboard
+    definitions:
+      Address:
+        type: object
+        properties:
+          province:
+            type: string
+            format: char
+            example: tehran
+          city:
+            type: string
+            format: char
+            example: tehran
+          postal_code:
+            type: string
+            format: char
+            example: "78665752"
+          postal_address:
+            type: string
+            format: char
+            example: tehran,azadi street
+          lat:
+            type: string
+            format: char
+          lon:
+            type: string
+            format: char
+      InvalidAddress:
+        type: object
+        properties:
+          errors:
+            type: object
+            example: address does not exist
+  /dashboard/bookmark:
+    get:
+      operationId: dashboard_bookmark_list
+      description: ""
+      summary: get list of bookmarks
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_bookmark_create
+      description: ""
+      summary: add new product for bookmark
+      parameters:
+        - in: body
+          name: body
+          description: Add bookmark
+          required: true
+          schema:
+            type: object
+            properties:
+              product_id:
+                type: object
+                format: int
+                example: 1
+      responses:
+        "201":
+          schema:
+            $ref: "#/paths/~1dashboard~1bookmark/post/parameters/0/schema"
+        "400":
+          schema:
+            type: object
+            properties:
+              errors:
+                product_id:
+                  type: object
+                  format: array
+                  example:
+                    - This field is required.
+      tags:
+        - dashboard
+    definitions:
+      Bookmark:
+        type: object
+        properties:
+          product_id:
+            type: object
+            format: int
+            example: 1
+      InvalidBookmark:
+        type: object
+        properties:
+          errors:
+            product_id:
+              type: object
+              format: array
+              example:
+                - This field is required.
+  "/dashboard/bookmark/{id}":
+    delete:
+      operationId: dashboard_favorite_delete
+      summary: delete bookmark
+      description: ""
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Bookmark deleted successfuly
+          schema:
+            properties:
+              success:
+                type: object
+                format: char
+                example: Bookmark deleted successfuly
+        "400":
+          description: bookmark does not exist
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+                format: char
+                example: Bookmark does not exist
+      tags:
+        - dashboard
+    definitions:
+      InvalidBookmark:
+        type: object
+        properties:
+          errors:
+            type: object
+            format: char
+            example: Bookmark does not exist
+      ValidBookmark:
+        properties:
+          success:
+            type: object
+            format: char
+            example: Bookmark deleted successfuly
+  /dashboard/orders:
+    get:
+      operationId: dashboard_orders_list
+      summary: get list of user orders
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+  /dashboard/pet/:
+    get:
+      operationId: dashboard_pet_list
+      summary: get list of users pet
+      description: ""
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+    post:
+      operationId: dashboard_pet_create
+      summary: add new pet
+      description: ""
+      parameters:
+        - in: body
+          name: body
+          description: Add Pet
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                format: char
+                example: malmal
+              pet_type:
+                type: string
+                format: char
+                example: ghosfand
+              pet_category:
+                type: string
+                format: char
+                example: chaharpa
+              sex:
+                type: string
+                format: char
+                example: M
+              birth_date:
+                type: string
+                format: char
+                example: 2020-12-2
+              weight:
+                type: float
+                example: "30.3"
+              last_vaccine_date:
+                type: string
+                format: char
+                example: 2022-12-29
+              underlying_disease:
+                type: string
+                format: char
+                example: HIV
+              last_anti_parasitic_vaccine_date:
+                type: string
+                format: char
+                example: 2022-12-29
+      responses:
+        "201":
+          description: ""
+      tags:
+        - dashboard
+    definitions:
+      Pet:
+        type: object
+        properties:
+          name:
+            type: string
+            format: char
+            example: malmal
+          pet_type:
+            type: string
+            format: char
+            example: ghosfand
+          pet_category:
+            type: string
+            format: char
+            example: chaharpa
+          sex:
+            type: string
+            format: char
+            example: M
+          birth_date:
+            type: string
+            format: char
+            example: 2020-12-2
+          weight:
+            type: float
+            example: "30.3"
+          last_vaccine_date:
+            type: string
+            format: char
+            example: 2022-12-29
+          underlying_disease:
+            type: string
+            format: char
+            example: HIV
+          last_anti_parasitic_vaccine_date:
+            type: string
+            format: char
+            example: 2022-12-29
+  "/dashboard/pet/{id}":
+    patch:
+      operationId: dashboard_pet_partial_update
+      summary: update pet
+      description: ""
+      parameters:
+        - in: body
+          name: body
+          description: Add address
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                format: char
+                example: malmal
+              sex:
+                type: string
+                format: char
+                example: M
+              birth_date:
+                type: string
+                format: char
+                example: 2020-12-2
+              weight:
+                type: float
+                example: "30.3"
+              last_vaccine_date:
+                type: string
+                format: char
+                example: 2022-12-29
+              underlying_disease:
+                type: string
+                format: char
+                example: HIV
+              last_anti_parasitic_vaccine_date:
+                type: string
+                format: char
+                example: 2022-12-29
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+    definitions:
+      Pet:
+        type: object
+        properties:
+          name:
+            type: string
+            format: char
+            example: malmal
+          sex:
+            type: string
+            format: char
+            example: M
+          birth_date:
+            type: string
+            format: char
+            example: 2020-12-2
+          weight:
+            type: float
+            example: "30.3"
+          last_vaccine_date:
+            type: string
+            format: char
+            example: 2022-12-29
+          underlying_disease:
+            type: string
+            format: char
+            example: HIV
+          last_anti_parasitic_vaccine_date:
+            type: string
+            format: char
+            example: 2022-12-29
+  /dashboard/message/:
+    get:
+      operationId: dashboard_message_list
+      summary: get messages for user
+      description: ""
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+  /dashboard/user-profile:
+    get:
+      operationId: get_user_profile
+      summary: get users profile information
+      description: ""
+      responses:
+        "200":
+          description: ""
+      tags:
+        - dashboard
+    patch:
+      operationId: edit_user_profile
+      summary: edite users information
+      description: ""
+      parameters:
+        - in: body
+          name: body
+          description: edit profile
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: char
+                example: gholam@gmail.com
+              birth_date:
+                type: string
+                format: char
+                example: 2022-01-10
+      responses:
+        "201":
+          description: ""
+      tags:
+        - dashboard
+    definitions:
+      User:
+        type: object
+        properties:
+          email:
+            type: string
+            format: char
+            example: gholam@gmail.com
+          birth_date:
+            type: string
+            format: char
+            example: 2022-01-10
+  /dashboard/over-view:
+    get:
+      operationId: dashboard_over_view
+      summary: overview
+      description: ""
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: object
+            properties:
+              success:
+                example: "true"
+              data:
+                example:
+                  my_pet:
+                    name: jessi
+                    pet_type: dog
+                    sex: M
+                    pet_category: bouldag
+                    birth_date: 2023-01-17
+                    weight: 35000
+                    last_vaccine_date: 2023-01-17
+                    underlying_disease: qewd
+                    last_anti_parasitic_vaccine_date: 2023-01-17
+                  wallet: 45000000
+                  orders:
+                    delivered: 4
+                    canceled: 1
+                    ongoing: 2
+                  total_price: "122323"
+                  orders_count: 3
+      tags:
+        - dashboard
+    definitions:
+      Overview:
+        type: object
+        properties:
+          success:
+            example: "true"
+          data:
+            example:
+              my_pet:
+                name: jessi
+                pet_type: dog
+                sex: M
+                pet_category: bouldag
+                birth_date: 2023-01-17
+                weight: 35000
+                last_vaccine_date: 2023-01-17
+                underlying_disease: qewd
+                last_anti_parasitic_vaccine_date: 2023-01-17
+              wallet: 45000000
+              orders:
+                delivered: 4
+                canceled: 1
+                ongoing: 2
+              total_price: "122323"
+              orders_count: 3
+  /cart:
+    get:
+      operationId: cart_get_cart
+      summary: get shopping carts products
+      description: ""
+      parameters: null
+      responses:
+        "200":
+          schema:
+            type: object
+            properties:
+              success:
+                example: true
+              data:
+                example:
+                  - id: 2
+                    price: 333
+                    price_after_sale: 3
+                    petshop: pet shopekabar
+                    picture: null
+                    count: 2
+                    products_accumulative_price: 666
+                  - total_price: 666
+      tags:
+        - cart
+    post:
+      operationId: cart_add_product
+      summary: add products to cart
+      description: first item (key)is product id and value is count
+      parameters:
+        - in: body
+          name: body
+          description: add product
+          required: true
+          schema:
+            type: object
+            properties:
+              "2":
+                example: 1
+                type: int
+      responses:
+        "200":
+          description: address added successfuly
+      tags:
+        - cart
+    definitions:
+      GetCart:
+        type: object
+        properties:
+          success:
+            example: true
+          data:
+            example:
+              - id: 2
+                price: 333
+                price_after_sale: 3
+                petshop: pet shopekabar
+                picture: null
+                count: 2
+                products_accumulative_price: 666
+              - total_price: 666
+      PostCart:
+        type: object
+        properties:
+          "2":
+            example: 1
+            type: int
+  /petshop-dashboard/orders:
+    get:
+      operationId: petshop_dashboard_orders_list
+      summary: get list of petshop orders
+      description: ""
+      parameters:
+        - in: query
+          name: orders_type
+          description: type of orders
+          required: true
+          type: char
+          example: recent
+        - in: query
+          name: orders_type
+          description: type of orders
+          required: true
+          type: char
+          example: completed
+      responses:
+        "200":
+          description: ""
+      tags:
+        - petshop-dashboard
+  "/petshop-dashboard/orders/{id}":
+    get:
+      operationId: single order
+      summary: get list of user orders
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - petshop-dashboard
+  /petshop-dashboard/products:
+    get:
+      operationId: petshop_dashboard_products
+      summary: list of petshops product
+      description: ""
+      responses:
+        "200":
+          description: ""
+      tags:
+        - petshop-dashboard
