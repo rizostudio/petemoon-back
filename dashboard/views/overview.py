@@ -2,15 +2,11 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import exceptions
 
-from config.responses import SuccessResponse, UnsuccessfulResponse
+from config.responses import SuccessResponse
 from dashboard.serializers import PetSerializer
 from dashboard.models import Pet
 from shopping_cart.models import Order
-from config.responses import SuccessResponse, UnsuccessfulResponse
-from config.exceptions import CustomException
-
 from django.db.models import Sum
 
 
@@ -20,7 +16,7 @@ class OverViewView(APIView):
     def get(self, request):
 
         pet = Pet.objects.filter(user=request.user)
-        wallet = request.user.profile.wallet.credit
+        wallet = request.user.wallet.credit
         orders = Order.objects.filter(user=request.user)
 
         orders_count = orders.count()
@@ -31,9 +27,10 @@ class OverViewView(APIView):
         total_price = Order.objects.aggregate(Sum('total_price'))
 
         pet = PetSerializer(pet, many=True).data
-        return SuccessResponse(data={"my_pet": pet,
-         "wallet": wallet, 
-         "orders":{"delivered": delivered, "canceled": canceled, "ongoing": ongoing},
-         "total_price": total_price['total_price__sum'],
-         "orders_count":orders_count
-         })
+        return SuccessResponse(
+            data={"my_pet": pet,
+                    "wallet": wallet, 
+                    "orders":{"delivered": delivered, "canceled": canceled, "ongoing": ongoing},
+                    "total_price": total_price['total_price__sum'],
+                    "orders_count":orders_count
+            })

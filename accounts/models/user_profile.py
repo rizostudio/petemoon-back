@@ -16,7 +16,6 @@ class UserProfile(models.Model):
     referal_code = models.CharField(max_length=16, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    wallet = models.ForeignKey(Wallet, null=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "user profile"
@@ -30,3 +29,5 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+        wallet = Wallet.objects.create(user=instance)
+
