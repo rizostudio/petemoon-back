@@ -14,7 +14,7 @@ class PetCategorySerializer(serializers.ModelSerializer):
             fields = "__all__"
          
 
-class PetSerializer(serializers.Serializer):
+class PetGetSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
     pet_type = serializers.CharField(source='pet_type.pet_type',required=False)
@@ -28,11 +28,27 @@ class PetSerializer(serializers.Serializer):
     last_anti_parasitic_vaccine_date = serializers.DateField(required=False)
     photo = serializers.ImageField()
     
+
+    
+class PetPostSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField()
+    pet_type = serializers.IntegerField(required=False)
+    sex = serializers.CharField(max_length=1)
+    pet_category = serializers.IntegerField(required=False)
+    birth_date = serializers.DateField()
+    # medical
+    weight = serializers.FloatField(required=False)
+    last_vaccine_date = serializers.DateField(required=False)
+    underlying_disease = serializers.CharField(required=False)
+    last_anti_parasitic_vaccine_date = serializers.DateField(required=False)
+    photo = serializers.ImageField(required=False)
+    
     def create(self, validated_data):
         validated_data['pet_type'] = PetType.objects.get(
-            pet_type=validated_data['pet_type']['pet_type'])
+            id=validated_data['pet_type'])
         validated_data['pet_category'] = PetCategory.objects.get(
-            pet_category=validated_data['pet_category']['pet_category'])
+            id=validated_data['pet_category'])
 
         pet = Pet.objects.create(**validated_data)
         return pet

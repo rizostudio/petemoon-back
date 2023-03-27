@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from config.responses import SuccessResponse
-from dashboard.serializers import PetSerializer
+from dashboard.serializers import PetGetSerializer
 from dashboard.models import Pet
 from shopping_cart.models import Order
 from django.db.models import Sum
@@ -26,7 +26,7 @@ class OverViewView(APIView):
         ongoing = Order.objects.filter(user=request.user,status="ONGOING").count()
         total_price = Order.objects.aggregate(Sum('total_price'))
 
-        pet = PetSerializer(pet, many=True).data
+        pet = PetGetSerializer(pet, many=True).data
         return SuccessResponse(
             data={"my_pet": pet,
                     "wallet": wallet, 

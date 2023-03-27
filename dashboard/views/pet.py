@@ -5,25 +5,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
 from config.responses import SuccessResponse, UnsuccessfulResponse
-from dashboard.serializers import PetSerializer, PetTypeSerializer, PetCategorySerializer
+from dashboard.serializers import PetGetSerializer, PetPostSerializer, PetTypeSerializer, PetCategorySerializer
 from dashboard.models import Pet, PetType, PetCategory
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
 
 class PetView(APIView):
-    serializer_class = PetSerializer
     #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
            
         pet_general = Pet.objects.filter(user=request.user)
-        result = self.serializer_class(pet_general,many=True).data
+        result = PetGetSerializer(pet_general,many=True).data
         return SuccessResponse(data=result)
 
     def post(self, request):
-        serialized_data = self.serializer_class(data=request.data)
+        serialized_data = PetPostSerializer(data=request.data)
         try:
             if serialized_data.is_valid(raise_exception=True):
                 serialized_data.save(user=request.user)
@@ -35,7 +34,7 @@ class PetView(APIView):
 
 
     def patch(self, request, id=None):
-        serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
+        serialized_data = PetPostSerializer(request.user,data=request.data, partial=True)
 
         try:
             if serialized_data.is_valid(raise_exception=True):
@@ -64,7 +63,7 @@ class PetTypeView(APIView):
     
 
 class PetCategoryView(APIView):
-    serializer_class = PetTypeSerializer
+    serializer_class = PetCategorySerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id=None):
