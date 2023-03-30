@@ -56,7 +56,7 @@ def create_transaction(
         },
     )
     data = response.json()
-    status = data["data"]["code"]
+    status = data["errors"]["code"]
     if status != 100:
         raise Exception("error in zarrinpal gateway")
     transaction.authority = data["data"]["authority"]
