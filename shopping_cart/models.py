@@ -35,7 +35,7 @@ class Order(models.Model):
     def __str__(self):
         return str(self.order_id)
 
-    def save(self):
+    def save(self,*args, **kwargs):
         self.order_id = default=random_N_chars_str(12)
             # Generate ID once, then check the db. If exists, keep trying.
           
