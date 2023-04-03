@@ -5,3 +5,4 @@ from accounts.views.register_petshop import RegisterPetshop
 from accounts.views.send_otp import SendOTP
 from accounts.views.verify_otp import VerifyOTP
 from accounts.views.register_vet import *
+from .user_validation import *

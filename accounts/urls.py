@@ -7,7 +7,8 @@ from accounts.views import (
     RegisterPetshop,
     SendOTP,
     VerifyOTP,
-    VetRegisterView
+    VetRegisterView,
+    UserValidationView,
 )
 
 urlpatterns = [
@@ -18,4 +19,7 @@ urlpatterns = [
     path("register/petshop/", RegisterPetshop.as_view(), name="register_petshop"),
     path("register/vet", VetRegisterView.as_view(), name="vet_register"),
     path("logout/", Logout.as_view(), name="logout"),
+    path("user-is-valid", UserValidationView.as_view(), name="is-valid"),
+
+    
 ]
