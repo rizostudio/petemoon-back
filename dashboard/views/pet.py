@@ -48,8 +48,32 @@ class PetView(APIView):
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)     
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)   
+          
+    def delete(self, request, id=None):
+        try:
+            try:
+                address = Pet.objects.get(id=id).delete()
+            except Pet.DoesNotExist:
+                raise CustomException(detail=_("Pet does not exist"))
 
+            return SuccessResponse(data={"message":_("Pet deleted successfuly")})
+                
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code) 
+
+
+class SinglePetView(APIView):
+    #authentication_classes = []
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+           
+        pet_general = Pet.objects.get(user=request.user,id=id)
+        result = PetGetSerializer(pet_general).data
+        return SuccessResponse(data=result)
+
+    
 
 class PetTypeView(APIView):
     serializer_class = PetTypeSerializer
