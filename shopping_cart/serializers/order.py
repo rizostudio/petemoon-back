@@ -7,7 +7,7 @@ from ..utils import order_completion
 from django.db import transaction
 #from shopping_cart.serializers  import ShippingSerializer
 from .. models import Shipping
-from payment.services.create_transaction import create_transaction
+from payment.services.create_transaction import create_transaction3
 
 
 class OrderGetSerializer(serializers.Serializer):
@@ -44,10 +44,10 @@ class OrderPostSerializer(serializers.Serializer):
 
         order.save()
 
-        create_transaction(
+        tran = create_transaction3(
             user=validated_data.get("user"), 
             amount=order.total_price,
             order=order, transaction_type="order",
             description="some descriptoin")
-
-        return order
+        print(tran)
+        return tran

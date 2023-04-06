@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext as _
 from rest_framework.views import APIView
+from rest_framework import exceptions
 
 from accounts.functions import (
     apply_stage,
@@ -10,44 +11,35 @@ from accounts.functions import (
 from accounts.models import PetshopProfile
 from accounts.views.permissions import IsPetShop
 from config.responses import bad_request, ok
+from ..serializers import PetShopRegisterSerializer
 
+from config.responses import SuccessResponse, UnsuccessfulResponse
+from config.exceptions import CustomException
 
 class RegisterPetshop(APIView):
     permission_classes = [IsPetShop]
+    serializer_class =  PetShopRegisterSerializer
 
-    @transaction.atomic
-    def patch(self, *args, **kwargs):
+    def get(self, request):
+           
+        order = PetshopProfile.objects.filter(user=request.user)
+        result = self.serializer_class(order,many=True).data
+        return SuccessResponse(data=result)
+
+
+    def patch(self, request):
+        serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
+
         try:
-            data = self.request.data
-            files = self.request.FILES
-            user = self.request.user
-            try:
-                stage = int(self.request.query_params.get("stage", 0))
-            except ValueError:
-                return bad_request({"stage": _("invalid stage")})
-            profile = getattr(user, "petshop_profile", PetshopProfile())
-            if (user.is_registered and stage < 3) or profile.is_approved:
-                return bad_request({"stage": _("user is already registered")})
-            if stage < 0 or stage > 3:
-                return bad_request({"stage": _("invalid stage")})
-            check, min_stage = check_petshop_register_stage(user, stage)
-            if not check:
-                return bad_request(
-                    {
-                        "stage": _("stage ")
-                        + str(min_stage)
-                        + _(" is not completed")
-                    }
-                )
-            applying_func = apply_stage[stage]
-            success, errors = applying_func(user, data=data, files=files)
-            if not success:
-                return bad_request(errors)
-            user_data = {}
-            if stage == 3:
-                user.refresh_from_db()
-                user_data = get_user_data(user)
-            return ok({"user_data": user_data})
-        except Exception as e:
-            print(e)
-            return bad_request()
+            if serialized_data.is_valid(raise_exception=True):
+
+                petshop = serialized_data.update(
+                    instance=PetshopProfile.objects.filter(
+                    user=request.user),validated_data=serialized_data.validated_data)
+
+                return SuccessResponse(data=self.serializer_class(petshop,many=True).data)
+
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except exceptions.ValidationError as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)     

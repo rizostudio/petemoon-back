@@ -10,33 +10,35 @@ sheba_number_validator = RegexValidator(
 )
 
 
-class Stage0PetShopSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=64, required=True)
-    last_name = serializers.CharField(max_length=64, required=True)
-    gender = serializers.CharField(max_length=64, required=True)
+class PetShopRegisterSerializer(serializers.Serializer):
+
+    address = serializers.CharField(max_length=200,required=False)
+    description = serializers.CharField(required=False)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+    city = serializers.CharField(max_length=64,required=False)
+    postal_region = serializers.CharField(max_length=64,required=False)
+ 
     national_id = serializers.CharField(
-        max_length=10, required=True, validators=[national_id_validator]
+        max_length=10,
+        validators=[national_id_validator],
+    required=False
     )
 
-    class Meta:
-        fields = "__all__"
+    #files
+    national_card = serializers.FileField(required=False)
+    birth_certificate = serializers.FileField(required=False)
+    business_license = serializers.FileField(required=False)
+    union_license = serializers.FileField(required=False)
+    tax_certificate = serializers.FileField(required=False)
 
-
-class Stage1PetShopSerializer(serializers.Serializer):
-    city = serializers.CharField(max_length=64, required=True)
-    postal_region = serializers.CharField(max_length=64, required=True)
-    address = serializers.CharField(max_length=200, required=True)
-    store_name = serializers.CharField(max_length=64, required=True)
-
-    class Meta:
-        fields = "__all__"
-
-
-class Stage2PetShopSerializer(serializers.Serializer):
+    estimated_item_count = serializers.IntegerField(required=False)
+    gender = serializers.CharField(max_length=64,required=False)
+ 
     sheba_number = serializers.CharField(
-        max_length=26, validators=[sheba_number_validator], required=True
-    )
-    estimated_item_count = serializers.IntegerField(min_value=1, required=True)
+        max_length=26,validators=[sheba_number_validator],required=False)
+    
+    def update(self, instance, validated_data):
+        instance.update(**validated_data)
 
-    class Meta:
-        fields = "__all__"
+        return instance
