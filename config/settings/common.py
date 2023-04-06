@@ -153,9 +153,10 @@ USE_TZ = True
 
 STATIC_ROOT = get_env("STATIC_ROOT", default="/static/")
 STATIC_URL = get_env("STATIC_URL", default="/static/")
-MEDIA_ROOT = get_env("MEDIA_ROOT", default="/media/")
+MEDIA_ROOT =BASE_DIR/"media"
 MEDIA_URL = get_env("MEDIA_URL", default="/media/")
 static_file_env = get_env("STATICFILES_DIRS", optinal=True)
+
 STATICFILES_DIRS = (
     static_file_env.split(",") if static_file_env is not None else ["docs/"]
 )
@@ -210,7 +211,7 @@ SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 APPEND_SLASH = True
 
 # ZARRINPAL CONFIGURATION
-ZARRINPAL_MERCHANT_ID = get_env("ZARRINPAL_MERCHANT_ID", default="")
+ZARRINPAL_MERCHANT_ID = get_env("ZARRINPAL_MERCHANT_ID", default="00000000-0000-0000-0000-000000000000")
 ZARRINPAL_URL = get_env(
     "ZARRINPAL_URL", default="https://api.zarinpal.com/pg/"
 )

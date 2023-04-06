@@ -2,7 +2,7 @@ from django.urls import path
 from dashboard.views import (
     AddressView, PetView, OrdersView, 
     BookmarkView, MessageView, UserProfileView, 
-    OverViewView, PetTypeView, PetCategoryView,WalletView,SinglePetView)
+    OverViewView, PetTypeView, PetCategoryView, WalletView, SinglePetView)
 
 
 urlpatterns = [
@@ -20,8 +20,5 @@ urlpatterns = [
     path('over-view', OverViewView.as_view(), name='over-view'),
     path('wallet', WalletView.as_view(), name='wallet'),
     path('single-pet/<int:id>', SinglePetView.as_view(), name='single-pet'),
-
-
-
 
 ]
