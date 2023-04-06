@@ -52,6 +52,11 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "productpricing",
             "best_pricing",
             "pictures",
+            "specific",
+            "size",
+            "weight",
+            "made_in",
+            "other_details"
         )
 
     def get_price(self, obj):
@@ -119,6 +124,12 @@ class ProductListSerializer(serializers.ModelSerializer):
             "max_price",
             "inventory",
             "rating",
+            "specific",
+            "size",
+            "weight",
+            "made_in",
+            "other_details"
+
         )
 
     def get_min_price(self, obj):

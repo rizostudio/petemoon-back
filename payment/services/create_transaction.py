@@ -1,7 +1,7 @@
 import requests
 from django.contrib.auth import get_user_model
-
-from config.settings import ZARRINPAL_MERCHANT_ID, ZARRINPAL_URL
+import json
+from django.conf import settings
 from payment.models import Transaction
 
 User = get_user_model()
@@ -25,6 +25,7 @@ def create_transaction(
         order: order object needed for transaction_type order
     return: link to zarrinpal payment gateway
     """
+    
     if transaction_type == "order":
         assert (
             order is not None
@@ -44,9 +45,9 @@ def create_transaction(
         order=order,
     )
     response = requests.post(
-        f"{ZARRINPAL_URL}v4/payment/request.json",
+        f"{settings.ZARRINPAL_URL}v4/payment/request.json",
         json={
-            "merchant_id": ZARRINPAL_MERCHANT_ID,
+            "merchant_id": settings.ZARRINPAL_MERCHANT_ID,
             "amount": amount,
             "callback_url": "https://api.petemoon.com/payment/verify/"
             + str(transaction.id)
@@ -55,10 +56,58 @@ def create_transaction(
             "metadata": {"mobile": user.phone_number},
         },
     )
+    data = json.dumps(response.content)
+
     data = response.json()
     status = data["errors"]["code"]
     if status != 100:
         raise Exception("error in zarrinpal gateway")
     transaction.authority = data["data"]["authority"]
     transaction.save()
-    return f"{ZARRINPAL_URL}StartPay/{transaction.authority}"
+    return f"{settings.ZARRINPAL_URL}StartPay/{transaction.authority}"
+
+def create_transaction3(
+    user: User,
+    amount: int,
+    transaction_type: str,
+    description: str | None = None,
+    order: str | None = None,
+) -> str:
+
+    transaction = Transaction.objects.create(
+        user=user,
+        amount=amount,
+        transaction_type=transaction_type,
+        description=description,
+        order=order,
+    )
+    data = {
+        
+        "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
+        "Amount": amount,
+        "Description": description,
+        "Phone": user.phone_number,
+        "CallbackURL": "http://127.0.0.1:8000/payment/verify/"
+            + str(transaction.id)
+            + "/",
+        }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    try:
+        response = requests.post(
+            f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json", data=data,headers=headers, timeout=10)
+        print(response.content)
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return {
+                    'url': f"https://sandbox.zarinpal.com/pg/StartPay/" + str(response['Authority']), 'authority': response['Authority']}
+            else:
+                return {'code': str(response['Status'])}
+        return response
+    
+    except requests.exceptions.Timeout:
+        return {'code': 'timeout'}
+    except requests.exceptions.ConnectionError:
+        return {'code': 'connection error'}

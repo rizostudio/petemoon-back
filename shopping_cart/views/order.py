@@ -48,9 +48,9 @@ class OrderView(APIView):
                             product_in_cart.price
                         total_price += product_in_cart.products_accumulative_price
 
-                serialized_data.save(
+                tran = serialized_data.save(
                     user=request.user, total_price=total_price, products=products)
-                return SuccessResponse(data={"message": _("Order created successfully")})
+                return SuccessResponse(data={"data": tran})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:

@@ -17,7 +17,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from config.settings import STATIC_ROOT, STATIC_URL, SWAGGER_URL
+from config.settings import STATIC_ROOT, STATIC_URL, SWAGGER_URL, MEDIA_URL, MEDIA_ROOT
 from utils.swagger_view import yaml_to_html
 
 urlpatterns = [
@@ -31,7 +31,10 @@ urlpatterns = [
     path("payment/", include("payment.urls")),
     path("vet/", include("vet.urls")),
 ]
-if SWAGGER_URL is not None:
-    urlpatterns += [path(SWAGGER_URL, yaml_to_html)]
 
-urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+
+# urlpatterns = [
+#     url(r'^admin/', admin.site.urls),
+#     url(r'^', include('home.urls'), name="home"),
+# ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

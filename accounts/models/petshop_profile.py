@@ -26,7 +26,13 @@ class PetshopProfile(models.Model):
         null=True,
         blank=True,
     )
-    national_card = models.ImageField(null=True, blank=True)
+    #files
+    national_card = models.FileField(null=True, blank=True)
+    birth_certificate = models.FileField(null=True,blank=True)
+    business_license = models.FileField(null=True,blank=True)
+    union_license = models.FileField(null=True,blank=True)
+    tax_certificate = models.FileField(null=True,blank=True)
+
     estimated_item_count = models.IntegerField(default=0)
     gender = models.CharField(max_length=64, null=True, blank=True)
     sheba_number_validator = RegexValidator(

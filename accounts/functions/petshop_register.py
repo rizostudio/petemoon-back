@@ -2,11 +2,7 @@ from django.db import transaction
 from slugify import slugify
 
 from accounts.models import PetshopProfile, User
-from accounts.serializers import (
-    Stage0PetShopSerializer,
-    Stage1PetShopSerializer,
-    Stage2PetShopSerializer,
-)
+
 from product.models import Petshop
 
 
