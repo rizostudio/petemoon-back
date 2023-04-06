@@ -10,6 +10,7 @@ from django.conf import settings
 import json
 from config.responses import SuccessResponse,UnsuccessfulResponse
 
+
 class VerifyTransaction(APIView):
     @transaction.atomic
     def get(self, *args, **kwargs):
