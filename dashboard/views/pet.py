@@ -65,12 +65,14 @@ class PetView(APIView):
 
 class SinglePetView(APIView):
     #authentication_classes = []
+    serializer_class = PetGetSerializer
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id=None):
            
         pet_general = Pet.objects.get(user=request.user,id=id)
-        result = PetGetSerializer(pet_general).data
+        result = self.serializer_class(pet_general).data
         return SuccessResponse(data=result)
 
     
