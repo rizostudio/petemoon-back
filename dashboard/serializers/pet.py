@@ -42,7 +42,7 @@ class PetPostSerializer(serializers.Serializer):
     last_vaccine_date = serializers.DateField(required=False)
     underlying_disease = serializers.CharField(required=False)
     last_anti_parasitic_vaccine_date = serializers.DateField(required=False)
-    photo = serializers.ImageField(required=False)
+    photo = serializers.ImageField(required=False,use_url=True)
     
     def create(self, validated_data):
         validated_data['pet_type'] = PetType.objects.get(
@@ -54,6 +54,8 @@ class PetPostSerializer(serializers.Serializer):
         return pet
 
     def update(self, instance, validated_data):
+        photo = validated_data.get('photo',None)
+        print(photo)
         instance.update(**validated_data)
 
         return instance
