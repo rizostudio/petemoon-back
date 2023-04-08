@@ -12,4 +12,6 @@ class CartGetSerializer(serializers.Serializer):
     total_price = serializers.IntegerField(read_only=True)
 
 class CartPostSerializer(serializers.Serializer):
-    cart = serializers.JSONField()
+    products = serializers.JSONField()
+    address = serializers.IntegerField()
+    #shipping_method = serializers.IntegerField()
