@@ -35,7 +35,7 @@ class PetView(APIView):
 
     def patch(self, request, id=None):
         serialized_data = PetPostSerializer(request.user,data=request.data, partial=True)
-
+        # print(request.FILES["photo"])
         try:
             if serialized_data.is_valid(raise_exception=True):
 

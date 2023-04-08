@@ -21,19 +21,17 @@ class OrderGetSerializer(serializers.Serializer):
 
 
 class OrderPostSerializer(serializers.Serializer):
-    address = serializers.IntegerField()
     shipping_method = serializers.CharField()
 
     @transaction.atomic
     def create(self, validated_data):
-        address = validated_data.pop("address")
-        address = Address.objects.get(id=address)
+     
         products = validated_data.pop("products")
         shipping = validated_data.pop("shipping_method")
         shipping_method = Shipping.objects.get(id=shipping)
         order = Order.objects.create(**validated_data)
 
-        order.address = address
+        order.address = validated_data.pop("address")
         order.shipping_method = shipping_method
         order.total_price += shipping_method.price
         
@@ -49,5 +47,4 @@ class OrderPostSerializer(serializers.Serializer):
             amount=order.total_price,
             order=order, transaction_type="order",
             description="some descriptoin")
-        print(tran)
         return tran
