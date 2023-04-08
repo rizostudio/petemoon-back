@@ -12,6 +12,7 @@ from product.models.pricing import ProductPricing
 from ..serializers import OrderGetSerializer, OrderPostSerializer
 from shopping_cart.models import Order
 
+from dashboard.models import Address
 
 class OrderView(APIView):
 
@@ -40,7 +41,7 @@ class OrderView(APIView):
                 else:
                     products = []
                     total_price = 0
-                    for key, value in cart.items():
+                    for key, value in cart['products'].items():
                         product_in_cart = ProductPricing.objects.get(id=key)
                         products.append(product_in_cart)
                         product_in_cart.count = value
@@ -48,8 +49,9 @@ class OrderView(APIView):
                             product_in_cart.price
                         total_price += product_in_cart.products_accumulative_price
 
+                address = Address.objects.get(id=cart['address'],user=request.user)
                 tran = serialized_data.save(
-                    user=request.user, total_price=total_price, products=products)
+                    user=request.user, total_price=total_price, products=products, address=address)
                 return SuccessResponse(data={"data": tran})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
