@@ -1,19 +1,18 @@
 from django.db import models
 
-from dashboard.models import PetCategory
+from dashboard.models import PetCategory, PetType
 
 
 class Product(models.Model):
     name = models.CharField(max_length=64, unique=True)
     category = models.ForeignKey(
-        "product.Category",
+        PetCategory,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        to_field="name",
     )
     pet_type = models.ForeignKey(
-        PetCategory, on_delete=models.SET_NULL, null=True,blank=True
+        PetType, on_delete=models.SET_NULL, null=True
     )
     picture = models.ImageField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)
