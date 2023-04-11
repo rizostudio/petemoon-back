@@ -29,6 +29,6 @@ class Product(models.Model):
     
     def __str__(self):
         if self.category is not None:
-            return f"{self.brand.name}-{self.name}-{self.category.name}"
+            return f"{self.brand.name}-{self.name}-{self.category.pet_category}"
         else:
             return f"{self.brand.name}-{self.name}"
