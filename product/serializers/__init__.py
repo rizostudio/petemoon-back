@@ -4,4 +4,5 @@ from product.serializers.pricing import AddPricingSerializer
 from product.serializers.product import (
     ProductGetSerializer,
     ProductListSerializer,
+    ProductSearchSerializer
 )

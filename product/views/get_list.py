@@ -11,14 +11,10 @@ class GetList(APIView):
         try:
             kw = {
                 "limit": int(query_params.get("limit", "16")),
-                "offset": int(query_params.get("limit", "0")),
+                "offset": int(query_params.get("offset", "0")),  # fixed error here
                 "pet_types": query_params.get("pet_types", "").split(","),
-                "pet_categories": list(
-                    map(int, query_params.get("pet_categories", "").split(","))
-                ),
-                "category_slugs": query_params.get("category_slugs", "").split(
-                    ","
-                ),
+                "pet_categories": [int(x) for x in query_params.get("pet_categories", "").split(",")],
+                "category_slugs": query_params.get("category_slugs", "").split(","),
                 "brand_slugs": query_params.get("brand_slugs", "").split(","),
                 "max_price": int(query_params.get("max_price", None)),
                 "min_price": int(query_params.get("min_price", None)),
