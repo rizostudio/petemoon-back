@@ -54,8 +54,17 @@ class PetPostSerializer(serializers.Serializer):
         return pet
 
     def update(self, instance, validated_data):
-        photo = validated_data.get('photo',None)
-        print(photo)
-        instance.update(**validated_data)
+        instance.name = validated_data.get('name', instance.name)
+        instance.pet_type = validated_data.get('pet_type', instance.pet_type)
+        instance.sex = validated_data.get('sex', instance.sex)
+        instance.pet_category = validated_data.get('pet_category', instance.pet_category)
+        instance.birth_date = validated_data.get('birth_date', instance.birth_date)
+        instance.weight = validated_data.get('weight', instance.weight)
+        instance.last_vaccine_date = validated_data.get('last_vaccine_date', instance.last_vaccine_date)
+        instance.underlying_disease = validated_data.get('underlying_disease', instance.underlying_disease)
+        instance.last_anti_parasitic_vaccine_date = validated_data.get(
+             'last_anti_parasitic_vaccine_date', instance.last_anti_parasitic_vaccine_date)
+        instance.photo = validated_data.get('photo', instance.photo)
+        instance.save()
 
         return instance

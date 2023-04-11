@@ -5,10 +5,9 @@ from shopping_cart.models import Order, PetShopOrder
 from dashboard.models import Address
 from ..utils import order_completion
 from django.db import transaction
-#from shopping_cart.serializers  import ShippingSerializer
 from .. models import Shipping
 from payment.services.create_transaction import create_transaction3
-
+from utils.choices import Choices
 
 class OrderGetSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -27,24 +26,31 @@ class OrderPostSerializer(serializers.Serializer):
     def create(self, validated_data):
      
         products = validated_data.pop("products")
-        shipping = validated_data.pop("shipping_method")
-        shipping_method = Shipping.objects.get(id=shipping)
-        order = Order.objects.create(**validated_data)
+        shipping_id = validated_data.pop("shipping_method")
+        shipping = Shipping.objects.get(id=shipping_id)
 
-        order.address = validated_data.pop("address")
-        order.shipping_method = shipping_method
-        order.total_price += shipping_method.price
-        
+        order = Order.objects.create(
+            address=validated_data.pop("address"),
+            shipping_method=shipping,
+            **validated_data
+        )
+
         for product in products:
             PetShopOrder.objects.create(
-                user_order=order, price=product.price, product=product)
+                user_order=order,
+                price=product.price,
+
+                product=product
+            )
             order.products.add(product)
 
-        order.save()
-
         tran = create_transaction3(
-            user=validated_data.get("user"), 
-            amount=order.total_price,
-            order=order, transaction_type="order",
-            description="some descriptoin")
+            user=validated_data.get("user"),
+            amount=order.total_price + shipping.price,
+            order=order,
+            transaction_type="order",
+            description="some description"
+        )
+        order.status = Choices.Order.PAY_PENDING
+
         return tran

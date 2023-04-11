@@ -7,6 +7,7 @@ from product.views.get_recommended import GetRecommended
 from product.views.get_sales import GetSales
 from product.views.get_top_sellers import GetTopSellers
 
+from product.views.search import *
 
 class SingleItem(CreateComment, GetItem):
     def get_permissions(self):

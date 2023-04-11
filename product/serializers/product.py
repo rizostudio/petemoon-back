@@ -183,3 +183,12 @@ class ProductListSerializer(serializers.ModelSerializer):
         return obj.productpricing_set.aggregate(
             total_inventory=Sum("inventory")
         ).get("total_inventory")
+
+
+class ProductSearchSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    brand = BrandSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    pet_type = PetCategorySerializer(read_only=True)
+    pictures = PictureSerializer(many=True, read_only=True)
+    slug = serializers.CharField()

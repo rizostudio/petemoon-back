@@ -39,7 +39,7 @@ class PetView(APIView):
         try:
             if serialized_data.is_valid(raise_exception=True):
 
-                pet = Pet.objects.filter(id=id)
+                pet = Pet.objects.get(id=id)
 
                 serialized_data.update(instance=pet,validated_data=serialized_data.validated_data)
 
