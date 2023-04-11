@@ -33,8 +33,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
-
-# urlpatterns = [
-#     url(r'^admin/', admin.site.urls),
-#     url(r'^', include('home.urls'), name="home"),
-# ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)
+if SWAGGER_URL is not None:
+    urlpatterns += [path(SWAGGER_URL, yaml_to_html)]
