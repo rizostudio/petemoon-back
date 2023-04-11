@@ -12,22 +12,34 @@ User = get_user_model()
 
 def get_top_sales():
     last_month = timezone.now() - timedelta(days=30)
+    
+    # filter orders created in the last month
     last_month_orders = Order.objects.filter(created_at__gte=last_month)
+    
+    # group orders by product and count how many times each product appears
     last_month_sales = (
         last_month_orders.values("products__product")
         .annotate(sell_count=Count("products__product"))
-        .distinct()
         .order_by("-sell_count")[0:20]
     )
+    
+    # extract product IDs from the top-selling products
     last_month_sales_ids = [
         sale["products__product"] for sale in last_month_sales
     ]
+    
     if len(last_month_sales_ids) < 20:
         remaining = 20 - len(last_month_sales_ids)
-        return (
-            Product.objects.filter(id__in=last_month_sales_ids)
-            | Product.objects.exclued(id__in=last_month_sales_ids)[0:remaining]
+        
+        # get the remaining products that were not part of the top-selling products
+        remaining_products = (
+            Product.objects.exclude(id__in=last_month_sales_ids)
+            .order_by("?")[:remaining] # select remaining products randomly
         )
+        
+        # combine the top-selling products and the remaining products
+        return Product.objects.filter(id__in=last_month_sales_ids) | remaining_products
+    
     return Product.objects.filter(id__in=last_month_sales_ids)
 
 
