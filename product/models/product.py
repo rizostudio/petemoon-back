@@ -13,7 +13,7 @@ class Product(models.Model):
         to_field="name",
     )
     pet_type = models.ForeignKey(
-        PetCategory, on_delete=models.SET_NULL, null=True
+        PetCategory, on_delete=models.SET_NULL, null=True,blank=True
     )
     picture = models.ImageField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)
