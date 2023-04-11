@@ -21,11 +21,11 @@ down:
 	@BUILD_VERSION_PETEMOON=${BUILD_VERSION_PETEMOON} docker-compose down
 
 log:
-	@docker-compose logs -f app
+	@docker-compose logs -f backend
 
 migrations:
-	@docker-compose exec app ./manage.py makemigrations
-	@docker-compose exec app ./manage.py migrate
+	@docker-compose exec backend ./manage.py makemigrations
+	@docker-compose exec backend ./manage.py migrate
 
 deploy-dev:
 	@echo "---[deploy to dev server]---"
