@@ -6,23 +6,34 @@ from config.responses import ok
 
 
 class Logout(APIView):
-    def get(self, *args, **kwargs):
-        access_from_cookie = self.request.COOKIES.get(
+    def get(self, request, *args, **kwargs):
+        # Fetch access token from cookies or headers
+        access_from_cookie = request.COOKIES.get(
             "HTTP_ACCESS"
-        ) or self.request.COOKIES.get("HTTP_AUTHORIZATION")
-        access_from_header = self.request.META.get(
+        ) or request.COOKIES.get("HTTP_AUTHORIZATION")
+        access_from_header = request.META.get(
             "HTTP_ACCESS"
-        ) or self.request.META.get("HTTP_AUTHORIZATION")
+        ) or request.META.get("HTTP_AUTHORIZATION")
         access = access_from_cookie or access_from_header
-        if access is not None:
+
+        # Expire the access token if it exists
+        if access:
             expire(access)
+
+        # Create a response with a success message
         response = ok({"message": _("Logged out")})
-        response.delete_cookie.set_cookie(
+
+        # Delete the HTTP_ACCESS cookie and set appropriate cookie attributes
+        response.delete_cookie("HTTP_ACCESS")
+        response.set_cookie(
             "HTTP_ACCESS",
             "",
-            max_age=0,
+            path="/",
             secure=True,
             httponly=True,
             samesite="None",
+            max_age=0,
         )
+
+        # Return the response to the client
         return response
