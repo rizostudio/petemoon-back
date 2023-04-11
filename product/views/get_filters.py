@@ -4,14 +4,14 @@ from rest_framework.views import APIView
 
 from config.responses import ok
 from dashboard.models import PetCategory
-from product.models import Brand, Category, ProductPricing
+from product.models import Brand, ProductPricing
 from utils.choices import Choices
 
 
 class GetFilters(APIView):
     def get(self, request):
         brands = Brand.objects.all().values("name", "slug")
-        categories = Category.objects.all().values("name", "slug")
+        categories = PetCategory.objects.all().values("name", "slug")
         pet_types = (
             PetCategory.objects.all()
             .annotate(name=F("pet_category"))

@@ -5,7 +5,7 @@ from django.db.models.functions import Coalesce
 
 from product.models import Product, ProductPricing
 from product.serializers.brand import BrandSerializer
-from product.serializers.category import CategorySerializer
+# from ..serializers import CategorySerializer
 from product.serializers.comments import CommentSerializer
 from product.serializers.pet_type import PetCategorySerializer
 from product.serializers.petshop import PetshopSerializer
@@ -34,7 +34,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     best_seller = serializers.SerializerMethodField(read_only=True)
     min_price = serializers.SerializerMethodField(read_only=True)
     max_price = serializers.SerializerMethodField(read_only=True)
-    category = CategorySerializer(read_only=True)
+    category = "CategorySerializer(read_only=True)"
     rating = serializers.SerializerMethodField(read_only=True)
     inventory = serializers.SerializerMethodField(read_only=True)
 
