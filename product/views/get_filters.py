@@ -11,7 +11,7 @@ from utils.choices import Choices
 class GetFilters(APIView):
     def get(self, request):
         brands = Brand.objects.all().values("name", "slug")
-        categories = PetCategory.objects.all().values("name", "slug")
+        categories = PetCategory.objects.all().values("pet_category", "slug")
         pet_types = (
             PetCategory.objects.all()
             .annotate(name=F("pet_category"))

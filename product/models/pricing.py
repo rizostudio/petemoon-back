@@ -7,6 +7,7 @@ class ProductPricing(models.Model):
     price = models.PositiveIntegerField()
     price_after_sale = models.PositiveIntegerField(null=True, blank=True)
     inventory = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
 
     class Meta:
         unique_together = ("product_id", "petshop_id")
