@@ -15,7 +15,7 @@ class GetFilters(APIView):
         pet_types = (
             PetCategory.objects.all()
             .annotate(name=F("pet_category"))
-            .values("pet_category", "slug")
+            .values("name", "slug")
         )
         max_price = ProductPricing.objects.filter(inventory__gt=0).aggregate(
             Max("price")

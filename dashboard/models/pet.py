@@ -11,6 +11,8 @@ class PetType(models.Model):
     specific_type = models.IntegerField(
         null=True, blank=True, choices=pet_type_choices
     )
+    slug = models.SlugField(unique=True, db_index=True, null=True)
+
 
     class Meta:
         verbose_name = _("PetType")

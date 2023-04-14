@@ -88,12 +88,14 @@ def get_item_list(
             )
         )
     )
+    print(base)
     if pet_types is not None and len(pet_types) > 0:
         base = base.filter(pet_type__slug__in=pet_types)
     if category_slugs is not None and len(category_slugs) > 0:
         base = base.filter(category__slug__in=category_slugs)
     if brand_slugs is not None and len(brand_slugs) > 0:
-        base = base.filter(brand__slug__in=brand_slugs)
+        products = base.filter(brand__slug__in=brand_slugs)
+        print(products)
     if max_price is not None:
         base = base.filter(min_price__lte=max_price)
     if min_price is not None:
@@ -104,20 +106,7 @@ def get_item_list(
         base = base.filter(
             pet_type__pet_type__specific_type__in=pet_categories
         )
-    if (
-        search is not None
-        and len(search) > 0
-        and connections["default"].vendor == "postgresql"
-    ):
-        from django.contrib.postgres.search import (
-            SearchQuery,
-            SearchRank,
-            SearchVector,
-        )
-
-        vector = SearchVector("name", "details")
-        query = SearchQuery(" ".join(search))
-        base = base.annotate(rank=SearchRank(vector, query)).order_by("-rank")
+    
     end = limit + offset
     total = base.count()
     return base[offset:end], total
