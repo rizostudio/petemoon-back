@@ -55,7 +55,8 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "size",
             "weight",
             "made_in",
-            "other_details"
+            "other_details",
+            "slug"
         )
 
     def get_price(self, obj):
