@@ -7,7 +7,7 @@ from config.responses import SuccessResponse
 from dashboard.serializers import PetGetSerializer
 from dashboard.models import Pet
 from shopping_cart.models import Order
-from django.db.models import Sum
+from django.db.models import Sum, Q
 
 
 class OverViewView(APIView):
@@ -24,9 +24,13 @@ class OverViewView(APIView):
         delivered = Order.objects.filter(user=request.user,status="DELIVERED").count()
         canceled = Order.objects.filter(user=request.user,status="CANCELED").count()
         ongoing = Order.objects.filter(user=request.user,status="ONGOING").count()
-        total_price = Order.objects.aggregate(Sum('total_price'))
+        total_price = Order.objects.filter(Q(user=request.user) 
+            & ( Q(status="ONGOING") |
+                Q(status="SENDING") |
+                Q(status="PROCESSING") ) ).aggregate(Sum('total_price'))
 
         pet = PetGetSerializer(pet, many=True).data
+        print(total_price)
         return SuccessResponse(
             data={"my_pet": pet,
                     "wallet": wallet, 

@@ -55,9 +55,19 @@ class PetPostSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.pet_type = validated_data.get('pet_type', instance.pet_type)
+        if validated_data.get('pet_type'):
+             
+            pet_type = PetType.objects.get(id=validated_data.get('pet_type'))
+            instance.pet_type = pet_type
+            print(pet_type)
+        if validated_data.get('pet_category'):
+                pet_category = PetCategory.objects.get(id=validated_data['pet_category'])
+                instance.pet_category = pet_category
+        
         instance.sex = validated_data.get('sex', instance.sex)
-        instance.pet_category = validated_data.get('pet_category', instance.pet_category)
+
+     
+
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
         instance.weight = validated_data.get('weight', instance.weight)
         instance.last_vaccine_date = validated_data.get('last_vaccine_date', instance.last_vaccine_date)
