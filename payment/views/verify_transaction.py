@@ -21,14 +21,13 @@ class VerifyTransaction(APIView):
         if not authority or status != "OK":
             return bad_request("Invalid request")
 
-        try:
-            transaction = Transaction.objects.select_for_update().get(
-                id=transaction_id,
-                authority=authority,
-                success=False,
-            )
-        except Transaction.DoesNotExist:
-            return bad_request("Transaction does not exist or has already been verified.")
+        # try:
+        transaction = Transaction.objects.get(
+            id=transaction_id,
+            success=False,
+        )
+        # except Transaction.DoesNotExist:
+        #     return bad_request("Transaction does not exist or has already been verified.")
 
         data = {
             "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -38,29 +37,35 @@ class VerifyTransaction(APIView):
         data = json.dumps(data)
         headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
 
-        response = requests.post(
-            f"{settings.ZARRINPAL_URL}/pg/rest/WebGate/PaymentVerification.json",
+        response = requests.post(f"{settings.ZARRINPAL_URL}StartPay/"
+,
             data=data,
             headers=headers,
         )
-        response_data = response.json()
+        
+        if response.status_code == 200:
+            response = response.json()
+            transaction.success = True
+            transaction.authority = authority
+            transaction.ref_id = response["data"]["ref_id"]
+            transaction.save()
 
-        if response.status_code != 200:
-            return UnsuccessfulResponse(errors=response_data,status_code=response.status_code)
+            if transaction.transaction_type == "wallet":
+                user = transaction.user
+                if user.user_type == "normal":
+                    profile = user.profile
+                    profile.wallet = transaction.amount + F("wallet")
+                    profile.save()
 
-        transaction.success = True
-        transaction.ref_id = response_data["data"]["ref_id"]
-        transaction.save()
+            if transaction.transaction_type == "order":
+                transaction.order.status = Choices.Order.PROCESSING
+                transaction.order.save()
+                
+            if response['Status'] == 100:
+                return SuccessResponse(data={"RefID": response['RefID'] })
+                #return {'status': True, 'RefID': response['RefID']}
+            else:
+                return UnsuccessfulResponse()
+                #return {'status': False, 'code': str(response['Status'])}
 
-        if transaction.transaction_type == "wallet":
-            user = transaction.user
-            if user.user_type == "normal":
-                profile = user.profile
-                profile.wallet = transaction.amount + F("wallet")
-                profile.save()
-
-        if transaction.transaction_type == "order":
-            transaction.order.status = Choices.Order.PROCESSING
-            transaction.order.save()
-
-        return SuccessResponse(data=response_data)
+        return SuccessResponse(data=response.content)

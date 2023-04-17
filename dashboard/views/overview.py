@@ -30,7 +30,6 @@ class OverViewView(APIView):
                 Q(status="PROCESSING") ) ).aggregate(Sum('total_price'))
 
         pet = PetGetSerializer(pet, many=True).data
-        print(total_price)
         return SuccessResponse(
             data={"my_pet": pet,
                     "wallet": wallet, 
