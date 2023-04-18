@@ -50,10 +50,9 @@ class GetList(APIView):
             products = products.filter(pet_type__slug__in=pet_types)
 
         # Filter by pet categories
-        pet_categories = [x for x in query_params.get("pet_categories", "").split(",") if x]
-        if pet_categories:
-            pet_category_ids = [int(x) for x in pet_categories]
-            products = products.filter(category__in=pet_category_ids)
+        pet_categories = query_params.get("pet_categories", "").split(",")
+        if pet_categories != ['']:
+            products = products.filter(category__slug__in=pet_categories)
 
 
         # # Filter by brand slugs

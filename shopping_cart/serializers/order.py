@@ -6,7 +6,7 @@ from dashboard.models import Address
 from ..utils import order_completion
 from django.db import transaction
 from .. models import Shipping
-from payment.services.create_transaction import create_transaction3
+from payment.services.create_transaction import create_transaction
 from utils.choices import Choices
 
 class OrderGetSerializer(serializers.Serializer):
@@ -44,7 +44,7 @@ class OrderPostSerializer(serializers.Serializer):
             )
             order.products.add(product)
 
-        tran = create_transaction3(
+        tran = create_transaction(
             user=validated_data.get("user"),
             amount=order.total_price + shipping.price,
             order=order,
