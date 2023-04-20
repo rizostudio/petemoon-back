@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import PetShopProductPricingView, ProductsView,OrdersView, SingleOrderView
+from .views import PetShopProductPricingView, ProductsView,OrdersView, SingleOrderView, DashboardView
 
 urlpatterns = [
     path("product-pricing", PetShopProductPricingView.as_view(), name="product-pricing"),
@@ -8,5 +8,7 @@ urlpatterns = [
     path("products", ProductsView.as_view(), name="products"),
     path("orders", OrdersView.as_view(), name="orderrs"),
     path("orders/<int:id>", SingleOrderView.as_view(), name="orders"),
+    path("dashboard", DashboardView.as_view(), name="dashboard"),
+
 
 ]
