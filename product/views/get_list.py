@@ -45,7 +45,6 @@ class GetList(APIView):
         )
         
         pet_types = query_params.get("pet_types", "").split(",")
-        print(pet_types)
         if pet_types != ['']:
             products = products.filter(pet_type__slug__in=pet_types)
 

@@ -4,15 +4,10 @@ from django.db.models import Avg, Max, Min, Sum
 from django.db.models.functions import Coalesce
 
 from product.models import Product, ProductPricing
-from product.serializers.brand import BrandSerializer
-# from ..serializers import CategorySerializer
-from product.serializers.comments import CommentSerializer
-from product.serializers.pet_type import PetCategorySerializer
 from product.serializers.petshop import PetshopSerializer
-from config.exceptions import CustomException
 
 
-class ProductPricingSerializer(serializers.Serializer):
+class PetShopProductPricingSerializer(serializers.Serializer):
     product_id = serializers.IntegerField(write_only=True)
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(source="product.name", read_only=True)
@@ -28,6 +23,11 @@ class ProductPricingSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         product_id = validated_data.pop('product_id')
+
+        validated_data["product"] = Product.objects.get(id=product_id)
+        product_pricing = ProductPricing.objects.create(**validated_data)
+
+
         return "product_pricing"
 
 class ProductListSerializer(serializers.ModelSerializer):
