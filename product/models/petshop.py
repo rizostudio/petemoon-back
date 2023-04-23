@@ -1,6 +1,7 @@
 from django.db import models
-
-from accounts.models import PetshopProfile
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from accounts.models import PetshopProfile,User
 
 
 class Petshop(models.Model):
@@ -21,3 +22,8 @@ class Petshop(models.Model):
     @property
     def is_complete(self):
         return bool(self.name)
+    
+    @receiver(post_save, sender=PetshopProfile)
+    def create_petshop_profile(sender, instance, created, **kwargs):
+        if created :
+            Petshop.objects.create(owner=instance)
