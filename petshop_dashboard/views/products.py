@@ -192,3 +192,27 @@ class ProductsView(APIView):
              )
 
 
+
+class SingleProductPricingView(APIView):
+    serializer_class = PetShopProductPricingSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+           
+        pricing = ProductPricing.objects.get(id=id)
+        result = self.serializer_class(pricing).data
+        return SuccessResponse(data=result)
+    
+
+
+class SingleProductView(APIView):
+    serializer_class = ProductGetSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+           
+        product = Product.objects.get(id=id)
+        result = self.serializer_class(product).data
+        return SuccessResponse(data=result)

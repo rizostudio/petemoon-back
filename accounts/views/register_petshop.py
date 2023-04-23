@@ -16,6 +16,7 @@ from ..serializers import PetShopRegisterSerializer
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
+
 class RegisterPetshop(APIView):
     permission_classes = [IsPetShop]
     serializer_class =  PetShopRegisterSerializer
