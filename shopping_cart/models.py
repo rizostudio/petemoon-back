@@ -45,7 +45,7 @@ class PetShopOrder(models.Model):
     user_order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(ProductPricing,on_delete=models.CASCADE)
     price = models.IntegerField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True,editable=True,serialize=True)
     
     class Meta:
         verbose_name = _("PetShopOrder")
