@@ -5,7 +5,8 @@ from dashboard.models import Wallet
 admin.site.register(Order)
 admin.site.register(Wallet)
 
-admin.site.register(PetShopOrder)
 admin.site.register(Shipping)
 
-# Register your models here.
+@admin.register(PetShopOrder)
+class PersonAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at', )

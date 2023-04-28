@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (PetShopProductPricingView, ProductsView,OrdersView, 
-                    SingleOrderView, DashboardView, SingleProductPricingView, SingleProductView)
+                    SingleOrderView, DashboardView, SingleProductPricingView, SingleProductView, TurnOverView)
 
 urlpatterns = [
     path("product-pricing", PetShopProductPricingView.as_view(), name="product-pricing"),
@@ -12,6 +12,7 @@ urlpatterns = [
     path("dashboard", DashboardView.as_view(), name="dashboard"),
     path("single-product/<int:id>", SingleProductView.as_view(), name="dashboard"),
     path("single-pricing/<int:id>", SingleProductPricingView.as_view(), name="dashboard"),
+    path("turn-over", TurnOverView.as_view(), name="turn-over"),
 
 
 ]
