@@ -9,6 +9,9 @@ from .. models import Shipping
 from payment.services.create_transaction import create_transaction
 from utils.choices import Choices
 
+from ..utils import random_N_chars_str
+
+
 class OrderGetSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     order_id = serializers.CharField()
@@ -32,7 +35,8 @@ class OrderPostSerializer(serializers.Serializer):
         order = Order.objects.create(
             address=validated_data.pop("address"),
             shipping_method=shipping,
-            **validated_data
+            **validated_data,
+
         )
 
         for product in products:
