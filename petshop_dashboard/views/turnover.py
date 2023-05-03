@@ -23,14 +23,16 @@ class TurnOverView(APIView):
             product__petshop__owner__user=request.user,created_at__range=(start_date, end_date)).aggregate(Sum('price'))
         orders_count = Order.objects.filter(
             products__petshop__owner__user=request.user,created_at__range=(start_date, end_date)).count()
-        
+        if total_income['price__sum'] != None:
+
+            profit = total_income['price__sum']-((20*total_income['price__sum'])/100)
+
         return SuccessResponse(data={
             "total_incom":total_income['price__sum'],
             "orders_count":orders_count,
-            "profit":total_income['price__sum']-((20*total_income['price__sum'])/100),
+            "profit":profit,
             "settlement date":None,
             "status":None
-
             
             })
 
