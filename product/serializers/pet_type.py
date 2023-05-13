@@ -6,7 +6,7 @@ from dashboard.models import PetCategory, PetType
 class PetTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetType
-        fields = ("pet_type",)
+        fields = "__all__"
 
 
 class PetCategorySerializer(serializers.ModelSerializer):
@@ -14,4 +14,4 @@ class PetCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PetCategory
-        fields = ("pet_category", "pet_type")
+        fields = "__all__"

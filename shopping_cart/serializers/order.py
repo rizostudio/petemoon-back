@@ -20,6 +20,7 @@ class OrderGetSerializer(serializers.Serializer):
     products = ProductPricingSerializer(many=True)
     total_price = serializers.IntegerField()
     shipping_method = "ShippingSerializer()"
+    
 
 
 class OrderPostSerializer(serializers.Serializer):

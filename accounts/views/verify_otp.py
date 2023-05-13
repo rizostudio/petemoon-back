@@ -7,6 +7,7 @@ from accounts.functions import get_user_data, login
 from accounts.models import OneTimePassword
 from accounts.selectors import get_user
 from config.settings import ACCESS_TTL
+from dashboard.models.wallet import Wallet
 
 
 class VerifyOTP(APIView):
@@ -24,11 +25,17 @@ class VerifyOTP(APIView):
             )
         user = get_user(id=user_id)
         access, refresh = login(user)
+        try:
+            wallet = Wallet.objects.get(user=user)
+            credit = wallet.credit
+        except:
+            credit = None
         data = {
             "refresh_token": refresh,
             "is_registered": user.is_registered,
             "user_type": user.user_type,
             "user_data": {},
+            "wallet":credit
         }
         if user.is_registered:
             data["user_data"] = get_user_data(user)
