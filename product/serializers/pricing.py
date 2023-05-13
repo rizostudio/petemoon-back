@@ -6,7 +6,7 @@ from product.serializers.petshop import PetshopSerializer
 
 class ProductPricingSerializer(serializers.ModelSerializer):
     petshop = PetshopSerializer(read_only=True)
-
+    picture = serializers.ImageField(source='product.picture')
     class Meta:
         model = ProductPricing
         fields = ("id", "price", "price_after_sale", "inventory", "petshop")
