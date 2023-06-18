@@ -9,7 +9,7 @@ class ProductPricingSerializer(serializers.ModelSerializer):
     picture = serializers.ImageField(source='product.picture')
     class Meta:
         model = ProductPricing
-        fields = ("id", "price", "price_after_sale", "inventory", "petshop")
+        fields = ("id", "price", "price_after_sale", "inventory", "petshop","picture")
 
 
 class AddPricingSerializer(serializers.Serializer):
