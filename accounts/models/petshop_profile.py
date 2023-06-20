@@ -63,6 +63,9 @@ class PetshopProfile(models.Model):
             and self.postal_region
             and self.estimated_item_count
         )
+    
+    def __str__(self):
+        return f"{self.first_name + self.last_name}"
 
 
 @receiver(post_save, sender=User)
