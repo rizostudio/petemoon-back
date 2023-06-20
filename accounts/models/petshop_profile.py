@@ -11,6 +11,8 @@ class PetshopProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="petshop_profile"
     )
+    first_name = models.CharField(max_length=100, null=True, blank=False)
+    last_name = models.CharField(max_length=100, null=True, blank=False)
     address = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -28,10 +30,10 @@ class PetshopProfile(models.Model):
     )
     #files
     national_card = models.FileField(null=True, blank=True)
-    birth_certificate = models.FileField(null=True,blank=True)
-    business_license = models.FileField(null=True,blank=True)
-    union_license = models.FileField(null=True,blank=True)
-    tax_certificate = models.FileField(null=True,blank=True)
+    birth_certificate = models.FileField(null=True, blank=True)
+    business_license = models.FileField(null=True, blank=True)
+    union_license = models.FileField(null=True, blank=True)
+    tax_certificate = models.FileField(null=True, blank=True)
 
     estimated_item_count = models.IntegerField(default=0)
     gender = models.CharField(max_length=64, null=True, blank=True)

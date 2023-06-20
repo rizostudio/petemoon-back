@@ -32,12 +32,12 @@ class VerifyOTP(APIView):
             credit = None
         data = {
             "refresh_token": refresh,
-            "is_registered": user.is_registered,
+            "is_registered": user.register_completed,
             "user_type": user.user_type,
             "user_data": {},
             "wallet":credit
         }
-        if user.is_registered:
+        if user.register_completed:
             data["user_data"] = get_user_data(user)
         response = Response(
             {

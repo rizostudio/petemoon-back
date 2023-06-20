@@ -40,6 +40,7 @@ class User(AbstractUser):
     user_type = models.CharField(
         max_length=7, default="normal", choices=user_type_choices
     )
+    register_completed = models.BooleanField(default=False)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "phone_number"
@@ -54,10 +55,3 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.phone_number}-{self.get_full_name()}"
 
-    @property
-    def is_registered(self):
-        if self.user_type == "petshop":
-            if not hasattr(self, "petshop_profile"):
-                return False
-        
-        return bool(self.first_name and self.last_name)

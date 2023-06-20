@@ -30,14 +30,15 @@ class RegisterPetshop(APIView):
 
     def patch(self, request):
         serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
-
+        user = self.request.user
         try:
             if serialized_data.is_valid(raise_exception=True):
 
                 petshop = serialized_data.update(
                     instance=PetshopProfile.objects.filter(
                     user=request.user),validated_data=serialized_data.validated_data)
-
+                user.register_completed = True
+                user.save()
                 return SuccessResponse(data=self.serializer_class(petshop,many=True).data)
 
         except CustomException as e:

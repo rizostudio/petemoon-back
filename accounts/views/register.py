@@ -16,7 +16,7 @@ class Register(APIView):
     def patch(self, *args, **kwargs):
         user = self.request.user
         data = self.request.data
-        if user.is_registered:
+        if user.register_completed:
             return Response(
                 {
                     "success": False,
@@ -39,6 +39,8 @@ class Register(APIView):
             user.profile.save()
         user.refresh_from_db()
         user_data = get_user_data(user)
+        user.register_completed = True
+        user.save()
         return Response(
             {
                 "success": True,
