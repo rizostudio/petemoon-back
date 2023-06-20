@@ -21,7 +21,7 @@ def get_petshop_user_data(user):
         "estimated_item_count": user.petshop_profile.estimated_item_count,
         "national_card": user.petshop_profile.national_card.url,
         "store_name": user.petshop_profile.shops.name,
-        "store_slug": user.petshop_profile.shops.slug,
+        # "store_slug": user.petshop_profile.shops.slug,
     }
 
 
