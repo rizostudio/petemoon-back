@@ -8,4 +8,4 @@ from product.models import Petshop
 class PetshopAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     inlines = [PricingInline]
-    prepopulated_fields = {"slug": ("name",)}
+    # prepopulated_fields = {"slug": ("name",)}
