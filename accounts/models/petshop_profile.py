@@ -65,7 +65,7 @@ class PetshopProfile(models.Model):
         )
     
     def __str__(self):
-        return f"{self.get_full_name()}"
+        return f"{self.first_name + ' ' + self.last_name}"
 
 
 @receiver(post_save, sender=User)

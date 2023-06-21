@@ -14,9 +14,10 @@ from config import responses
 class UserValidationView(APIView):
 
     def post(self, request):
-        access_token = request.COOKIES.get('HTTP_ACCESS')
-        if access_token is None:
+        cookie = request.COOKIES.get('HTTP_ACCESS')
+        if cookie is None:
             return responses.bad_request(errors={"User is not logged in"})
+        access_token = cookie.split(' ')[1]
         if validate_token(access_token):
             return responses.ok(data={"is_valid": "True"})
         else:
