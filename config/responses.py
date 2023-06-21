@@ -134,6 +134,15 @@ def forbidden(errors, headers=None, content_type='application/json') -> Unsucces
     )
 
 
+def unauthorized(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
+    return UnsuccessfulResponse(
+        status_code=401,
+        errors=errors,
+        headers=headers,
+        content_type=content_type
+    )
+
+
 def not_found(errors, headers=None, content_type='application/json') -> UnsuccessfulResponse:
     return UnsuccessfulResponse(
         status_code=404,

@@ -2,6 +2,7 @@ from django.utils.translation import gettext as _
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from config import responses
 
 from accounts.functions import get_user_data, login
 from accounts.models import OneTimePassword
@@ -24,8 +25,8 @@ class VerifyOTP(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user = get_user(id=user_id)
-        if user.register_completed == True and user.petshop_profile.is_approved == False:
-            return Response({"success": False, "error": "Your account has not been approved yet!"}, status=status.HTTP_403_FORBIDDEN)
+        if user.user_type == 'petshop' and user.register_completed == True and user.petshop_profile.is_approved == False:
+            return responses.forbidden(errors={"Your account has not been approved yet!"}, status=status.HTTP_403_FORBIDDEN)
         access, refresh = login(user)
         try:
             wallet = Wallet.objects.get(user=user)
