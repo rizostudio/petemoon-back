@@ -13,7 +13,7 @@ from product.serializers.pricing import ProductPricingSerializer
 class PictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Picture
-        fields = ("picture",)
+        fields = ("image",)
 
 
 class SpecSerializer(serializers.ModelSerializer):

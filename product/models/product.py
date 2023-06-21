@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.text import slugify
 from dashboard.models import PetCategory, PetType
 
 
@@ -16,7 +16,7 @@ class Product(models.Model):
     )
     picture = models.ImageField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)
-    slug = models.SlugField(unique=True, db_index=True)
+    slug = models.CharField(unique=True, db_index=True, max_length=256)
 
     brand = models.ForeignKey(
         "product.Brand", on_delete=models.SET_NULL, null=True
@@ -31,4 +31,8 @@ class Product(models.Model):
         if self.category is not None:
             return f"{self.brand.name}-{self.name}-{self.category.pet_category}"
         else:
-            return f"{self.brand.name}-{self.name}"
+            return f"{self.brand.name}--{self.name}"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name, allow_unicode=True)
+        super(Product, self).save(*args, **kwargs)

@@ -18,7 +18,7 @@ urlpatterns = [
     path("top-sellers/", GetTopSellers.as_view(), name="get_top_sellers"),
     path("sales/", GetSales.as_view(), name="get_sales"),
     path("recommended/", GetRecommended.as_view(), name="get_recommended"),
-    path("<slug:slug>/", SingleItem.as_view(), name="item_detail"),
+    path("<str:slug>/", SingleItem.as_view(), name="item_detail"),
     path("<slug:slug>/pricing/",AddUpdatePricing.as_view(),name="add_update_pricing"),
     path("search",ProductSearchView.as_view(),name="add_update_pricing"),
 
