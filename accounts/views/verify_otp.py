@@ -26,7 +26,7 @@ class VerifyOTP(APIView):
             )
         user = get_user(id=user_id)
         if user.user_type == 'petshop' and user.register_completed == True and user.petshop_profile.is_approved == False:
-            return responses.forbidden(errors={"Your account has not been approved yet!"}, status=status.HTTP_403_FORBIDDEN)
+            return responses.forbidden(errors={"Petshop user has not been approved yet!"})
         access, refresh = login(user)
         try:
             wallet = Wallet.objects.get(user=user)
