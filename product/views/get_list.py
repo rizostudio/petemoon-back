@@ -44,20 +44,22 @@ class GetList(APIView):
             )
         )
         
+        # Filter by pet types
         pet_types = query_params.get("pet_types", "").split(",")
         if pet_types != ['']:
             products = products.filter(pet_type__slug__in=pet_types)
 
+        
         # Filter by pet categories
-        pet_categories = query_params.get("pet_categories", "").split(",")
-        if pet_categories != ['']:
-            products = products.filter(category__slug__in=pet_categories)
+        pet_category = query_params.get("pet_category", "").split(",")
+        if pet_category != ['']:
+            products = products.filter(category__slug__in=pet_category)
 
 
         # # Filter by brand slugs
-        brand_slugs = query_params.get("brand_slugs", "").split(",")
-        if brand_slugs != ['']:
-            products = products.filter(brand__slug__in=brand_slugs)
+        brand = query_params.get("brand", "").split(",")
+        if brand != ['']:
+            products = products.filter(brand__slug__in=brand)
 
         # Filter by price range
         max_price = query_params.get("max_price",None)
