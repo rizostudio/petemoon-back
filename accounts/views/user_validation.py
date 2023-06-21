@@ -17,7 +17,7 @@ class UserValidationView(APIView):
         user = request.user
         if user.register_completed == False:
             return responses.forbidden(errors={"User has not yet completed registration"})
-        if user.user_typer == 'petshop' and user.register_completed == True and user.petshop_profile.is_approved == False:
+        if user.user_type == 'petshop' and user.register_completed == True and user.petshop_profile.is_approved == False:
             return responses.forbidden(errors={"Petshop user has not been approved yet!"})
         cookie = request.COOKIES.get('HTTP_ACCESS')
         if cookie is None:
