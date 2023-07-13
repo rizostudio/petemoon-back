@@ -17,7 +17,7 @@ class Refresh(APIView):
         except ValueError:
             return Response(
                 {"success": False, "errors": [_("refresh is invalid")]},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         response = Response(
             {"success": True, "data": {"refresh_token": refresh}},

@@ -43,10 +43,12 @@ def get_top_sales():
     return Product.objects.filter(id__in=last_month_sales_ids)
 
 
-def get_recommended_products(user: User | None) -> list:
+#def get_recommended_products(user: User | None) -> list:
+def get_recommended_products(user: User) -> list:
     """
     Returns list of recommended products for user
     """
+
     if user is None or user.is_anonymous:
         return get_top_sales()
     user_pets_types = user.pet_set.values_list("pet_type", flat=True)
@@ -75,6 +77,8 @@ def get_recommended_products(user: User | None) -> list:
         .exclude(id__in=user_last_order_products)
         .distinct()
     )
+    print('--------------')
+    print(recommended_products)
     if recommended_products.count() < 20:
         remaining = 20 - recommended_products.count()
         return recommended_products | get_top_sales()[0:remaining]
