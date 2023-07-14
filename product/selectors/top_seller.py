@@ -13,15 +13,9 @@ def get_top_seller():
     last_month_sellers = (
         last_month_orders.values("products__petshop")
         .annotate(sell_count=Count("products__petshop"))
-        .order_by("-sell_count")[0:3]
-    )
-    last_month_sellers_ids = [
-        seller["products__petshop"] for seller in last_month_sellers
-    ]
+        .order_by("-sell_count")[0:3])
+    last_month_sellers_ids = [seller["products__petshop"] for seller in last_month_sellers]
     if len(last_month_sellers_ids) < 3:
         remaining = 3 - len(last_month_sellers_ids)
-        return (
-            Petshop.objects.filter(id__in=last_month_sellers_ids)
-            | Petshop.objects.all()[0:remaining]
-        )
+        return (Petshop.objects.filter(id__in=last_month_sellers_ids)| Petshop.objects.all()[0:remaining] )
     return Petshop.objects.filter(id__in=last_month_sellers_ids)

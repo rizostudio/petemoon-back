@@ -199,6 +199,7 @@ REST_FRAMEWORK = {
         "otp": get_env("OTP_THROTTLE_RATE", default="10/min"),
     },
 }
+
 # END REST FRAMEWORK CONFIGURATION
 
 # SMS CONFIGURATION
