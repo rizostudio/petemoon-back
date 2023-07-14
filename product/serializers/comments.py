@@ -12,9 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentCreateSerialzer(serializers.ModelSerializer):
-    product = serializers.SlugRelatedField(
-        slug_field="slug", write_only=True, queryset=Product.objects.all()
-    )
+    product = serializers.SlugRelatedField(slug_field="slug", write_only=True, queryset=Product.objects.all())
 
     class Meta:
         model = Comment

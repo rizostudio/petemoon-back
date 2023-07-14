@@ -18,6 +18,4 @@ class PetshopGetSerializer(serializers.ModelSerializer):
         fields = ("name", "slug", "average_rating")
 
     def get_average_rating(self, obj):
-        return Comment.objects.filter(product__petshop=obj).aggregate(
-            avg_rating=Avg("rate")
-        )["avg_rating"]
+        return Comment.objects.filter(product__petshop=obj).aggregate(avg_rating=Avg("rate"))["avg_rating"]

@@ -21,7 +21,7 @@ urlpatterns = [
     path("<str:slug>/", SingleItem.as_view(), name="item_detail"),
     path("<slug:slug>/pricing/",AddUpdatePricing.as_view(),name="add_update_pricing"),
     path("search",ProductSearchView.as_view(),name="add_update_pricing"),
-    path("create_comment/",CreateComment.as_view(),name="create_comment"),
+    path("create_comment/<str:slug>",CreateComment.as_view(),name="create_comment"),
 
     
 ]
