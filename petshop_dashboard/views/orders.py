@@ -1,18 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Sum
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
-
 from config.responses import SuccessResponse
-
 from ..serializers import OrdersSerializer, UserDetailsSerializer
 from shopping_cart.models import Order, PetShopOrder
 
 
 class OrdersView(APIView):
-
     serializer_class = OrdersSerializer
     permission_classes = [IsAuthenticated]
 
@@ -23,7 +19,6 @@ class OrdersView(APIView):
                 products__petshop__owner__user=request.user).distinct().order_by('-created_at')
 
         if query_params['orders_type'] == 'completed':
-
             orders = Order.objects.filter(
                 products__petshop__owner__user=request.user, status="DELIVERED").distinct()
 
