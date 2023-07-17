@@ -4,10 +4,11 @@ from rest_framework import serializers
 
 from product.models import Picture, Product, Spec
 from product.serializers.brand import BrandSerializer
-#from dashboard.serializers import PetCategorySerializer, PetTypeSerializer
+from dashboard.serializers.pet import PetCategorySerializer, PetTypeSerializer
 from product.serializers.comments import CommentSerializer
 from product.serializers.petshop import PetshopSerializer
 from product.serializers.pricing import ProductPricingSerializer
+
 
 
 class PictureSerializer(serializers.ModelSerializer):
@@ -22,14 +23,17 @@ class SpecSerializer(serializers.ModelSerializer):
         fields = ("name", "value")
 
 
+
 class ProductGetSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(read_only=True)
-    category = "PetCategorySerializer(read_only=True)"
+    #category = "PetCategorySerializer(read_only=True)"
+    category = PetCategorySerializer(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     productpricing = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
-    pet_type = "PetTypeSerializer(read_only=True)"
+    #pet_type = "PetTypeSerializer(read_only=True)"
+    pet_type = PetTypeSerializer(read_only=True)
     best_pricing = serializers.SerializerMethodField(read_only=True)
     pictures = PictureSerializer(many=True, read_only=True)
     specs = SpecSerializer(many=True, read_only=True)
@@ -41,7 +45,7 @@ class ProductGetSerializer(serializers.ModelSerializer):
             "name",
             "category",
             "pet_type",
-            "picture",
+            "picture_url",
             "details",
             "specs",
             "brand",
@@ -107,7 +111,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     best_seller = serializers.SerializerMethodField(read_only=True)
     min_price = serializers.SerializerMethodField(read_only=True)
     max_price = serializers.SerializerMethodField(read_only=True)
-    category = "PetCategorySerializer(read_only=True)"
+    category = PetCategorySerializer(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     inventory = serializers.SerializerMethodField(read_only=True)
 
@@ -188,7 +192,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 class ProductSearchSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     brand = BrandSerializer(read_only=True)
-    category = "PetCategorySerializer(read_only=True)"
-    pet_type = "PetCategorySerializer(read_only=True)"
+    category = PetCategorySerializer(read_only=True)
+    pet_type = PetCategorySerializer(read_only=True)
     pictures = PictureSerializer(many=True, read_only=True)
     slug = serializers.CharField()

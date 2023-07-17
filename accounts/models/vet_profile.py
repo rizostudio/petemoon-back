@@ -9,9 +9,7 @@ from vet.models import ReserveTimes
 
 
 class VetProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="vet_profile"
-    )
+    user = models.OneToOneField( User, on_delete=models.CASCADE, related_name="vet_profile" )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     medical_number = models.CharField(max_length=10, null=True, blank=True)

@@ -8,6 +8,7 @@ from ..models import Product
 from django.db.models import Avg, F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 
+
 class GetList(APIView):
     def get(self, *args, **kwargs):
         query_params = self.request.query_params

@@ -8,9 +8,7 @@ from accounts.models.user import User
 
 
 class PetshopProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="petshop_profile"
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="petshop_profile")
     first_name = models.CharField(max_length=100, null=True, blank=False)
     last_name = models.CharField(max_length=100, null=True, blank=False)
     address = models.CharField(max_length=200, blank=True, null=True)
@@ -65,7 +63,7 @@ class PetshopProfile(models.Model):
         )
     
     def __str__(self):
-        return f"{self.first_name + ' ' + self.last_name}"
+        return f"{str(self.first_name) + ' ' + str(self.last_name)}"
 
 
 @receiver(post_save, sender=User)

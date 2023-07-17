@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 from accounts.functions import refresh as refresh_function
 from config.settings import ACCESS_TTL
 
-
 class Refresh(APIView):
     permission_classes = []
 
@@ -17,7 +16,7 @@ class Refresh(APIView):
         except ValueError:
             return Response(
                 {"success": False, "errors": [_("refresh is invalid")]},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         response = Response(
             {"success": True, "data": {"refresh_token": refresh}},

@@ -19,7 +19,6 @@ class VetRegisterView(APIView):
     serializer_class =  VetRegisterSerializer
 
     def get(self, request):
-           
         order = VetProfile.objects.filter(user=request.user)
         result = self.serializer_class(order,many=True).data
         return SuccessResponse(data=result)
@@ -27,14 +26,12 @@ class VetRegisterView(APIView):
 
     def patch(self, request):
         serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
-
         try:
             if serialized_data.is_valid(raise_exception=True):
 
                 vet_profile = serialized_data.update(
                     instance=VetProfile.objects.filter(
                     user=request.user),validated_data=serialized_data.validated_data)
-
                 return SuccessResponse(data=self.serializer_class(vet_profile,many=True).data)
 
         except CustomException as e:

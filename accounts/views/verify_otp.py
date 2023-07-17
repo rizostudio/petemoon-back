@@ -49,6 +49,9 @@ class VerifyOTP(APIView):
             },
             status=status.HTTP_200_OK,
         )
+        print('----------------------access-----')
+        print(access)
+        print('---------------------------------')
         response.set_cookie(
             "HTTP_ACCESS",
             f"Bearer {access}",
@@ -58,3 +61,5 @@ class VerifyOTP(APIView):
             samesite="None",
         )
         return response
+
+

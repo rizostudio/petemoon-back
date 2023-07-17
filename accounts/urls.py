@@ -11,6 +11,8 @@ from accounts.views import (
     UserValidationView,
 )
 
+
+
 urlpatterns = [
     path("otp/", SendOTP.as_view(), name="send_otp"),
     path("otp/verify/", VerifyOTP.as_view(), name="verify_otp"),
@@ -21,5 +23,4 @@ urlpatterns = [
     path("logout/", Logout.as_view(), name="logout"),
     path("user-is-valid", UserValidationView.as_view(), name="is-valid"),
 
-    
 ]

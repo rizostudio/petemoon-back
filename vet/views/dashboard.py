@@ -21,7 +21,6 @@ class PastVisitView(APIView):
 
     def get(self, request):
         try:
-            
             visit = Visit.objects.filter(
                 Q(vet=request.user) & Q(status=Choices.Visit.CANCELED) | Q(status=Choices.Visit.DONE))
             serialized_data = self.serializer_class(visit, many=True).data

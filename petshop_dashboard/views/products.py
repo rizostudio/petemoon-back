@@ -74,12 +74,11 @@ class PetShopProductPricingView(APIView):
         petshop = Petshop.objects.get(owner__user=request.user)
         try:
             if serialized_data.is_valid(raise_exception=True):
-                    
                     product_pricing = ProductPricing.objects.filter(
                         product__id=serialized_data.validated_data["product_id"],
                         petshop__owner__user=request.user)
                     if product_pricing.exists():
-                        raise CustomException(detail="You created this product before")
+                        raise CustomException(detail="You added this product before")
                     
                     serialized_data.save(petshop=petshop)
             return SuccessResponse(data={"message":_("Product pricing added successfuly")})
@@ -87,7 +86,8 @@ class PetShopProductPricingView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-        
+
+
     def delete(self, request, id=None):
         try:
             try:

@@ -43,10 +43,8 @@ def get_top_sales():
     return Product.objects.filter(id__in=last_month_sales_ids)
 
 
-def get_recommended_products(user: User | None) -> list:
-    """
-    Returns list of recommended products for user
-    """
+#def get_recommended_products(user: User | None) -> list:
+def get_recommended_products(user: User) -> list:
     if user is None or user.is_anonymous:
         return get_top_sales()
     user_pets_types = user.pet_set.values_list("pet_type", flat=True)
@@ -57,25 +55,20 @@ def get_recommended_products(user: User | None) -> list:
         .distinct()
         .order_by("-sell_count")
     )
+    user_bought_products_id = []
+    for product_id in user_bought_products:
+        user_bought_products_id.append(product_id['products__product'])
+
     bought_product_categories = (
-        Product.objects.filter(id__in=user_bought_products)
-        .values_list("category", flat=True)
-        .distinct()
-    )
-    user_last_order_products = (
-        Order.objects.filter(user=user)
-        .order_by("-created_at")
-        .values_list("products__product", flat=True)
-    )
-    recommended_products = (
-        Product.objects.filter(
-            pet_type__pet_type__in=user_pets_types,
-            category__in=bought_product_categories,
-        )
-        .exclude(id__in=user_last_order_products)
-        .distinct()
-    )
-    if recommended_products.count() < 20:
+        Product.objects.filter(id__in=user_bought_products_id).values_list("category", flat=True).distinct() )
+
+    user_last_order_products = (Order.objects.filter(user=user).order_by("-created_at").values_list("products__product", flat=True))
+
+    recommended_products = (Product.objects.filter(pet_type__pet_type__in=user_pets_types,category__in=bought_product_categories,).exclude(id__in=user_last_order_products).distinct() )
+
+    if recommended_products.count() == 0:
+        return  Product.objects.all()[0:20]
+    elif recommended_products.count() < 20:
         remaining = 20 - recommended_products.count()
         return recommended_products | get_top_sales()[0:remaining]
     return recommended_products[0:20]
