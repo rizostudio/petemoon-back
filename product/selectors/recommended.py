@@ -45,10 +45,6 @@ def get_top_sales():
 
 #def get_recommended_products(user: User | None) -> list:
 def get_recommended_products(user: User) -> list:
-    """
-    Returns list of recommended products for user
-    """
-
     if user is None or user.is_anonymous:
         return get_top_sales()
     user_pets_types = user.pet_set.values_list("pet_type", flat=True)

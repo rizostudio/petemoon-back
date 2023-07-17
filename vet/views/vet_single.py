@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import exceptions
 
 from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer, VetSingleSerializer
@@ -11,24 +11,20 @@ from config.exceptions import CustomException
 from accounts.views.permissions import IsVet
 
 from accounts.models import VetProfile
-
 from ..models import ReserveTimes
 
 
 class VetSingleView(APIView):
-
-    permission_classes = [IsVet]
+    permission_classes = [AllowAny]
     serializer_class = VetSingleSerializer
-
-    def get(self, request, id=None):
+    def get(self, *args, **kwargs):
         try:
-            
-            vet = VetProfile.objects.get(user=request.user)
+            vet = VetProfile.objects.get(id=kwargs.get("id"))
             serialized_data = self.serializer_class(vet).data
-            
             return SuccessResponse(data=serialized_data)
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
 
 
 
@@ -70,4 +66,3 @@ class AvailableReserveTimeView(APIView):
 
 
 
-       
