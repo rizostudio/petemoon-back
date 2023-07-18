@@ -1,18 +1,17 @@
 import uuid
-
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from utils.choices import Choices
 from dashboard.models import Address
 from product.models import ProductPricing
-
 from .utils import random_N_chars_str
 
 class Shipping(models.Model):
     method = models.CharField(max_length=128)
     price = models.IntegerField()
+    def __str__(self):
+        return str(self.method) + ' | ' + str(self.price)
 
 class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -27,6 +26,14 @@ class Order(models.Model):
     @property
     def products_count(self):
         return self.products.count()
+
+    def total_price_with_shipping(self):
+        try:
+            return self.shipping_method.price * self.total_price
+        except:
+            return None
+
+
 
     class Meta:
         verbose_name = _("Order")
@@ -48,6 +55,9 @@ class PetShopOrder(models.Model):
     product = models.ForeignKey(ProductPricing,on_delete=models.CASCADE)
     price = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True,editable=True,serialize=True)
+
+    def __str__(self):
+        return 'order_id:' + str(self.user_order.order_id) + ' - price:' + str(self.price)
     
     class Meta:
         verbose_name = _("PetShopOrder")

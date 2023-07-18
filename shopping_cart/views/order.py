@@ -15,7 +15,6 @@ from shopping_cart.models import Order
 from dashboard.models import Address
 
 class OrderView(APIView):
-
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id=None):
@@ -31,6 +30,7 @@ class OrderView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
     def post(self, request):
+        # add method post to total price
         serialized_data = OrderPostSerializer(data=request.data)
         try:
             if serialized_data.is_valid(raise_exception=True):
@@ -50,8 +50,7 @@ class OrderView(APIView):
                         total_price += product_in_cart.products_accumulative_price
 
                 address = Address.objects.get(id=cart['address'],user=request.user)
-                tran = serialized_data.save(
-                    user=request.user, total_price=total_price, products=products, address=address)
+                tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
                 return SuccessResponse(data={"data": tran})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)

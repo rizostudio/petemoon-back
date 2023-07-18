@@ -13,8 +13,9 @@ from ..serializers.cart import CartGetSerializer, CartPostSerializer
 
 from dashboard.models import Address
 from dashboard.serializers import AddressSerializer
-class CartView(APIView):
 
+
+class CartView(APIView):
     serializer_class = CartGetSerializer
     permission_classes = [IsAuthenticated]
 
