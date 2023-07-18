@@ -70,10 +70,10 @@ def create_transaction(
     user: User,
     amount: int,
     transaction_type: str,
-    #description: str | None = None,
-    #order: str | None = None,
-    description: str = None,
-    order: str = None,
+    description: str | None = None,
+    order: str | None = None,
+    #description: str = None,
+    #order: str = None,
 ) -> str:
 
     transaction = Transaction.objects.create(

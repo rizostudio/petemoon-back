@@ -3,7 +3,6 @@ from pathlib import Path
 
 # GET ENV UTIL
 
-
 def get_env(key, default=None, optinal=False):
     """Return environment variables with some options."""
     val = environ.get(key)
@@ -13,7 +12,6 @@ def get_env(key, default=None, optinal=False):
         return default
     elif not optinal:
         raise ValueError(f"Environment variable {key} was not defined")
-
 
 # END GET ENV UTIL
 
@@ -172,8 +170,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        #"LOCATION": get_env("REDIS_URL"),
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        "LOCATION": get_env("REDIS_URL"),
+        #'LOCATION': 'redis://127.0.0.1:6379/1',
     }
 }
 # END CACHING CONFIGURATION
@@ -215,6 +213,6 @@ APPEND_SLASH = True
 
 # ZARRINPAL CONFIGURATION
 ZARRINPAL_MERCHANT_ID = get_env("ZARRINPAL_MERCHANT_ID", default="00000000-0000-0000-0000-000000000000")
-# ZARRINPAL_URL = get_env("ZARRINPAL_URL")
-# ZARIN_CALL_BACK = get_env("ZARIN_CALL_BACK")
+ZARRINPAL_URL = 'https://www.zarinpal.com/pg/StartPay/'
+ZARIN_CALL_BACK = '/'
 # END ZARRINPAL CONFIGURATION

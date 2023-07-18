@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    PotentialTimeView, AvailableReserveTimeView, VetSingleView,
+    PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView,
       VisitView, PastVisitView,SinglePastVisitView, FutureVisitView,SingleFutureVisitView, VetListView)
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('single-future-visit/<int:id>', SingleFutureVisitView.as_view(), name='single-future-visit'),
     path('vet-list', VetListView.as_view(), name='vet-list'),
     path('vet-single/<int:id>', VetSingleView.as_view(), name='vet-single'),
+    path('vet-profile', VetProfileView.as_view(), name='vet-profile'),
 ]

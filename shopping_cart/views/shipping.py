@@ -1,12 +1,9 @@
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
-
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
-
 from ..utils import get_cart
 from product.models.pricing import ProductPricing
 from ..serializers import ShippingSerializer

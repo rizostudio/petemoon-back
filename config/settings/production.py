@@ -1,5 +1,6 @@
 from config.settings.common import *
 
+
 # PRODUCTION APPS CONFIGURATION
 INSTALLED_APPS += ("corsheaders", "gunicorn")
 
@@ -18,7 +19,7 @@ DATABASES = {
         "PORT": get_env("DEFAULT_DATABASE_PORT"),
     }
 }
-"POSTGRES_HOST_AUTH_METHOD=trust"
+POSTGRES_HOST_AUTH_METHOD=trust
 # END DATABASE CONFIGURATION
 
 # CORSHEADERS CONFIGURATION
