@@ -3,7 +3,6 @@ from pathlib import Path
 
 # GET ENV UTIL
 
-
 def get_env(key, default=None, optinal=False):
     """Return environment variables with some options."""
     val = environ.get(key)
@@ -13,8 +12,6 @@ def get_env(key, default=None, optinal=False):
         return default
     elif not optinal:
         raise ValueError(f"Environment variable {key} was not defined")
-
-
 
 # END GET ENV UTIL
 

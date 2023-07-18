@@ -1,5 +1,6 @@
 from config.settings.common import *
 
+
 # PRODUCTION APPS CONFIGURATION
 INSTALLED_APPS += ("corsheaders", "gunicorn")
 
