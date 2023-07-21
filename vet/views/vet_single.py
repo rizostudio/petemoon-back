@@ -35,7 +35,6 @@ class AvailableReserveTimeView(APIView):
 
 
     def get(self, request):
-           
         vet_profile = VetProfile.objects.get(user=request.user)
         reserved_time = vet_profile.reserve_times.all()
         result = self.serializer_class(reserved_time,many=True).data
@@ -46,16 +45,17 @@ class AvailableReserveTimeView(APIView):
         try:
             serialized_data.is_valid()
             vet_profile = VetProfile.objects.get(user=request.user)
-            times = serialized_data.validated_data["available_time"]
+
+            #times = serialized_data.validated_data["time"]
+            times = request.data['time']
             reserved_time = vet_profile.reserve_times.all()
             
             for time in times:
-                    reserve_time = ReserveTimes.objects.create(time=time)
+                    reserve_time = ReserveTimes.objects.create(time=time, vet=VetProfile.objects.get(user=request.user))
                     if reserved_time.filter(time=reserve_time.time).exists():
                         pass
                     else:
                         vet_profile.reserve_times.add(reserve_time)
-            
             return SuccessResponse(data=times)
 
         except CustomException as e:

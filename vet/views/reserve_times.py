@@ -9,17 +9,13 @@ from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from accounts.views.permissions import IsVet
-
 from accounts.models import VetProfile
-
 from ..models import ReserveTimes
 
-class PotentialTimeView(APIView):
 
+class PotentialTimeView(APIView):
     serializer_class = PotentialTimeSerializer
     permission_classes = [IsVet]
-
-
 
     def post(self, request):
         serialized_data = self.serializer_class(data=request.data)
@@ -48,7 +44,6 @@ class AvailableReserveTimeView(APIView):
     permission_classes = [IsVet]
 
     def get(self, request):
-           
         vet_profile = VetProfile.objects.get(user=request.user)
         reserved_time = vet_profile.reserve_times.all()
         result = self.serializer_class(reserved_time,many=True).data

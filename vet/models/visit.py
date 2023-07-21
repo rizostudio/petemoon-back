@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
 from shopping_cart.utils import random_N_chars_str
 from utils.choices import Choices
 from .reserve_times import ReserveTimes
