@@ -1,10 +1,11 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import exceptions
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import exceptions, status
+from rest_framework.response import Response
 
-from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer
+from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer, ReserveTimeSerializer
 from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
@@ -13,10 +14,10 @@ from accounts.models import VetProfile
 from ..models import ReserveTimes
 
 
+
 class PotentialTimeView(APIView):
     serializer_class = PotentialTimeSerializer
     permission_classes = [IsVet]
-
     def post(self, request):
         serialized_data = self.serializer_class(data=request.data)
         try:
@@ -45,7 +46,7 @@ class AvailableReserveTimeView(APIView):
 
     def get(self, request):
         vet_profile = VetProfile.objects.get(user=request.user)
-        reserved_time = vet_profile.reserve_times.all()
+        reserved_time = vet_profile.reserve_times.filter(reserved=False)
         result = self.serializer_class(reserved_time,many=True).data
         return SuccessResponse(data=result)
 
@@ -72,6 +73,42 @@ class AvailableReserveTimeView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
 
+class AvailableReserveForNormalUserView(APIView):
+    serializer_class = AvailableTimeSerializer
+    permission_classes = [AllowAny]
+    def get(self, *args, **kwargs):
+        vet_profile = VetProfile.objects.get(id=kwargs.get("id"))
+        reserved_time = vet_profile.reserve_times.filter(reserved=False)
+        result = self.serializer_class(reserved_time, many=True).data
+        return SuccessResponse(data=result)
 
 
-       
+class ReserveForNormalUserView(APIView):
+    serializer_class = ReserveTimeSerializer
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        serialized_data = self.serializer_class(data=request.data)
+        try:
+            serialized_data.is_valid()
+            vet_profile = VetProfile.objects.get(id=kwargs.get("id"))
+            time = serialized_data.validated_data["time"]
+            reserved_time = vet_profile.reserve_times.filter(reserved=False).values_list("time", flat=True)
+
+            #for ReserveTime in reserved_time:
+                #print(ReserveTime.strftime("%m/%d/%Y,%H:%M:%S"))
+
+            if time in reserved_time:
+                reserve = ReserveTimes.objects.get(time=time)
+                reserve.reserved = True
+                reserve.save()
+                return SuccessResponse(data=time)
+                # create visit model for reserved time
+            else:
+                return Response("The time you enter is already reserved or does not exist in vet's available times.", status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except exceptions.ValidationError as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
+

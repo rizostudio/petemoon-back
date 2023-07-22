@@ -7,3 +7,6 @@ class ReserveTimes(models.Model):
     time = models.DateTimeField()
     availabe = models.BooleanField(default=True)
     reserved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.vet.user.first_name)+' '+str(self.vet.user.last_name) +' | '+ str(self.time)

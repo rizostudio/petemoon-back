@@ -33,10 +33,9 @@ class AvailableReserveTimeView(APIView):
     serializer_class = AvailableTimeSerializer
     permission_classes = [IsVet]
 
-
     def get(self, request):
         vet_profile = VetProfile.objects.get(user=request.user)
-        reserved_time = vet_profile.reserve_times.all()
+        reserved_time = vet_profile.reserve_times.filter(reserved=False)
         result = self.serializer_class(reserved_time,many=True).data
         return SuccessResponse(data=result)
 
