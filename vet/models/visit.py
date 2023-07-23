@@ -5,6 +5,7 @@ from utils.choices import Choices
 from .reserve_times import ReserveTimes
 
 
+
 class Visit(models.Model):
     vet = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="visit_vet")
     visit_id = models.CharField(max_length=128,unique=True,editable=False,null=True)
@@ -19,6 +20,7 @@ class Visit(models.Model):
     prescription_photo = models.ImageField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     status = models.CharField(choices=Choices.Visit.choices, max_length=128, null=True,blank=True)
+
     def save(self):
         self.visit_id = default=random_N_chars_str(12)          
         super(Visit, self).save()
