@@ -14,8 +14,6 @@ services:
       main:
     env_file:
       - .env
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: "trust"
 
   redis:
     container_name: redis

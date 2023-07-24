@@ -1,7 +1,7 @@
 from product.selectors.recommended import get_top_sales
 from django.contrib.auth import get_user_model
 from django.db.models import Count
-from product.models import Product
+from product.models import Product, ProductPricing
 from shopping_cart.models import Order
 from rest_framework.views import APIView
 from config.responses import ok
@@ -11,11 +11,11 @@ User = get_user_model()
 
 
 
-def get_similar_products(user: User) -> list:
+def get_similar_products(product_pricing_ids, user: User) -> list:
     if user is None or user.is_anonymous:
         return get_top_sales()
 
-    orders_pet_type = Order.objects.filter(user=user).values_list("products__product__pet_type",flat=True).distinct()
+    orders_pet_type = Order.objects.filter(user=user).values_list("products__product__pet_type", flat=True).distinct()
 
     user_bought_products = (
         Order.objects.filter(user=user)
@@ -28,9 +28,9 @@ def get_similar_products(user: User) -> list:
     for product_id in user_bought_products:
         user_bought_products_id.append(product_id['products__product'])
 
-    bought_product_categories = (Product.objects.filter(id__in=user_bought_products_id).values_list("category", flat=True).distinct())
+    bought_product_categories = (ProductPricing.objects.filter(id__in=product_pricing_ids).values_list("product__category", flat=True).distinct())
 
-    user_last_order_products = ( Order.objects.filter(user=user).order_by("-created_at").values_list("products__product", flat=True))
+    user_last_order_products = (Order.objects.filter(user=user).order_by("-created_at").values_list("products__product", flat=True))
 
     recommended_products = (Product.objects.filter(pet_type__pet_type__in=orders_pet_type,
                                                    category__in=bought_product_categories, ).exclude(
@@ -48,9 +48,10 @@ def get_similar_products(user: User) -> list:
 
 
 class SimilarProducts(APIView):
-    def get(self, *args, **kwargs):
+    def post(self,request, *args, **kwargs):
+        product_pricing_ids = request.data['product_pricing_ids']
         user = self.request.user
-        products = get_similar_products(user)
+        products = get_similar_products(product_pricing_ids, user)
         return ok(data=ProductListSerializer(products, many=True).data)
 
 

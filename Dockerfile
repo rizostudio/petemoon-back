@@ -9,7 +9,6 @@ RUN pip install --upgrade pip
 
 RUN apt-get update && apt-get upgrade -y
 
-#RUN pip install django_extensions==3.2.1
 RUN pip install -r requirements/production.txt
 
 COPY . /petemoon-back

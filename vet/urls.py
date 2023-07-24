@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
-    PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView,
-      VisitView, PastVisitView,SinglePastVisitView, FutureVisitView,SingleFutureVisitView, VetListView)
+    PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView, AvailableReserveForNormalUserView,
+    ReserveForNormalUserView, VisitView, PastVisitView,SinglePastVisitView, FutureVisitView,
+    SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView)
 
 urlpatterns = [
     path('potential-time', PotentialTimeView.as_view(), name='potential-time'),
@@ -12,7 +13,13 @@ urlpatterns = [
     path('single-past-visit/<int:id>', SinglePastVisitView.as_view(), name='past-visit'),
     path('future-visit', FutureVisitView.as_view(), name='future-visit'),
     path('single-future-visit/<int:id>', SingleFutureVisitView.as_view(), name='single-future-visit'),
+    path('user-future-visit', UserFutureVisitView.as_view(), name='user-future-visit'),
+    path('user-single-future-visit/<int:id>', UserSingleFutureVisitView.as_view(), name='user-single-future-visit'),
+    path('user-past-visit', UserPastVisitView.as_view(), name='user-past-visit'),
+    path('user-single-past-visit/<int:id>', UserSinglePastVisitView.as_view(), name='user-single-past-visit'),
     path('vet-list', VetListView.as_view(), name='vet-list'),
     path('vet-single/<int:id>', VetSingleView.as_view(), name='vet-single'),
     path('vet-profile', VetProfileView.as_view(), name='vet-profile'),
+    path('available-reserve/<int:id>', AvailableReserveForNormalUserView.as_view(), name='available-reserve'),
+    path('reserve/<int:id>', ReserveForNormalUserView.as_view(), name='reserve'),
 ]

@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
 from shopping_cart.utils import random_N_chars_str
 from utils.choices import Choices
 from .reserve_times import ReserveTimes
+
 
 
 class Visit(models.Model):
@@ -20,6 +20,7 @@ class Visit(models.Model):
     prescription_photo = models.ImageField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     status = models.CharField(choices=Choices.Visit.choices, max_length=128, null=True,blank=True)
+
     def save(self):
         self.visit_id = default=random_N_chars_str(12)          
         super(Visit, self).save()
