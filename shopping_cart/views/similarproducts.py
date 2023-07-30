@@ -5,7 +5,7 @@ from product.models import Product, ProductPricing
 from shopping_cart.models import Order
 from rest_framework.views import APIView
 from config.responses import ok
-from product.serializers import ProductListSerializer
+from product.serializers import ProductListSerializer, ProductGetSerializer
 
 User = get_user_model()
 
@@ -52,7 +52,7 @@ class SimilarProducts(APIView):
         product_pricing_ids = request.data['product_pricing_ids']
         user = self.request.user
         products = get_similar_products(product_pricing_ids, user)
-        return ok(data=ProductListSerializer(products, many=True).data)
+        return ok(data=ProductGetSerializer(products, many=True).data)
 
 
 

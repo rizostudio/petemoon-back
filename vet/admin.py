@@ -4,4 +4,9 @@ from .models import ReserveTimes, VetComment, Visit
 
 admin.site.register(ReserveTimes)
 admin.site.register(VetComment)
-admin.site.register(Visit)
+
+class VisitAdmin(admin.ModelAdmin):
+    list_display = ('visit_id', 'vet', 'user')
+    readonly_fields = ('price',)
+admin.site.register(Visit, VisitAdmin)
+

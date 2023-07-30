@@ -20,6 +20,7 @@ class Visit(models.Model):
     prescription_photo = models.ImageField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     status = models.CharField(choices=Choices.Visit.choices, max_length=128, null=True,blank=True)
+    price = models.ImageField(default=200)
 
     def save(self):
         self.visit_id = default=random_N_chars_str(12)          
