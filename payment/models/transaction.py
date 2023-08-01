@@ -27,3 +27,12 @@ class Transaction(models.Model):
             f"{self.description}-{self.amount}-{self.user}"
             f"-{self.ref_id}-{self.success}"
         )
+
+
+
+
+class PetshopSaleFee(models.Model):
+    percent = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.amount)

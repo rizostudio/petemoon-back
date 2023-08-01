@@ -97,6 +97,9 @@ class VerifyTransaction(APIView):
                 if transaction.transaction_type == "order":
                     transaction.order.status = Choices.Order.PROCESSING
                     transaction.order.save()
+
+
+
                 return SuccessResponse(data={'status': True, 'RefID': response['RefID']})
             else:
                 return SuccessResponse(data={'status': False, 'details': 'Transaction has already been verified' })

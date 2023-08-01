@@ -7,6 +7,7 @@ from dashboard.models import Address
 from product.models import ProductPricing
 from .utils import random_N_chars_str
 
+
 class Shipping(models.Model):
     method = models.CharField(max_length=128)
     price = models.IntegerField()
