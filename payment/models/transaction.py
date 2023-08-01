@@ -34,5 +34,10 @@ class Transaction(models.Model):
 class PetshopSaleFee(models.Model):
     percent = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return str(self.amount)
+        return str(self.percent)
