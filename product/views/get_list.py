@@ -1,12 +1,11 @@
 from rest_framework.views import APIView
-
 from config.responses import ok
 from product.selectors import get_item_list
 from product.serializers import ProductGetSerializer
 from ..models import Product
-
 from django.db.models import Avg, F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
+
 
 
 class GetList(APIView):
