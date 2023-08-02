@@ -10,7 +10,7 @@ from config.exceptions import CustomException
 from ..utils import get_cart
 from product.models.pricing import ProductPricing
 from ..serializers import OrderGetSerializer, OrderPostSerializer
-from shopping_cart.models import Order
+from shopping_cart.models import Order, Shipping
 
 from dashboard.models import Address
 
@@ -38,6 +38,12 @@ class OrderView(APIView):
                 if cart == None:
                     raise CustomException(
                         detail=_("Your shopping cart is empty"))
+
+                try:
+                    shipping_method = Shipping.objects.get(id=request.data['shipping_method'])
+                except Shipping.DoesNotExist:
+                    raise CustomException(detail=_("Shipping matching does not exist"))
+
                 else:
                     products = []
                     total_price = 0

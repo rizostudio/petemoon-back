@@ -4,8 +4,8 @@ import json
 from django.conf import settings
 from payment.models import Transaction
 
-User = get_user_model()
 
+User = get_user_model()
 
 # def create_transaction(
 #     user: User,
@@ -66,6 +66,9 @@ User = get_user_model()
 #     transaction.save()
 #     return f"{settings.ZARRINPAL_URL}StartPay/{transaction.authority}"
 
+
+
+
 def create_transaction(
     user: User,
     amount: int,
@@ -84,7 +87,6 @@ def create_transaction(
         order=order,
     )
     data = {
-        
         "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
         "Amount": amount,
         "Description": description,
@@ -93,23 +95,26 @@ def create_transaction(
             + str(transaction.id)
             + "/",
         }
+
     data = json.dumps(data)
-    # set content length by data
-    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+
     try:
-        response = requests.post(
-            f"{settings.ZARRINPAL_URL}/pg/rest/WebGate/PaymentRequest.json", data=data,headers=headers, timeout=10)
-        print(response.content)
+        response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
         if response.status_code == 200:
             response = response.json()
             if response['Status'] == 100:
-                return {
-                    'url': f"{settings.ZARRINPAL_URL}/pg/StartPay/" + str(response['Authority']), 'authority': response['Authority']}
+                transaction.authority = response['Authority']
+                transaction.save()
+                data = { 'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),'transaction': transaction.id, 'authority': response['Authority'] }
+                return data
             else:
-                return {'code': str(response['Status'])}
+                return {'status': False, 'code': str(response['Status'])}
         return response
-    
+
     except requests.exceptions.Timeout:
-        return {'code': 'timeout'}
+        return {'status': False, 'code': 'timeout'}
     except requests.exceptions.ConnectionError:
-        return {'code': 'connection error'}
+        return {'status': False, 'code': 'connection error'}
+
+

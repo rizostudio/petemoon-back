@@ -212,6 +212,7 @@ SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 APPEND_SLASH = True
 
 # ZARRINPAL CONFIGURATION
+ZARRINPAL_URL="https://api.zarinpal.com/pg/"
 ZARRINPAL_MERCHANT_ID = get_env("ZARRINPAL_MERCHANT_ID", default="00000000-0000-0000-0000-000000000000")
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
 ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"

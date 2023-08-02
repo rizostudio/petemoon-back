@@ -7,7 +7,7 @@ from django.db.models import F
 from rest_framework.views import APIView
 
 from config.responses import bad_request, SuccessResponse, UnsuccessfulResponse
-from payment.models import Transaction
+from payment.models import Transaction, PetshopSaleFee
 from utils.choices import Choices
 from rest_framework.response import Response
 from rest_framework import status
@@ -81,6 +81,13 @@ class VerifyTransaction(APIView):
         headers = {'content-type': 'application/json', 'content-length': str(len(data))}
         response = requests.post(settings.ZP_API_VERIFY, data=data, headers=headers)
 
+        products = transaction.order.products.all()
+        print(products)
+        for product in products:
+            print(product.price)
+            print(product.petshop)
+        print('--#---------------')
+
         if response.status_code == 200:
             response = response.json()
             if response['Status'] == 100:
@@ -97,6 +104,9 @@ class VerifyTransaction(APIView):
                 if transaction.transaction_type == "order":
                     transaction.order.status = Choices.Order.PROCESSING
                     transaction.order.save()
+
+
+                    #PetshopSaleFee
 
 
 
