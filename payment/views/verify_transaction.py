@@ -30,7 +30,9 @@ class SendReqTransaction(APIView):
             "Amount": transaction.amount,
             "Description": transaction.description,
             "Authority": authority,
-            "CallbackURL": settings.ZARIN_CALL_BACK,
+            "CallbackURL": settings.ZARIN_CALL_BACK
+                   + str(transaction.id)
+                   + "/",
             "TransactionID": transaction.id,
         }
 
@@ -62,12 +64,13 @@ class VerifyTransaction(APIView):
     def get(self, *args, **kwargs):
         status = self.request.query_params.get("Status")
         authority = self.request.query_params.get("Authority")
+        transaction_id = kwargs.get("transaction_id")
 
         if not authority or status != "OK":
             return bad_request("Invalid request")
 
         try:
-            transaction = Transaction.objects.get(authority=authority,success=False)
+            transaction = Transaction.objects.get(id=transaction_id,success=False)
         except Transaction.DoesNotExist:
             return bad_request("Transaction does not exist or has already been verified.")
 
