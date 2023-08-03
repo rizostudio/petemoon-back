@@ -14,5 +14,4 @@ urlpatterns = [
     path("single-pricing/<int:id>", SingleProductPricingView.as_view(), name="dashboard"),
     path("turn-over", TurnOverView.as_view(), name="turn-over"),
 
-
 ]
