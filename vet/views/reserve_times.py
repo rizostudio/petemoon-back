@@ -1,17 +1,16 @@
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import exceptions, status
 from rest_framework.response import Response
-
 from ..serializers import PotentialTimeSerializer,AvailableTimeSerializer, ReserveTimeSerializer
 from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from accounts.views.permissions import IsVet
 from accounts.models import VetProfile
-from ..models import ReserveTimes
+from ..models import ReserveTimes, Visit
+from django.shortcuts import get_object_or_404
 
 
 
@@ -98,11 +97,17 @@ class ReserveForNormalUserView(APIView):
                 #print(ReserveTime.strftime("%m/%d/%Y,%H:%M:%S"))
 
             if time in reserved_time:
-                reserve = ReserveTimes.objects.get(time=time)
+                reserve = ReserveTimes.objects.get(vet=vet_profile,time=time)
+                #reserve = get_object_or_404(ReserveTimes, time=time)
                 reserve.reserved = True
                 reserve.save()
+                visit = Visit()
+                visit.vet = vet_profile.user
+                visit.user = request.user
+                visit.time = reserve
+                visit.status = "Pending"
+                visit.save()
                 return SuccessResponse(data=time)
-                # create visit model for reserved time
             else:
                 return Response("The time you enter is already reserved or does not exist in vet's available times.", status=status.HTTP_406_NOT_ACCEPTABLE)
 

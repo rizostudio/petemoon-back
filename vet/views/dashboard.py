@@ -12,6 +12,8 @@ from utils.choices import Choices
 
 from django.shortcuts import render, get_object_or_404
 
+
+
 class PastVisitView(APIView):
 
     permission_classes = [IsVet]
