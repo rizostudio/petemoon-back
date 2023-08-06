@@ -13,7 +13,7 @@ from product.models import Petshop, Product
 
 from config.responses import ok
 from product.serializers import ProductGetSerializer
-from product.models import Product
+from product.models import Product, ProductPricing
 
 from django.db.models import Avg, F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
@@ -101,8 +101,9 @@ class PetShopProductPricingView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code) 
 
 
-class ProductsView(APIView):
 
+
+class ProductsView(APIView):
     serializer_class = ProductListSerializer
     permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
@@ -143,10 +144,14 @@ class ProductsView(APIView):
     #     products = products[offset:offset+limit]
 
         # If no products are found, raise a 404 exception
-  
+
+        petshop = Petshop.objects.get(owner=self.request.user.petshop_profile)
+        added_products_ids = ProductPricing.objects.filter(petshop=petshop).values_list("product", flat=True)
+        non_repetitive_products = products.exclude(id__in=added_products_ids)
+
         return ok(
-            {"products": ProductGetSerializer(products, many=True).data,
-             "count": products.count()}
+            {"products": ProductGetSerializer(non_repetitive_products, many=True).data,
+             "count": non_repetitive_products.count()}
              )
 
 
