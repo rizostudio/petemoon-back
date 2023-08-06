@@ -18,15 +18,8 @@ class PetshopProfile(models.Model):
     city = models.CharField(max_length=64, null=True, blank=True)
     province = models.CharField(max_length=64, null=True, blank=True)
     postal_region = models.CharField(max_length=64, null=True, blank=True)
-    national_id_validator = RegexValidator(
-        r"^(\d{10})?$", message=_("Invalid national ID.")
-    )
-    national_id = models.CharField(
-        max_length=10,
-        validators=[national_id_validator],
-        null=True,
-        blank=True,
-    )
+    national_id_validator = RegexValidator(r"^(\d{10})?$", message=_("Invalid national ID.") )
+    national_id = models.CharField(max_length=10,validators=[national_id_validator],null=True,blank=True,)
     #files
     national_card = models.FileField(null=True, blank=True)
     birth_certificate = models.FileField(null=True, blank=True)
