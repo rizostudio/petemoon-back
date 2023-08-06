@@ -10,3 +10,10 @@ class CommentInline(admin.TabularInline):
 
     def has_add_permission(self, *args, **kwargs):
         return False
+
+
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("product", "user", "title")
+admin.site.register(Comment, CommentAdmin)

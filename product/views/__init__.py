@@ -9,6 +9,7 @@ from product.views.get_top_sellers import GetTopSellers
 
 from product.views.search import *
 
+
 class SingleItem(CreateComment, GetItem):
     def get_permissions(self):
         if self.request.method == "GET":

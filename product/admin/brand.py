@@ -7,3 +7,7 @@ from product.models import Brand
 class BrandAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     prepopulated_fields = {"slug": ("name",)}
+
+
+
+
