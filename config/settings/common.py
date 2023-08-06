@@ -218,4 +218,5 @@ ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.js
 ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
 ZARIN_CALL_BACK = 'http://127.0.0.1:8000/payment/verify/'
+ZARIN_VISIT_CALL_BACK = 'http://127.0.0.1:8000/visit_payment/verify/'
 # END ZARRINPAL CONFIGURATION

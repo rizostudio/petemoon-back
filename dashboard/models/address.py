@@ -10,8 +10,8 @@ class Address(models.Model):
     receiver = models.CharField(max_length=128)
     postal_code = models.CharField(max_length=10)
     postal_address = models.CharField(max_length=512)
-    lat = models.DecimalField(_('Latitude'), max_digits=20, decimal_places=6, null=True)
-    lon = models.DecimalField(_('Longitude'), max_digits=20, decimal_places=6, null=True)
+    lat = models.DecimalField(_('Latitude'), max_digits=20, decimal_places=9, null=True)
+    lon = models.DecimalField(_('Longitude'), max_digits=20, decimal_places=9, null=True)
     
     def __str__(self):
         return self.receiver
