@@ -1,1 +1,1 @@
-from payment.models.transaction import Transaction
+from payment.models.transaction import Transaction, PetshopSaleFee

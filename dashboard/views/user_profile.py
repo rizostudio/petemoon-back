@@ -11,6 +11,7 @@ from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
 
+
 class UserProfileView(APIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]

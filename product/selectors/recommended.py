@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.utils import timezone
 
-from product.models import Product
+from product.models import Product, ProductPricing
 from shopping_cart.models import Order
 
 User = get_user_model()

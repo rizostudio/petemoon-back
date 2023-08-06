@@ -6,10 +6,9 @@ from product.admin.spec import SpecInline
 from product.models import Product
 
 
-@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     prepopulated_fields = {"slug": ("name",)}
     list_display = ("name", "category", "pet_type", "brand")
     inlines = [CommentInline, PictureInline, SpecInline]
-#admin.site.register(Product)
+admin.site.register(Product, ProductAdmin)

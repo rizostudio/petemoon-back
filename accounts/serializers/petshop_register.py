@@ -10,6 +10,7 @@ sheba_number_validator = RegexValidator(
 )
 
 
+
 class PetShopRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=200,required=True)
     last_name = serializers.CharField(max_length=200,required=True)
@@ -18,6 +19,7 @@ class PetShopRegisterSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     city = serializers.CharField(max_length=64,required=False)
+    province = serializers.CharField(max_length=64, required=False)
     postal_region = serializers.CharField(max_length=64,required=False)
  
     national_id = serializers.CharField(

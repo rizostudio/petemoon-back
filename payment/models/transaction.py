@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from shopping_cart.models import Order
 
 
@@ -27,3 +26,17 @@ class Transaction(models.Model):
             f"{self.description}-{self.amount}-{self.user}"
             f"-{self.ref_id}-{self.success}"
         )
+
+
+
+
+class PetshopSaleFee(models.Model):
+    percent = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.percent)

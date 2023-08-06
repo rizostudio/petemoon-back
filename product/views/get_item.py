@@ -11,7 +11,7 @@ class GetItem(APIView):
         slug = kwargs.get("slug")
         item = get_item_by_slug(slug)
         if item:
-            related_products = ProductListSerializer(
+            related_products = ProductGetSerializer(
                 get_related_products(item), many=True
             ).data
             data = dict(ProductGetSerializer(item).data)

@@ -11,6 +11,7 @@ from config.settings import ACCESS_TTL
 from dashboard.models.wallet import Wallet
 
 
+
 class VerifyOTP(APIView):
     permission_classes = []
 

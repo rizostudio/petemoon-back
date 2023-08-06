@@ -40,16 +40,14 @@ class Pet(models.Model):
     name = models.CharField(max_length=256)
     pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, null=True)
     sex = models.CharField(choices=Choices.Sex.choices, max_length=1)
-    pet_category = models.ForeignKey(
-        PetCategory, on_delete=models.CASCADE, null=True
-    )
+    pet_category = models.ForeignKey(PetCategory, on_delete=models.CASCADE, null=True)
     birth_date = models.DateField(null=True)
     photo = models.ImageField(blank=True, null=True)
     # Medical
-    weight = models.FloatField(null=True)
-    last_vaccine_date = models.DateField(null=True)
+    weight = models.FloatField(blank=True, null=True)
+    last_vaccine_date = models.DateField(blank=True, null=True)
     underlying_disease = models.CharField(max_length=128, null=True)
-    last_anti_parasitic_vaccine_date = models.DateField(null=True)
+    last_anti_parasitic_vaccine_date = models.DateField(blank=True, null=True)
 
     class Meta:
         verbose_name = _("Pet")

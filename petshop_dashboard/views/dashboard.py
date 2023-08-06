@@ -22,14 +22,14 @@ class DashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        income = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).aggregate(Sum('price'))
+        income = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).aggregate(Sum('price_with_shipping_and_fee'))
         messages = None
         products_count = ProductPricing.objects.filter(petshop__owner__user=request.user).count()
         orders_count = Order.objects.filter(products__petshop__owner__user=request.user).count()
         order_history = PetShopOrder.objects.filter(product__petshop__owner__user=request.user)
 
         return SuccessResponse(data={
-            "income":income['price__sum'],
+            "income":income['price_with_shipping_and_fee__sum'],
             "messages":messages,
             "products_count":products_count,
             "orders_count":orders_count,
