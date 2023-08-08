@@ -15,3 +15,5 @@ class PetShopOrderAdmin(admin.ModelAdmin):
     list_display = ('user_order', 'price', 'price_with_shipping_and_fee', 'created_at' )
     readonly_fields = ('created_at',)
 admin.site.register(PetShopOrder, PetShopOrderAdmin)
+
+

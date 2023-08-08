@@ -2,6 +2,26 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from shopping_cart.models import Order
+from shopping_cart.utils import random_N_chars_str
+
+
+
+class Discount(models.Model):
+    active = models.BooleanField(default=True)
+    code = models.CharField(max_length=128, unique=True, blank=True)
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='creator')
+    percentage = models.IntegerField()
+    expiration_day = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = random_N_chars_str(12)
+        super(Discount, self).save()
+
+    def __str__(self):
+        return str(self.active) +' | '+ str(self.code)
+
 
 
 class Transaction(models.Model):
@@ -29,7 +49,6 @@ class Transaction(models.Model):
 
 
 
-
 class PetshopSaleFee(models.Model):
     percent = models.IntegerField(default=0)
 
@@ -40,3 +59,7 @@ class PetshopSaleFee(models.Model):
 
     def __str__(self):
         return str(self.percent)
+
+
+
+
