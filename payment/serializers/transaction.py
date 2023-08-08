@@ -1,6 +1,10 @@
 from rest_framework import serializers
+from payment.models import Transaction, Discount
 
-from payment.models import Transaction
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = ("code", "creator", "percentage", "expiration_day")
 
 
 class TransactionSerializer(serializers.ModelSerializer):
