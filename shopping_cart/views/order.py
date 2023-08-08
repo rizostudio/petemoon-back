@@ -44,6 +44,12 @@ class OrderView(APIView):
                 except Shipping.DoesNotExist:
                     raise CustomException(detail=_("Shipping matching does not exist"))
 
+
+                try:
+                    address = Address.objects.get(id=cart['address'],user=request.user)
+                except Address.DoesNotExist:
+                    raise CustomException(detail=_("Address matching does not exist"))
+
                 else:
                     products = []
                     total_price = 0
@@ -55,7 +61,7 @@ class OrderView(APIView):
                             product_in_cart.price
                         total_price += product_in_cart.products_accumulative_price
 
-                address = Address.objects.get(id=cart['address'],user=request.user)
+
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
                 return SuccessResponse(data={"data": tran})
         except CustomException as e:
