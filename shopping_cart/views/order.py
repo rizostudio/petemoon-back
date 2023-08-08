@@ -1,18 +1,26 @@
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
-
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
-
 from ..utils import get_cart
 from product.models.pricing import ProductPricing
 from ..serializers import OrderGetSerializer, OrderPostSerializer
 from shopping_cart.models import Order, Shipping
-
 from dashboard.models import Address
+import json
+import requests
+from django.conf import settings
+from django.db import transaction
+from django.db.models import F
+from payment.models import Transaction, PetshopSaleFee
+from utils.choices import Choices
+from rest_framework.response import Response
+from rest_framework import status
+
+
+
 
 class OrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -44,7 +52,6 @@ class OrderView(APIView):
                 except Shipping.DoesNotExist:
                     raise CustomException(detail=_("Shipping matching does not exist"))
 
-
                 try:
                     address = Address.objects.get(id=cart['address'],user=request.user)
                 except Address.DoesNotExist:
@@ -61,8 +68,44 @@ class OrderView(APIView):
                             product_in_cart.price
                         total_price += product_in_cart.products_accumulative_price
 
-
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
+
+                try:
+                    transaction = Transaction.objects.get(id=tran['transaction'], success=False)
+                except Transaction.DoesNotExist:
+                    return bad_request("Transaction does not exist or has already been verified.")
+
+                data = {
+                    "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
+                    "Amount": transaction.amount,
+                    "Description": transaction.description,
+                    "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
+                    "TransactionID": transaction.id}
+                data = json.dumps(data)
+                headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+
+                try:
+                    response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+                    if response.status_code == 200:
+                        response = response.json()
+                        if response['Status'] == 100:
+                            transaction.authority = response['Authority']
+                            transaction.save()
+                            return SuccessResponse(
+                                data={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
+                                      'transaction': transaction.id, 'authority': response['Authority']})
+                        else:
+                            return {'status': False, 'code': str(response['Status'])}
+                    return response
+
+                except requests.exceptions.Timeout:
+                    return {'status': False, 'code': 'timeout'}
+                except requests.exceptions.ConnectionError:
+                    return {'status': False, 'code': 'connection error'}
+
+
+
+
                 return SuccessResponse(data={"data": tran})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
