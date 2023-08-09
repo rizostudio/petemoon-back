@@ -8,8 +8,9 @@ from django.db import transaction
 from .. models import Shipping
 from payment.services.create_transaction import create_transaction
 from utils.choices import Choices
-
+from payment.models import Discount
 from ..utils import random_N_chars_str
+from config.exceptions import CustomException
 
 
 class OrderGetSerializer(serializers.Serializer):
@@ -26,15 +27,23 @@ class OrderGetSerializer(serializers.Serializer):
 
 class OrderPostSerializer(serializers.Serializer):
     shipping_method = serializers.CharField()
+    discount = serializers.CharField()
 
     @transaction.atomic
     def create(self, validated_data):
-     
+
+        discount = validated_data.pop("discount")
         products = validated_data.pop("products")
         shipping_id = validated_data.pop("shipping_method")
         shipping = Shipping.objects.get(id=shipping_id)
 
+        try:
+            discount = Discount.objects.get(code=discount)
+        except Address.DoesNotExist:
+            raise CustomException(detail=_("discount matching does not exist"))
+
         order = Order.objects.create(
+            discount=discount,
             address=validated_data.pop("address"),
             shipping_method=shipping,
             **validated_data,
@@ -52,7 +61,7 @@ class OrderPostSerializer(serializers.Serializer):
 
         tran = create_transaction(
             user=validated_data.get("user"),
-            amount=order.total_price + shipping.price,
+            amount=(order.total_price-((order.total_price*discount.percentage)/100))+shipping.price,
             order=order,
             transaction_type="order",
             description="some description"

@@ -27,6 +27,7 @@ class Order(models.Model):
     total_price = models.IntegerField(null=True)
     shipping_method = models.ForeignKey(Shipping, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    discount = models.CharField(max_length=128, null=True, blank=True)
     
     @property
     def products_count(self):
@@ -58,8 +59,12 @@ class Order(models.Model):
 from payment.models import PetshopSaleFee
 
 def fee():
-    fee = PetshopSaleFee.objects.all().first()
-    return fee.percent
+    try:
+        fee = PetshopSaleFee.objects.all().first()
+        return fee.percent
+    except:
+        return 0
+
 
 
 class PetShopOrder(models.Model):
