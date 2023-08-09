@@ -30,7 +30,7 @@ class PetshopProfile(models.Model):
     estimated_item_count = models.IntegerField(default=0)
     gender = models.CharField(max_length=64, null=True, blank=True)
     sheba_number_validator = RegexValidator(
-        r"^(\d{24})?$", message=_("Invalid sheba.")
+        r"^\d{24}$", message=_("Invalid sheba.")
     )
     sheba_number = models.CharField(
         max_length=26,
