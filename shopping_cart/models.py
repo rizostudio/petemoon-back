@@ -59,8 +59,12 @@ class Order(models.Model):
 from payment.models import PetshopSaleFee
 
 def fee():
-    fee = PetshopSaleFee.objects.all().first()
-    return fee.percent
+    try:
+        fee = PetshopSaleFee.objects.all().first()
+        return fee.percent
+    except:
+        return 0
+
 
 
 class PetShopOrder(models.Model):
