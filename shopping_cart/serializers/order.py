@@ -27,20 +27,24 @@ class OrderGetSerializer(serializers.Serializer):
 
 class OrderPostSerializer(serializers.Serializer):
     shipping_method = serializers.CharField()
-    discount = serializers.CharField()
+    discount = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     @transaction.atomic
     def create(self, validated_data):
-
         discount = validated_data.pop("discount")
+        if discount is None:
+            discount_percentage = 0
+        else:
+            try:
+                discount = Discount.objects.get(code=discount)
+                discount_percentage = discount.percentage
+            except Discount.DoesNotExist:
+                raise CustomException(detail=("discount matching does not exist"))
+
         products = validated_data.pop("products")
         shipping_id = validated_data.pop("shipping_method")
         shipping = Shipping.objects.get(id=shipping_id)
 
-        try:
-            discount = Discount.objects.get(code=discount)
-        except Address.DoesNotExist:
-            raise CustomException(detail=_("discount matching does not exist"))
 
         order = Order.objects.create(
             discount=discount,
@@ -61,7 +65,7 @@ class OrderPostSerializer(serializers.Serializer):
 
         tran = create_transaction(
             user=validated_data.get("user"),
-            amount=(order.total_price-((order.total_price*discount.percentage)/100))+shipping.price,
+            amount=(order.total_price-((order.total_price*discount_percentage)/100))+shipping.price,
             order=order,
             transaction_type="order",
             description="some description"

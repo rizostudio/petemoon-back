@@ -5,5 +5,5 @@ from dashboard.models import Message
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['context']
+        fields = ['title', 'context']
 
