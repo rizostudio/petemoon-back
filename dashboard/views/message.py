@@ -12,11 +12,9 @@ from config.exceptions import CustomException
 
 class MessageView(APIView):
     serializer_class = MessageSerializer
-    #authentication_classes = []
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-           
         order = Message.objects.filter(user=request.user)
         result = self.serializer_class(order,many=True).data
         return SuccessResponse(data=result)

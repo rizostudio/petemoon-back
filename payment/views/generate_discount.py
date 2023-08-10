@@ -3,6 +3,32 @@ from payment.serializers import DiscountSerializer
 from accounts.views.permissions import IsPetShop
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from payment.models import Discount
+from datetime import datetime
+from django.utils.timezone import localdate
+
+class DiscountCalculator(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        data = request.data
+        try:
+            discount = Discount.objects.get(code=data['code'])
+            #print( datetime.now() )
+            #print(localdate())
+            #print(discount.created_at)
+            #print(discount.expiration_day)
+            #r = (discount.created_at-localdate()).seconds
+            discount_percentage = discount.percentage
+            return SuccessResponse(data={'status': True, 'discount_percentage': discount_percentage })
+        except Discount.DoesNotExist:
+            return UnsuccessfulResponse(errors="discount matching does not exist", status_code=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+
+
+
 
 
 class GenerateDiscount(APIView):
