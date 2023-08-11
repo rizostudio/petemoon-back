@@ -72,11 +72,9 @@ class OrderView(APIView):
 
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
 
-                print(tran)
-                print(tran['transaction'])
-
                 try:
-                    transaction = Transaction.objects.get(id=tran['transaction'], success=False)
+                    transaction = Transaction.objects.latest('id')
+                    #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
                     raise CustomException(detail=_("Transaction does not exist or has already been verified."))
 
