@@ -12,7 +12,8 @@ from accounts.views.permissions import IsVet
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from ..serializers import VetRegisterSerializer
-
+from rest_framework import status
+from django.conf import settings
 
 class VetRegisterView(APIView):
     permission_classes = [IsVet]
@@ -28,6 +29,37 @@ class VetRegisterView(APIView):
         serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
         try:
             if serialized_data.is_valid(raise_exception=True):
+
+                try:
+                    if serialized_data.validated_data['national_card_front'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload national_card_front file more than 5Mb",status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
+
+                try:
+                    if serialized_data.validated_data['national_card_back'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload national_card_back file more than 5Mb",status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
+
+                try:
+                    if serialized_data.validated_data['birth_certificate'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload birth_certificate file more than 5Mb", status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
+
+                try:
+                    if serialized_data.validated_data['medical_card'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload medical_card file more than 5Mb",status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
+
+                try:
+                    if serialized_data.validated_data['military_card'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload military_card file more than 5Mb",status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
+
 
                 vet_profile = serialized_data.update(
                     instance=VetProfile.objects.filter(
