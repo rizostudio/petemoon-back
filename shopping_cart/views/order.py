@@ -105,6 +105,7 @@ class OrderView(APIView):
                                       'transaction': transaction.id, 'authority': response['Authority']})
                             '''
                         else:
+                            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='errrr')
                             return {'status': False, 'code': str(response['Status'])}
                 except:
                     return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='connection error or timeout')
