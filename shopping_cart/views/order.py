@@ -45,6 +45,7 @@ class OrderView(APIView):
 
         try:
             if serialized_data.is_valid(raise_exception=True):
+                
                 cart = get_cart(request.user.id)
                 if cart == None:
                     raise CustomException(detail=_("Your shopping cart is empty"))
@@ -90,9 +91,7 @@ class OrderView(APIView):
 
                 try:
                     response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
-
                     if response.status_code == 200:
-
                         response = response.json()
                         if response['Status'] == 100:
                             transaction.authority = response['Authority']
@@ -107,12 +106,8 @@ class OrderView(APIView):
                             '''
                         else:
                             return {'status': False, 'code': str(response['Status'])}
-                    return response
-
                 except:
                     return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='connection error or timeout')
 
-        except CustomException as e:
-            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-        except exceptions.ValidationError as e:
-            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='error')
