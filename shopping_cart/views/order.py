@@ -99,7 +99,9 @@ class OrderView(APIView):
                             transaction.save()
 
                             return Response({'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
-                                      'transaction': transaction.id, 'authority': response['Authority']})
+                                      'transaction': transaction.id, 'authority': response['Authority']}, status=status.HTTP_200_OK)
+
+                         
                             '''
                             return SuccessResponse(
                                 data={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
