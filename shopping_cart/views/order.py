@@ -37,15 +37,17 @@ class OrderView(APIView):
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
+
+
     def post(self, request):
         # add method post to total price
         serialized_data = OrderPostSerializer(data=request.data)
+
         try:
             if serialized_data.is_valid(raise_exception=True):
                 cart = get_cart(request.user.id)
                 if cart == None:
-                    raise CustomException(
-                        detail=_("Your shopping cart is empty"))
+                    raise CustomException(detail=_("Your shopping cart is empty"))
 
                 try:
                     shipping_method = Shipping.objects.get(id=request.data['shipping_method'])
@@ -70,10 +72,13 @@ class OrderView(APIView):
 
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
 
+                print(tran)
+                print(tran['transaction'])
+
                 try:
                     transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
-                    return bad_request("Transaction does not exist or has already been verified.")
+                    raise CustomException(detail=_("Transaction does not exist or has already been verified."))
 
                 data = {
                     "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -82,6 +87,7 @@ class OrderView(APIView):
                     "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
                     "TransactionID": transaction.id}
                 data = json.dumps(data)
+
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
                 try:
@@ -105,10 +111,6 @@ class OrderView(APIView):
                 except requests.exceptions.ConnectionError:
                     return {'status': False, 'code': 'connection error'}
 
-
-
-
-                return SuccessResponse(data={"data": tran})
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
