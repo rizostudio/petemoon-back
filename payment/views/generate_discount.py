@@ -30,7 +30,6 @@ class DiscountCalculator(APIView):
 
 
 
-
 class GenerateDiscount(APIView):
     permission_classes = [IsPetShop]
 

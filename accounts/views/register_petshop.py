@@ -2,7 +2,7 @@ from django.db import transaction
 from django.utils.translation import gettext as _
 from rest_framework.views import APIView
 from rest_framework import exceptions
-
+from rest_framework import status
 from accounts.functions import (
     apply_stage,
     check_petshop_register_stage,
@@ -15,6 +15,8 @@ from ..serializers import PetShopRegisterSerializer
 
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
+from django.conf import settings
+
 
 
 class RegisterPetshop(APIView):
@@ -33,6 +35,12 @@ class RegisterPetshop(APIView):
         user = self.request.user
         try:
             if serialized_data.is_valid(raise_exception=True):
+
+                try:
+                    if serialized_data.validated_data['national_card'].size > settings.MAX_UPLOAD_SIZE:
+                        return UnsuccessfulResponse(errors="You cannot upload file more than 5Mb",status_code=status.HTTP_406_NOT_ACCEPTABLE)
+                except:
+                    pass
 
                 petshop = serialized_data.update(
                     instance=PetshopProfile.objects.filter(

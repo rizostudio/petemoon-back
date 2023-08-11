@@ -5,7 +5,7 @@ from ..models import (Message)
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ("title", "context","user")
+    list_display = ("title", "context","user", "created")
     search_fields = ["user__first_name","user__phone_number"]
 
 
