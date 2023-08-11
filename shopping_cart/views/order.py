@@ -87,6 +87,7 @@ class OrderView(APIView):
                     "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
                     "TransactionID": transaction.id}
                 data = json.dumps(data)
+
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
                 try:
