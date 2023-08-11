@@ -89,8 +89,6 @@ class OrderView(APIView):
 
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
-                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='1')
-
                 try:
                     response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
                     if response.status_code == 200:
