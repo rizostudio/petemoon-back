@@ -86,7 +86,9 @@ class OrderView(APIView):
 
                 try:
                     response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+
                     if response.status_code == 200:
+
                         response = response.json()
                         if response['Status'] == 100:
                             transaction.authority = response['Authority']
