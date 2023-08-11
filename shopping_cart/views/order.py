@@ -48,17 +48,17 @@ class OrderView(APIView):
                 
                 cart = get_cart(request.user.id)
                 if cart == None:
-                    raise CustomException(detail=_("Your shopping cart is empty"))
-
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Your shopping cart is empty')
+                  
                 try:
                     shipping_method = Shipping.objects.get(id=request.data['shipping_method'])
                 except Shipping.DoesNotExist:
-                    raise CustomException(detail=_("Shipping matching does not exist"))
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Shipping matching does not exist')
 
                 try:
                     address = Address.objects.get(id=cart['address'],user=request.user)
                 except Address.DoesNotExist:
-                    raise CustomException(detail=_("Address matching does not exist"))
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Address matching does not exist')
 
                 else:
                     products = []
@@ -77,7 +77,7 @@ class OrderView(APIView):
                     transaction = Transaction.objects.latest('id')
                     #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
-                    raise CustomException(detail=_("Transaction does not exist or has already been verified."))
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Transaction does not exist or has already been verified.')
 
                 data = {
                     "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -86,7 +86,6 @@ class OrderView(APIView):
                     "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
                     "TransactionID": transaction.id}
                 data = json.dumps(data)
-
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
                 try:
@@ -106,7 +105,7 @@ class OrderView(APIView):
                             '''
                         else:
                             return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='errrr')
-                            return {'status': False, 'code': str(response['Status'])}
+                            #return {'status': False, 'code': str(response['Status'])}
                 except:
                     return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='connection error or timeout')
 
