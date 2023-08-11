@@ -45,20 +45,19 @@ class OrderView(APIView):
 
         try:
             if serialized_data.is_valid(raise_exception=True):
-                
                 cart = get_cart(request.user.id)
                 if cart == None:
-                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Your shopping cart is empty')
-                  
+                    raise CustomException(detail=_("Your shopping cart is empty"))
+
                 try:
                     shipping_method = Shipping.objects.get(id=request.data['shipping_method'])
                 except Shipping.DoesNotExist:
-                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Shipping matching does not exist')
+                    raise CustomException(detail=_("Shipping matching does not exist"))
 
                 try:
                     address = Address.objects.get(id=cart['address'],user=request.user)
                 except Address.DoesNotExist:
-                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Address matching does not exist')
+                    raise CustomException(detail=_("Address matching does not exist"))
 
                 else:
                     products = []
@@ -77,7 +76,7 @@ class OrderView(APIView):
                     transaction = Transaction.objects.latest('id')
                     #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
-                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='Transaction does not exist or has already been verified.')
+                    raise CustomException(detail=_("Transaction does not exist or has already been verified."))
 
                 data = {
                     "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -86,28 +85,31 @@ class OrderView(APIView):
                     "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
                     "TransactionID": transaction.id}
                 data = json.dumps(data)
+
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
                 try:
                     response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+
                     if response.status_code == 200:
+
                         response = response.json()
                         if response['Status'] == 100:
                             transaction.authority = response['Authority']
                             transaction.save()
-
-                            c={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']), 'transaction': transaction.id, 'authority': response['Authority']}
-                            return Response(data=c, status=status.HTTP_200_OK)
-                            '''
                             return SuccessResponse(
                                 data={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
                                       'transaction': transaction.id, 'authority': response['Authority']})
-                            '''
                         else:
-                            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='errrr')
-                            #return {'status': False, 'code': str(response['Status'])}
-                except:
-                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='connection error or timeout')
+                            return {'status': False, 'code': str(response['Status'])}
+                    return response
 
-        except:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='error')
+                except requests.exceptions.Timeout:
+                    return {'status': False, 'code': 'timeout'}
+                except requests.exceptions.ConnectionError:
+                    return {'status': False, 'code': 'connection error'}
+
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+        except exceptions.ValidationError as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
