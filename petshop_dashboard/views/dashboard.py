@@ -16,7 +16,6 @@ from ..serializers.orders import PetShopOrdersSerializer
 
 
 class DashboardView(APIView):
-
     #serializer_class = AddressSerializer
     #authentication_classes = []
     permission_classes = [IsAuthenticated]
@@ -25,7 +24,7 @@ class DashboardView(APIView):
         income = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).aggregate(Sum('price_with_shipping_and_fee'))
         messages = None
         products_count = ProductPricing.objects.filter(petshop__owner__user=request.user).count()
-        orders_count = Order.objects.filter(products__petshop__owner__user=request.user).count()
+        orders_count = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).count()
         order_history = PetShopOrder.objects.filter(product__petshop__owner__user=request.user)
 
         return SuccessResponse(data={
