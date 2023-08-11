@@ -100,8 +100,6 @@ class OrderView(APIView):
 
                             return Response({'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
                                       'transaction': transaction.id, 'authority': response['Authority']}, status=status.HTTP_200_OK)
-
-                         
                             '''
                             return SuccessResponse(
                                 data={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
@@ -111,10 +109,8 @@ class OrderView(APIView):
                             return {'status': False, 'code': str(response['Status'])}
                     return response
 
-                except requests.exceptions.Timeout:
-                    return {'status': False, 'code': 'timeout'}
-                except requests.exceptions.ConnectionError:
-                    return {'status': False, 'code': 'connection error'}
+                except:
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data='connection error or timeout')
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
