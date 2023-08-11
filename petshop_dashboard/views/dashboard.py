@@ -5,12 +5,14 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 
-from dashboard.serializers import AddressSerializer
+from dashboard.serializers import AddressSerializer, MessageSerializer
+from dashboard.models import Message
 from shopping_cart.models import PetShopOrder,Order
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 
 from product.models.pricing import ProductPricing
+
 
 from ..serializers.orders import PetShopOrdersSerializer
 
@@ -22,14 +24,14 @@ class DashboardView(APIView):
 
     def get(self, request):
         income = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).aggregate(Sum('price_with_shipping_and_fee'))
-        messages = None
+        messages = Message.objects.filter(user=request.user)
         products_count = ProductPricing.objects.filter(petshop__owner__user=request.user).count()
         orders_count = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).count()
         order_history = PetShopOrder.objects.filter(product__petshop__owner__user=request.user)
 
         return SuccessResponse(data={
             "income":income['price_with_shipping_and_fee__sum'],
-            "messages":messages,
+            "messages":MessageSerializer(messages, many=True).data,
             "products_count":products_count,
             "orders_count":orders_count,
             "orders_history":PetShopOrdersSerializer(order_history, many=True).data
