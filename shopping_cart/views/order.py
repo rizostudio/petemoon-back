@@ -59,24 +59,29 @@ class OrderView(APIView):
                 except Address.DoesNotExist:
                     raise CustomException(detail=_("Address matching does not exist"))
 
-                else:
-                    products = []
-                    total_price = 0
-                    for key, value in cart['products'].items():
-                        product_in_cart = ProductPricing.objects.get(id=key)
-                        products.append(product_in_cart)
-                        product_in_cart.count = value
-                        product_in_cart.products_accumulative_price = product_in_cart.count * \
-                            product_in_cart.price
-                        total_price += product_in_cart.products_accumulative_price
+                print('---------1')
+
+                products = []
+                total_price = 0
+                for key, value in cart['products'].items():
+                    product_in_cart = ProductPricing.objects.get(id=key)
+                    products.append(product_in_cart)
+                    product_in_cart.count = value
+                    product_in_cart.products_accumulative_price = product_in_cart.count * \
+                    product_in_cart.price
+                    total_price += product_in_cart.products_accumulative_price
 
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
+
+                print('---------2')
 
                 try:
                     transaction = Transaction.objects.latest('id')
                     #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
                     raise CustomException(detail=_("Transaction does not exist or has already been verified."))
+
+                print('---------3')
 
                 data = {
                     "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -86,25 +91,20 @@ class OrderView(APIView):
                     "TransactionID": transaction.id}
                 data = json.dumps(data)
 
+                print('---------4')
+
                 headers = {'content-type': 'application/json', 'content-length': str(len(data))}
 
                 try:
+                    print('---------5')
                     response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
-
+                    print('---------6')
                     if response.status_code == 200:
-
+                        print('---------7')
                         response = response.json()
                         if response['Status'] == 100:
-                            transaction.authority = response['Authority']
-                            transaction.save()
-
-                            return Response({'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
-                                      'transaction': transaction.id, 'authority': response['Authority']})
-                            '''
-                            return SuccessResponse(
-                                data={'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),
-                                      'transaction': transaction.id, 'authority': response['Authority']})
-                            '''
+                            print('---------8')
+                            return Response( {'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),'transaction': transaction.id, 'authority': response['Authority']})
                         else:
                             return {'status': False, 'code': str(response['Status'])}
                     return response
@@ -113,6 +113,7 @@ class OrderView(APIView):
                     return {'status': False, 'code': 'timeout'}
                 except requests.exceptions.ConnectionError:
                     return {'status': False, 'code': 'connection error'}
+
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)

@@ -46,7 +46,13 @@ class RegisterPetshop(APIView):
                     instance=PetshopProfile.objects.filter(
                     user=request.user),validated_data=serialized_data.validated_data)
                 user.register_completed = True
+                user.first_name = serialized_data.validated_data['first_name']
+                user.last_name = serialized_data.validated_data['last_name']
                 user.save()
+                petshop_profile = PetshopProfile.objects.get(user=user)
+                petshop_profile.first_name = serialized_data.validated_data['first_name']
+                petshop_profile.last_name = serialized_data.validated_data['last_name']
+                petshop_profile.save()
                 return SuccessResponse(data=self.serializer_class(petshop,many=True).data)
 
         except CustomException as e:

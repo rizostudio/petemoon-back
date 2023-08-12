@@ -37,9 +37,9 @@ class PetShopRegisterSerializer(serializers.Serializer):
 
     estimated_item_count = serializers.IntegerField(required=False)
     gender = serializers.CharField(max_length=64,required=False)
- 
-    sheba_number = serializers.CharField(
-        max_length=26,validators=[sheba_number_validator],required=False)
+
+    sheba_number = serializers.CharField(max_length=26,required=False)
+    #sheba_number = serializers.CharField(max_length=26,validators=[sheba_number_validator],required=False)
     
     def update(self, instance, validated_data):
         instance.update(**validated_data)
