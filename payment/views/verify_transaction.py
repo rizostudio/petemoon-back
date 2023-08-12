@@ -59,6 +59,7 @@ class SendReqTransaction(APIView):
 
 
 
+
 class VerifyTransaction(APIView):
     @transaction.atomic
     def get(self, *args, **kwargs):
@@ -107,7 +108,6 @@ class VerifyTransaction(APIView):
                 if transaction.transaction_type == "order":
                     transaction.order.status = Choices.Order.PROCESSING
                     transaction.order.save()
-
                     # PetshopSaleFee emal beshe (baresi kon shayad oonvar mishe )
 
                 return redirect('https://petemoon.com/payment/status/Success/?RefID={}'.format(response['RefID']))
