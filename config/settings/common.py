@@ -220,6 +220,6 @@ ZARRINPAL_MERCHANT_ID = "00000000-0000-0000-0000-000000000000"
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
 ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
-ZARIN_CALL_BACK = 'http://127.0.0.1:8000/payment/verify/'
+ZARIN_CALL_BACK = 'https://api.petemoon.com/payment/verify/'
 ZARIN_VISIT_CALL_BACK = 'https://api.petemoon.com/visit_payment/verify/'
 # END ZARRINPAL CONFIGURATION
