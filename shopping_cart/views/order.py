@@ -27,6 +27,7 @@ def zp_send_request(transaction):
         "Amount": transaction.amount,
         "Description": transaction.description,
         "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
+        'transactionID': transaction.id,
     }
     data = json.dumps(data)
     headers = {'content-type': 'application/json', 'content-length': str(len(data))}

@@ -1,16 +1,16 @@
 import json
 import requests
-
+from django.shortcuts import redirect
 from django.conf import settings
 from django.db import transaction 
 from django.db.models import F
 from rest_framework.views import APIView
-
 from config.responses import bad_request, SuccessResponse, UnsuccessfulResponse
 from payment.models import Transaction, PetshopSaleFee
 from utils.choices import Choices
 from rest_framework.response import Response
 from rest_framework import status
+
 
 
 class SendReqTransaction(APIView):
@@ -67,7 +67,7 @@ class VerifyTransaction(APIView):
         transaction_id = kwargs.get("transaction_id")
 
         if not authority or status != "OK":
-            return bad_request("Invalid request")
+            return redirect('https://petemoon.com/payment/status/Faild')
 
         try:
             transaction = Transaction.objects.get(id=transaction_id,success=False)
@@ -80,7 +80,6 @@ class VerifyTransaction(APIView):
             "Authority": authority,
         }
         data = json.dumps(data)
-        # set content length by data
         headers = {'content-type': 'application/json', 'content-length': str(len(data))}
         response = requests.post(settings.ZP_API_VERIFY, data=data, headers=headers)
 
@@ -90,6 +89,7 @@ class VerifyTransaction(APIView):
             print(product.price)
             print(product.petshop)
         print('--#---------------')
+        # mojodi kam beshe
 
         if response.status_code == 200:
             response = response.json()
@@ -108,12 +108,9 @@ class VerifyTransaction(APIView):
                     transaction.order.status = Choices.Order.PROCESSING
                     transaction.order.save()
 
+                    # PetshopSaleFee emal beshe (baresi kon shayad oonvar mishe )
 
-                    #PetshopSaleFee
-
-
-
-                return SuccessResponse(data={'status': True, 'RefID': response['RefID']})
+                return redirect('https://petemoon.com/payment/status/Success/?RefID={}'.format(response['RefID']))
             else:
                 return SuccessResponse(data={'status': False, 'details': 'Transaction has already been verified' })
         return SuccessResponse(data=response.content)
