@@ -35,7 +35,9 @@ def zp_send_request(transaction):
         if response.status_code == 200:
             response = response.json()
             if response['Status'] == 100:
-                return {'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']) }
+                return {'status': True,'transactionID':transaction.id, 'amount':transaction.amount,
+                        'authority':response['Authority'],'description': transaction.description,
+                        'url': settings.ZP_API_STARTPAY + str(response['Authority']) }
             else:
                 return {'status': False, 'code': str(response['Status'])}
         return response
