@@ -21,6 +21,33 @@ from rest_framework import status
 
 
 
+def zp_send_request(transaction):
+    data = {
+        "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
+        "Amount": transaction.amount,
+        "Description": transaction.description,
+        "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
+    }
+    data = json.dumps(data)
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+    try:
+        response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return {'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']) }
+            else:
+                return {'status': False, 'code': str(response['Status'])}
+        return response
+
+    except requests.exceptions.Timeout:
+        return {'status': False, 'code': 'timeout'}
+    except requests.exceptions.ConnectionError:
+        return {'status': False, 'code': 'connection error'}
+
+
+
+
 
 class OrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -40,26 +67,22 @@ class OrderView(APIView):
 
 
     def post(self, request):
-        # add method post to total price
         serialized_data = OrderPostSerializer(data=request.data)
 
         try:
             if serialized_data.is_valid(raise_exception=True):
+
                 cart = get_cart(request.user.id)
                 if cart == None:
                     raise CustomException(detail=_("Your shopping cart is empty"))
-
                 try:
                     shipping_method = Shipping.objects.get(id=request.data['shipping_method'])
                 except Shipping.DoesNotExist:
                     raise CustomException(detail=_("Shipping matching does not exist"))
-
                 try:
                     address = Address.objects.get(id=cart['address'],user=request.user)
                 except Address.DoesNotExist:
                     raise CustomException(detail=_("Address matching does not exist"))
-
-                print('---------1')
 
                 products = []
                 total_price = 0
@@ -72,48 +95,14 @@ class OrderView(APIView):
                     total_price += product_in_cart.products_accumulative_price
 
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
-
-                print('---------2')
-
                 try:
                     transaction = Transaction.objects.latest('id')
                     #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
                     raise CustomException(detail=_("Transaction does not exist or has already been verified."))
 
-                print('---------3')
-
-                data = {
-                    "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
-                    "Amount": transaction.amount,
-                    "Description": transaction.description,
-                    "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
-                    "TransactionID": transaction.id}
-                data = json.dumps(data)
-
-                print('---------4')
-
-                headers = {'content-type': 'application/json', 'content-length': str(len(data))}
-
-                try:
-                    print('---------5')
-                    response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
-                    print('---------6')
-                    if response.status_code == 200:
-                        print('---------7')
-                        response = response.json()
-                        if response['Status'] == 100:
-                            print('---------8')
-                            return Response( {'status': True, 'url': settings.ZP_API_STARTPAY + str(response['Authority']),'transaction': transaction.id, 'authority': response['Authority']})
-                        else:
-                            return {'status': False, 'code': str(response['Status'])}
-                    return response
-
-                except requests.exceptions.Timeout:
-                    return {'status': False, 'code': 'timeout'}
-                except requests.exceptions.ConnectionError:
-                    return {'status': False, 'code': 'connection error'}
-
+                data = zp_send_request(transaction)
+                return Response(data, status=status.HTTP_200_OK)
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
