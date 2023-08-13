@@ -1,7 +1,6 @@
 from django.db.models import Avg, Max, Min, Sum
 from django.db.models.functions import Coalesce
 from rest_framework import serializers
-
 from product.models import Picture, Product, Spec
 from product.serializers.brand import BrandSerializer
 from dashboard.serializers.pet import PetCategorySerializer, PetTypeSerializer
