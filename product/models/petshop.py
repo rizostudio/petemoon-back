@@ -27,3 +27,7 @@ class Petshop(models.Model):
     def create_petshop_profile(sender, instance, created, **kwargs):
         if created :
             Petshop.objects.create(owner=instance)
+
+    def __str__(self):
+        return str(self.name)+' | '+str(self.owner)
+
