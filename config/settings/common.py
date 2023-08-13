@@ -207,6 +207,7 @@ KAVENEGAR_API_KEY = get_env("KAVENEGAR_API_KEY", default="")
 KAVENEGAR_TEMPLATE = get_env("KAVENEGAR_TEMPLATE", default="verify-otp")
 # END SMS CONFIGURATION
 
+
 # SWAGGER CONFIGURATION
 SWAGGER_URL = get_env("SWAGGER_URL", optinal=True)
 # END SWAGGER CONFIGURATION
@@ -216,10 +217,13 @@ APPEND_SLASH = True
 
 # ZARRINPAL CONFIGURATION
 ZARRINPAL_URL="https://api.zarinpal.com/pg/"
+
 ZARRINPAL_MERCHANT_ID = "00000000-0000-0000-0000-000000000000"
+
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
 ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
+
 ZARIN_CALL_BACK = 'https://api.petemoon.com/payment/verify/'
 ZARIN_VISIT_CALL_BACK = 'https://api.petemoon.com/visit_payment/verify/'
 # END ZARRINPAL CONFIGURATION

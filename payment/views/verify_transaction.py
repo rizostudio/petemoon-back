@@ -59,7 +59,6 @@ class SendReqTransaction(APIView):
 
 
 
-
 class VerifyTransaction(APIView):
     @transaction.atomic
     def get(self, *args, **kwargs):
