@@ -52,7 +52,6 @@ class OrderPostSerializer(serializers.Serializer):
             address=validated_data.pop("address"),
             shipping_method=shipping,
             **validated_data,
-
         )
 
         for product in products:

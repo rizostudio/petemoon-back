@@ -3,10 +3,12 @@ from product.models import ProductPricing
 from product.serializers import PetshopSerializer
 from product.models import Product
 
+
 class GetProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
 
 class ProductPricingSerializer(serializers.ModelSerializer):
     petshop = PetshopSerializer(read_only=True)
