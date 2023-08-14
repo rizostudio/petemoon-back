@@ -4,8 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 from config.responses import SuccessResponse
-from ..serializers import OrdersSerializer, UserDetailsSerializer
+from ..serializers import OrdersSerializer, UserDetailsSerializer, OrderSingleSerializer
 from shopping_cart.models import Order, PetShopOrder
+from accounts.models import PetshopProfile
+from product.models import Petshop, ProductPricing
+from product.serializers import ProductPricingSerializer
+from payment.models import PetshopSaleFee
 
 
 class OrdersView(APIView):
@@ -38,6 +42,7 @@ class OrdersView(APIView):
         return SuccessResponse(data=result)
 
 
+
 class SingleOrderView(APIView):
 
     serializer_class = OrdersSerializer
@@ -46,16 +51,29 @@ class SingleOrderView(APIView):
     def get(self, request, id=None):
         order = Order.objects.get(id=id)
 
-        d = PetShopOrder.objects.filter(user_order=order)
+        product_pricing_ids = []
+        petshops = PetShopOrder.objects.filter(user_order=order)
+        for petshop in petshops:
+            products = ProductPricing.objects.filter(id=petshop.product.id)
+            for product in products:
+                if product.petshop == Petshop.objects.get(owner=PetshopProfile.objects.get(user=request.user)):
+                    product_pricing_ids.append(product.id)
+        product_pricings = ProductPricing.objects.filter(id__in=product_pricing_ids)
 
-        p = d.aggregate(Sum('price'))
 
-        order.product = d
         price_count = 0
-        for product in d:
+        for product in product_pricings:
             price_count += product.price
 
+        shipping = order.shipping_method.price
+        fee = PetshopSaleFee.objects.all().first().percent
+        total = (price_count-((price_count*fee)/100))+shipping,
+
+        finance = {'price': price_count, 'shiping': shipping, 'fee':str(fee)+"%", 'total':total }
+
+
         return SuccessResponse(
-            data={"products": OrdersSerializer(order).data, 
-                "user": UserDetailsSerializer(order).data, 
-                "finance": None})
+            data={"order": OrderSingleSerializer(order).data,
+                  "products": ProductPricingSerializer(product_pricings, many=True).data,
+                  "user": UserDetailsSerializer(order).data,
+                  "finance": finance})
