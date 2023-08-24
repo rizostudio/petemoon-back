@@ -1,12 +1,13 @@
 from django.urls import path
 from .views import (
-    PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView, AvailableReserveForNormalUserView,
+    PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView, AvailableReserveForNormalUserView, AvailableTimesView,
     ReserveForNormalUserView, VisitView, PastVisitView,SinglePastVisitView, FutureVisitView, VetDashboardView,
     SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView)
 
 urlpatterns = [
     path('potential-time', PotentialTimeView.as_view(), name='potential-time'),
     path('available-time', AvailableReserveTimeView.as_view(), name='available-time'),
+    path('available-times/', AvailableTimesView.as_view(), name='available-times'),
     #path('vet-single', VetSingleView.as_view(), name='vet-single'),
     path('visit', VisitView.as_view(), name='visit'),
     path('past-visit', PastVisitView.as_view(), name='past-visit'),
