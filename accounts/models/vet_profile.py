@@ -28,6 +28,14 @@ class VetProfile(models.Model):
     is_approved = models.BooleanField(default=False)
     about = models.TextField(null=True)
 
+    def __str__(self):
+        if self.user:
+            return self.user.phone_number
+        else:
+            return str(self.id)
+
+
+
     class Meta:
         verbose_name = "Vet Profile"
         verbose_name_plural = "Vet Profiles"

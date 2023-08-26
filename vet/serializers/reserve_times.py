@@ -1,3 +1,4 @@
+from vet.models import ReserveTimes
 from rest_framework import serializers
 
 class PotentialTimeSerializer(serializers.Serializer):
@@ -11,3 +12,10 @@ class AvailableTimeSerializer(serializers.Serializer):
 
 class ReserveTimeSerializer(serializers.Serializer):
     time = serializers.DateTimeField()
+
+
+class VetTimesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReserveTimes
+        fields = ('id', 'time', 'availabe', 'reserved')
+

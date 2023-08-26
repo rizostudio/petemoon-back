@@ -9,4 +9,8 @@ class ReserveTimes(models.Model):
     reserved = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.vet.user.first_name)+' '+str(self.vet.user.last_name) +' | '+ str(self.time)
+        if self.vet:
+            return str(self.vet.user.first_name) + ' ' + str(self.vet.user.last_name) + ' | ' + str(self.time)
+        else:
+            return str(self.id)
+
