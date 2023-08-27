@@ -16,9 +16,6 @@ from config.responses import bad_request, SuccessResponse, UnsuccessfulResponse
 from utils.choices import Choices
 
 
-
-
-# tooooodooooooo
 class AvailableTimesView(APIView):
     serializer_class = AvailableTimeSerializer
     permission_classes = [IsVet]
@@ -57,4 +54,3 @@ class AvailableTimesView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-

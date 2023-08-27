@@ -4,6 +4,7 @@ from .views import (
     ReserveForNormalUserView, VisitView, PastVisitView,SinglePastVisitView, FutureVisitView, VetDashboardView,
     SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView)
 
+
 urlpatterns = [
     path('potential-time', PotentialTimeView.as_view(), name='potential-time'),
     path('available-time', AvailableReserveTimeView.as_view(), name='available-time'),
@@ -25,3 +26,4 @@ urlpatterns = [
     path('reserve/<int:id>', ReserveForNormalUserView.as_view(), name='reserve'),
     path("dashboard", VetDashboardView.as_view(), name="dashboard"),
 ]
+
