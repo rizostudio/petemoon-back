@@ -8,12 +8,14 @@ from config.exceptions import CustomException
 from accounts.views.permissions import IsVet
 from accounts.models import VetProfile
 from ..models import ReserveTimes, Visit
+
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 import json
 import requests
 from config.responses import bad_request, SuccessResponse, UnsuccessfulResponse
 from utils.choices import Choices
+
 
 
 class AvailableTimesView(APIView):
@@ -54,3 +56,4 @@ class AvailableTimesView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
