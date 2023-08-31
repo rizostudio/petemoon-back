@@ -29,6 +29,7 @@ class AvailableTimesView(APIView):
         times_serializer = VetTimesSerializer(reserved_time, many=True)
         return SuccessResponse(data=times_serializer.data)
 
+
     def post(self, request):
         date = request.data['date']
         vet_profile = VetProfile.objects.get(user=request.user)

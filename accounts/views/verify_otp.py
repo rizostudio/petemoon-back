@@ -10,6 +10,8 @@ from accounts.selectors import get_user
 from config.settings import ACCESS_TTL
 from dashboard.models.wallet import Wallet
 
+from accounts.serializers import UserSerializer
+
 
 
 class VerifyOTP(APIView):
@@ -25,7 +27,8 @@ class VerifyOTP(APIView):
                 {"success": False, "errors": [_("OTP is invalid")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user = get_user(id=user_id)
+        user = get_user(id=user_id) # self.request.user #
+
         if user.user_type == 'petshop' and user.register_completed == True and user.petshop_profile.is_approved == False:
             return responses.forbidden(errors={"Petshop user has not been approved yet!"})
         access, refresh = login(user)
@@ -34,15 +37,16 @@ class VerifyOTP(APIView):
             credit = wallet.credit
         except:
             credit = None
+
         data = {
             "refresh_token": refresh,
             "is_registered": user.register_completed,
             "user_type": user.user_type,
-            "user_data": {},
+            "user_data": UserSerializer(user),
             "wallet":credit
         }
         if user.register_completed:
-            data["user_data"] = get_user_data(user)
+            data["user_data"] = UserSerializer(user).data #get_user_data(user)
         response = Response(
             {
                 "success": True,
