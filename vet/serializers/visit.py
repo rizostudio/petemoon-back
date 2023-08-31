@@ -28,3 +28,10 @@ class VisitSerializer(serializers.Serializer):
         
         visit = Visit.objects.create(**validated_data)
         return visit
+
+    def update(self, instance, validated_data):
+        #instance.email = Pet.objects.get(id=validated_data['pet'])
+        #instance.content = User.objects.get(id=validated_data['vet'])
+        #instance.created = ReserveTimes.objects.get(id=validated_data.pop("time"))
+        instance.save()
+        return instance

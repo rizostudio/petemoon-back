@@ -13,7 +13,9 @@ from accounts.views.permissions import IsVet
 from accounts.models import VetProfile
 
 from ..models import ReserveTimes
-
+from vet.models import Visit
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 
 class VisitView(APIView):
 
@@ -42,5 +44,22 @@ class VisitView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-        
-     
+
+
+class SingleVisitView(APIView):
+    permission_classes = [IsVet]
+    serializer_class = VisitSerializer
+    def patch(self, request, id=None):
+        data = request.data
+        visit = Visit.objects.get(id=id)
+        data['pet'] = visit.pet.id
+        data['vet'] = visit.vet.id
+        data['time'] = visit.time.id
+        serializer = VisitSerializer(visit, data=data)
+        if serializer.is_valid():
+            #serializer.validated_data()
+            serializer.update()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
