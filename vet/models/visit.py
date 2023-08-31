@@ -29,6 +29,7 @@ class Visit(models.Model):
         super(Visit, self).save()
 
 
+
 ''' 
 
 class VisitOrder(models.Model):

@@ -8,6 +8,7 @@ from ..models import ReserveTimes
 from django.db import transaction
 
 
+
 class VisitSerializer(serializers.Serializer):
     
     pet = serializers.IntegerField()

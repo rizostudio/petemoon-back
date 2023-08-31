@@ -5,8 +5,9 @@ from django.db.models import Avg
 from . import AvailableTimeSerializer
 from .comments import VetCommentSerializer
 
+
 class VetSingleSerializer(serializers.Serializer):
-    
+    id = serializers.IntegerField()
     photo = serializers.ImageField()
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
