@@ -42,7 +42,7 @@ class VerifyOTP(APIView):
             "refresh_token": refresh,
             "is_registered": user.register_completed,
             "user_type": user.user_type,
-            "user_data": UserSerializer(user),
+            "user_data": UserSerializer(user).data,
             "wallet":credit
         }
         if user.register_completed:
