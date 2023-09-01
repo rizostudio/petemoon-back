@@ -10,7 +10,7 @@ from django.db import transaction
 
 
 class VisitSerializer(serializers.Serializer):
-    
+
     pet = serializers.IntegerField()
     vet = serializers.IntegerField()
     explanation = serializers.CharField()
@@ -30,9 +30,14 @@ class VisitSerializer(serializers.Serializer):
         visit = Visit.objects.create(**validated_data)
         return visit
 
+
     def update(self, instance, validated_data):
-        #instance.email = Pet.objects.get(id=validated_data['pet'])
-        #instance.content = User.objects.get(id=validated_data['vet'])
-        #instance.created = ReserveTimes.objects.get(id=validated_data.pop("time"))
-        instance.save()
-        return instance
+        visit = instance
+        if validated_data['explanation']:
+            visit.explanation = validated_data['explanation']
+        if validated_data['reason']:
+            visit.reason = validated_data['reason']
+        visit.save()
+        return visit
+
+
