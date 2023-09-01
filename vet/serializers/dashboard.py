@@ -8,6 +8,17 @@ class PastVisitSerializer(serializers.Serializer):
     time = serializers.DateTimeField(source='time.time')
     status = serializers.CharField()
     visit_id = serializers.CharField()
+    pet_type = serializers.CharField(source='pet.pet_type')
+    pet_category = serializers.CharField(source='pet.pet_category')
+    phone_number = serializers.CharField(source='user.phone_number')
+    pet_name = serializers.CharField(source='pet.name')
+    explanation = serializers.CharField()
+    reason = serializers.CharField()
+    photo = serializers.FileField()
+    prescription_photo = serializers.ImageField()
+    prescription_summary = serializers.CharField()
+    prescription = serializers.CharField()
+
         
 
 
@@ -29,6 +40,16 @@ class  FutureVisitSerializer(serializers.Serializer):
     time = serializers.DateTimeField(source='time.time')
     status = serializers.CharField()
     visit_id = serializers.CharField()
+    pet_type = serializers.CharField(source='pet.pet_type')
+    pet_category = serializers.CharField(source='pet.pet_category')
+    phone_number = serializers.CharField(source='user.phone_number')
+    pet_name = serializers.CharField(source='pet.name')
+    explanation = serializers.CharField()
+    reason = serializers.CharField()
+    photo = serializers.FileField()
+    prescription_photo = serializers.ImageField()
+    prescription_summary = serializers.CharField()
+    prescription = serializers.CharField()
         
 
 class SingleFutureVisitSerializer(serializers.Serializer):
