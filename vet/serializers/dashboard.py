@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 
-
 class PastVisitSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     first_name = serializers.CharField(source='user.first_name')

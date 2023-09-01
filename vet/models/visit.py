@@ -5,7 +5,6 @@ from utils.choices import Choices
 from .reserve_times import ReserveTimes
 
 
-
 class Visit(models.Model):
     vet = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="visit_vet")
     visit_id = models.CharField(max_length=128,unique=True,editable=False,null=True)
