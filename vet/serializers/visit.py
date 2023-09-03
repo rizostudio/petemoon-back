@@ -8,7 +8,6 @@ from ..models import ReserveTimes
 from django.db import transaction
 
 
-
 class VisitSerializer(serializers.Serializer):
 
     pet = serializers.IntegerField()
@@ -24,10 +23,8 @@ class VisitSerializer(serializers.Serializer):
         validated_data['pet'] = Pet.objects.get(id=validated_data['pet'])
         validated_data['vet'] = User.objects.get(id=validated_data['vet'])
         reserve_time = ReserveTimes.objects.get(id=validated_data.pop("time"))
-
         reserve_time.reserved=True
         reserve_time.save()
-        
         visit = Visit.objects.create(**validated_data)
         return visit
 

@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-
-
 class PastVisitSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     first_name = serializers.CharField(source='user.first_name')
@@ -18,7 +16,6 @@ class PastVisitSerializer(serializers.Serializer):
     prescription_photo = serializers.ImageField()
     prescription_summary = serializers.CharField()
     prescription = serializers.CharField()
-
         
 
 

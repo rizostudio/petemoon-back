@@ -3,13 +3,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from config import responses
-
 from accounts.functions import get_user_data, login
 from accounts.models import OneTimePassword
 from accounts.selectors import get_user
 from config.settings import ACCESS_TTL
 from dashboard.models.wallet import Wallet
-
 from accounts.serializers import UserSerializer
 
 
@@ -70,5 +68,4 @@ class VerifyOTP(APIView):
             samesite="None",
         )
         return response
-
 
