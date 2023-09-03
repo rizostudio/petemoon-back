@@ -79,8 +79,12 @@ class AvailableReserveForNormalUserView(APIView):
     serializer_class = AvailableTimeSerializer
     permission_classes = [AllowAny]
     def get(self, *args, **kwargs):
+        date_params = self.request.query_params.get("date")
         vet_profile = VetProfile.objects.get(id=kwargs.get("id"))
-        reserved_time = vet_profile.reserve_times.filter(reserved=False)
+        if date_params:
+            reserved_time = vet_profile.reserve_times.filter(reserved=False, time__date=date_params)
+        else:
+            reserved_time = vet_profile.reserve_times.filter(reserved=False)
         result = self.serializer_class(reserved_time, many=True).data
         return SuccessResponse(data=result)
 
