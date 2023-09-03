@@ -65,7 +65,6 @@ class SingleVisitView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
 
 
-
     '''
 
     def patch(self, request, id=None):
@@ -81,9 +80,6 @@ class SingleVisitView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-        
         
         serialized_data = self.serializer_class(visit, data=data, partial=True)
         if serialized_data.is_valid():

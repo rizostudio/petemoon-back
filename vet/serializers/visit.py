@@ -16,6 +16,7 @@ class VisitSerializer(serializers.Serializer):
     explanation = serializers.CharField()
     reason = serializers.CharField(max_length=256)
     photo = serializers.FileField(required=False)
+    prescription_photo = serializers.FileField(required=False)
     time = serializers.IntegerField()
 
     @transaction.atomic
@@ -37,6 +38,8 @@ class VisitSerializer(serializers.Serializer):
             visit.explanation = validated_data['explanation']
         if validated_data['reason']:
             visit.reason = validated_data['reason']
+        if validated_data['prescription_photo']:
+            visit.prescription_photo = validated_data['prescription_photo']
         visit.save()
         return visit
 
