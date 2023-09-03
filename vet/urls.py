@@ -3,7 +3,8 @@ from django.urls import path
 from .views import (
     PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView, AvailableReserveForNormalUserView, AvailableTimesView,
     ReserveForNormalUserView, VisitView, PastVisitView,SinglePastVisitView, FutureVisitView, VetDashboardView, SingleVisitView,
-    SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView)
+    SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView,
+    CreateComment, Comments)
 
 
 urlpatterns = [
@@ -27,6 +28,9 @@ urlpatterns = [
     path('available-reserve/<int:id>', AvailableReserveForNormalUserView.as_view(), name='available-reserve'),
     path('reserve/<int:id>', ReserveForNormalUserView.as_view(), name='reserve'),
     path("dashboard", VetDashboardView.as_view(), name="dashboard"),
+
+    path("comments",Comments.as_view(),name="comments"),
+    path("create_comment/<int:id>",CreateComment.as_view(),name="create_comment"),
 
 ]
 
