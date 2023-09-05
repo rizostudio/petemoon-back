@@ -34,7 +34,7 @@ class VisitSerializer(serializers.Serializer):
         visit.user = validated_data['user']
         visit.time = reserve_time
         visit.save()
-        return visit
+        return visit.id
 
 
 

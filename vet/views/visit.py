@@ -9,13 +9,57 @@ from dashboard.models import Address
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from accounts.views.permissions import IsVet
-
 from accounts.models import VetProfile
-
 from ..models import ReserveTimes
 from vet.models import Visit
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+import json
+import requests
+from django.conf import settings
+from django.db import transaction
+from django.db.models import F
+from payment.models import Transaction, PetshopSaleFee
+from utils.choices import Choices
+from rest_framework.response import Response
+from rest_framework import status
+
+
+
+
+def zp_send_request(visit_id):
+    visit = Visit.objects.get(id=visit_id)
+    data = {
+        "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
+        "Amount": visit.price,
+        "Description": 'پرداخت ویزیت',
+        "CallbackURL": settings.ZARIN_CALL_BACK + str(visit.id) + "/",
+        'transactionID': visit.id,
+    }
+    data = json.dumps(data)
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+    try:
+        response = requests.post(settings.ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return {'status': True,'visitID':visit.id, 'amount':visit.price,
+                        'authority':response['Authority'],'description': visit.explanation,
+                        'url': settings.ZP_API_STARTPAY + str(response['Authority']) }
+            else:
+                return {'status': False, 'code': str(response['Status'])}
+        return response
+
+    except requests.exceptions.Timeout:
+        return {'status': False, 'code': 'timeout'}
+    except requests.exceptions.ConnectionError:
+        return {'status': False, 'code': 'connection error'}
+
+
+
+
+
+
 
 class VisitView(APIView):
 
@@ -39,13 +83,20 @@ class VisitView(APIView):
         serialized_data = self.serializer_class(data=data)
         try:
             if serialized_data.is_valid():
-                serialized_data.save()
+                visit_id = serialized_data.save()
+                data = zp_send_request(visit_id)
+                return Response(data, status=status.HTTP_200_OK)
+
             return SuccessResponse(data={"message":_("Visit added successfuly")})
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
+
+
+
 
 
 class SingleVisitView(APIView):

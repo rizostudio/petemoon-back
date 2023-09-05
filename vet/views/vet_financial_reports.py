@@ -16,7 +16,6 @@ from accounts.models import VetProfile
 from vet.models import Visit
 
 
-
 class VetFinancialReportsView(APIView):
     permission_classes = [IsVet]
 
@@ -40,7 +39,5 @@ class VetFinancialReportsView(APIView):
             "visits_count": visits_count,
             "visit": PastVisitSerializer(visits, many=True).data
         })
-
-
 
 
