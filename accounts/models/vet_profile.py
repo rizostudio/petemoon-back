@@ -27,6 +27,7 @@ class VetProfile(models.Model):
     reserve_times = models.ManyToManyField(ReserveTimes,blank=True,related_name="vet_reserve_times")
     is_approved = models.BooleanField(default=False)
     about = models.TextField(null=True)
+    price = models.IntegerField(default=200, null=True, blank=True)
 
     def __str__(self):
         if self.user:

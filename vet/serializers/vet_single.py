@@ -11,6 +11,7 @@ class VetSingleSerializer(serializers.Serializer):
     photo = serializers.ImageField()
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
+    price = serializers.IntegerField(required=False)
     average_rating = serializers.SerializerMethodField(read_only=True)
     about = serializers.CharField()
     comments_count = serializers.SerializerMethodField(read_only=True)
