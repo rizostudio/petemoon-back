@@ -14,6 +14,8 @@ from dashboard.models import Message
 from accounts.serializers import UserSerializer, VetRegisterSerializer
 from accounts.models import VetProfile
 from vet.models import Visit
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class VetFinancialReportsView(APIView):
@@ -30,14 +32,12 @@ class VetFinancialReportsView(APIView):
         else:
             end_date = '3000-02-22T06:00:00.000Z'
 
-        income = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date)).aggregate(Sum('price'))
-        visits = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date))
-        visits_count = visits.count()
-
-        return SuccessResponse(data={
-            "total_income": income['price__sum'],
-            "visits_count": visits_count,
-            "visit": PastVisitSerializer(visits, many=True).data
-        })
-
+        try:
+            income = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date)).aggregate(Sum('price'))
+            visits = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date))
+            visits_count = visits.count()
+            visits_serializer = PastVisitSerializer(visits, many=True)
+            return SuccessResponse(data={"total_income": income['price__sum'], "visits_count": visits_count, "visit":visits_serializer.data })
+        except:
+            return Response('Error in response, Information is incomplete', status=status.HTTP_400_BAD_REQUEST)
 

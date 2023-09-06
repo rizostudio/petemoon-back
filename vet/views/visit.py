@@ -33,8 +33,8 @@ def zp_send_request(visit_id):
         "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
         "Amount": visit.price,
         "Description": 'پرداخت ویزیت',
-        "CallbackURL": settings.ZARIN_CALL_BACK + str(visit.id) + "/",
-        'transactionID': visit.id,
+        "CallbackURL": settings.ZARIN_CALL_BACK_VISIT + str(visit.id) + "/",
+        'visitID': visit.id,
     }
     data = json.dumps(data)
     headers = {'content-type': 'application/json', 'content-length': str(len(data))}
@@ -44,7 +44,7 @@ def zp_send_request(visit_id):
             response = response.json()
             if response['Status'] == 100:
                 return {'status': True,'visitID':visit.id, 'amount':visit.price,
-                        'authority':response['Authority'],'description': visit.explanation,
+                        'authority':response['Authority'],'description': 'پرداخت ویزیت',
                         'url': settings.ZP_API_STARTPAY + str(response['Authority']) }
             else:
                 return {'status': False, 'code': str(response['Status'])}
@@ -60,9 +60,7 @@ def zp_send_request(visit_id):
 
 
 
-
 class VisitView(APIView):
-
     permission_classes = [IsVet]
     serializer_class = VisitSerializer
 

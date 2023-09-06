@@ -225,5 +225,9 @@ ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerificatio
 ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
 
 ZARIN_CALL_BACK = 'https://api.petemoon.com/payment/verify/'
+ZARIN_CALL_BACK_VISIT = 'https://api.petemoon.com/payment/visit_verify/'
+#ZARIN_CALL_BACK_VISIT = 'http://127.0.0.1:8000/payment/visit_verify/'
 ZARIN_VISIT_CALL_BACK = 'https://api.petemoon.com/visit_payment/verify/'
 # END ZARRINPAL CONFIGURATION
+
+
