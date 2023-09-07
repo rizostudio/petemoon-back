@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework.views import APIView
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import exceptions
 from ..serializers import PastVisitSerializer,SinglePastVisitSerializer,FutureVisitSerializer, SingleFutureVisitSerializer
@@ -41,3 +42,17 @@ class VetFinancialReportsView(APIView):
         except:
             return Response('Error in response, Information is incomplete', status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+
+'''
+        try:
+            income = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date)).aggregate(Sum('price'))
+            visits = Visit.objects.filter(vet=request.user, created_at__range=(start_date, end_date))
+            visits_count = visits.count()
+            visits_serializer = PastVisitSerializer(visits, many=True)
+            return SuccessResponse(data={"total_income": income['price__sum'], "visits_count": visits_count, "visit":visits_serializer.data })
+        except:
+            return Response('Error in response, Information is incomplete', status=status.HTTP_400_BAD_REQUEST)
+'''

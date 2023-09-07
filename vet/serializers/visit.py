@@ -19,6 +19,8 @@ class VisitSerializer(serializers.Serializer):
     prescription_photo = serializers.FileField(required=False)
     time = serializers.IntegerField()
     price = serializers.IntegerField(required=False)
+    #price = serializers.IntegerField()
+
 
     @transaction.atomic
     def create(self, validated_data):
@@ -35,6 +37,7 @@ class VisitSerializer(serializers.Serializer):
         visit.time = reserve_time
         visit.save()
         return visit.id
+
 
 
 

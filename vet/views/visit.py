@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import exceptions
 
 from ..serializers import VisitSerializer
@@ -59,9 +59,8 @@ def zp_send_request(visit_id):
 
 
 
-
 class VisitView(APIView):
-    permission_classes = [IsVet]
+    permission_classes = [IsAuthenticated]
     serializer_class = VisitSerializer
 
     # def get(self, request, id=None):
