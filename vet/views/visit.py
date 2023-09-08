@@ -23,6 +23,8 @@ from payment.models import Transaction, PetshopSaleFee
 from utils.choices import Choices
 from rest_framework.response import Response
 from rest_framework import status
+from dashboard.models import Pet
+from accounts.models import User
 
 
 
@@ -77,14 +79,19 @@ class VisitView(APIView):
     def post(self, request):
         data = request.data
         data['user'] = request.user.id
-        serialized_data = self.serializer_class(data=data)
         try:
-            if serialized_data.is_valid(raise_exception=True):
-                visit_id = serialized_data.save()
-                data = zp_send_request(visit_id)
-                return Response(data, status=status.HTTP_200_OK)
-
-            return SuccessResponse(data={"message":_("Error in create visit and payment failed")})
+            visit = Visit()
+            reserve_time = ReserveTimes.objects.get(id=data['time'])
+            reserve_time.reserved = True
+            reserve_time.save()
+            visit.pet = Pet.objects.get(id=data['pet'])
+            visit.vet = User.objects.get(id=data['vet'])
+            visit.user = User.objects.get(id=request.user.id)
+            visit.time = reserve_time
+            visit.save()
+            data = zp_send_request(visit.id)
+            return Response(data, status=status.HTTP_200_OK)
+            #return SuccessResponse(data={"message":_("Error in create visit and payment failed")})
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
