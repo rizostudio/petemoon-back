@@ -20,44 +20,22 @@ class VisitSerializer(serializers.Serializer):
     price = serializers.IntegerField(required=False)
     #price = serializers.IntegerField()
 
-    def create(self, validated_data):
-        visit = Visit()
-        visit.pet = Pet.objects.get(id=validated_data['pet'])
-        visit.vet = User.objects.get(id=validated_data['vet'])
-        visit.user = User.objects.get(id=validated_data['user'])
-        reserve_time = ReserveTimes.objects.get(id=validated_data.pop("time"))
-        reserve_time.reserved = True
-        reserve_time.save()
-        visit.time = reserve_time
-        visit.save()
-        return visit.id
-
-
-    '''
-    
     @transaction.atomic
     def create(self, validated_data):
-        print('--==========--------------')
-        print(validated_data)
-
         visit=Visit()
         validated_data['pet'] = Pet.objects.get(id=validated_data['pet'])
         validated_data['vet'] = User.objects.get(id=validated_data['vet'])
-
+        validated_data['user'] = User.objects.get(id=validated_data['user'])
         reserve_time = ReserveTimes.objects.get(id=validated_data.pop("time"))
         reserve_time.reserved=True
         reserve_time.save()
-        print('-########-----------')
-        print(validated_data)
         visit.pet = validated_data['pet']
         visit.vet = validated_data['vet']
-        #visit.user = self.request.user
+        visit.user = validated_data['user']
         visit.time = reserve_time
         visit.save()
-        print('-******--------------')
-        print(visit)
         return visit.id
-    '''
+
 
     def update(self, instance, validated_data):
         visit = instance

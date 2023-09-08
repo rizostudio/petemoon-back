@@ -79,7 +79,7 @@ class VisitView(APIView):
         data['user'] = request.user.id
         serialized_data = self.serializer_class(data=data)
         try:
-            if serialized_data.is_valid():
+            if serialized_data.is_valid(raise_exception=True):
                 visit_id = serialized_data.save()
                 data = zp_send_request(visit_id)
                 return Response(data, status=status.HTTP_200_OK)
