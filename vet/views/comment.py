@@ -19,7 +19,7 @@ class CreateComment(APIView):
         vet_id = kwargs.get("id")
         user = self.request.user
         data = self.request.data
-        data["user"] = 11
+        data["user"] = user.id
         data["vet"] = vet_id
         serializer = VetCommentSerializer(data=data)
         if serializer.is_valid():
