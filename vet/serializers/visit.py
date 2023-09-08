@@ -54,5 +54,4 @@ class VisitSerializer(serializers.Serializer):
         visit.save()
         return visit
 
-
 # -----
