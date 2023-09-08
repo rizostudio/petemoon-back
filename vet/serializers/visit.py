@@ -9,6 +9,7 @@ from ..models import ReserveTimes
 from django.db import transaction
 
 
+
 class VisitSerializer(serializers.Serializer):
     pet = serializers.IntegerField()
     vet = serializers.IntegerField()
@@ -38,8 +39,6 @@ class VisitSerializer(serializers.Serializer):
         visit.time = reserve_time
         visit.save()
         return visit.id
-
-
 
 
     def update(self, instance, validated_data):
