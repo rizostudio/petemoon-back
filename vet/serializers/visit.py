@@ -41,7 +41,6 @@ class VisitSerializer(serializers.Serializer):
         visit.save()
         return visit.id
 
-
     def update(self, instance, validated_data):
         visit = instance
         if validated_data['explanation']:
@@ -53,5 +52,3 @@ class VisitSerializer(serializers.Serializer):
         visit.status = 'DONE'
         visit.save()
         return visit
-
-# -----
