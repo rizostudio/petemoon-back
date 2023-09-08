@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from accounts.functions import get_user_data
 from accounts.serializers import RegisterSerializer
 
@@ -53,3 +52,4 @@ class Register(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
