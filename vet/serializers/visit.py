@@ -27,6 +27,7 @@ class VisitSerializer(serializers.Serializer):
         visit=Visit()
         validated_data['pet'] = Pet.objects.get(id=validated_data['pet'])
         validated_data['vet'] = User.objects.get(id=validated_data['vet'])
+        validated_data['user'] = User.objects.get(id=validated_data['user'])
         reserve_time = ReserveTimes.objects.get(id=validated_data.pop("time"))
         reserve_time.reserved=True
         reserve_time.save()
