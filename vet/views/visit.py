@@ -77,6 +77,8 @@ class VisitView(APIView):
     def post(self, request):
         data = request.data
         data['user'] = self.request.user.id
+        print('----------------')
+        print(data)
         serialized_data = self.serializer_class(data=data)
         try:
             if serialized_data.is_valid():
