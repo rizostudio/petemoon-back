@@ -5,8 +5,8 @@ from rest_framework import serializers
 
 
 class VetRegisterSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=64, source='user.first_name', required=False)
-    last_name = serializers.CharField(max_length=64, source='user.last_name', required=False)
+    first_name = serializers.CharField(max_length=255, required=False)
+    last_name = serializers.CharField(max_length=255, required=False)
     medical_number = serializers.CharField(max_length=10,required=False)
     national_card_front = serializers.FileField(required=False)
     national_card_back = serializers.FileField(required=False)
