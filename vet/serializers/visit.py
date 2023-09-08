@@ -8,7 +8,6 @@ from ..models import ReserveTimes
 from django.db import transaction
 
 
-
 class VisitSerializer(serializers.Serializer):
     pet = serializers.IntegerField()
     vet = serializers.IntegerField()
@@ -20,7 +19,6 @@ class VisitSerializer(serializers.Serializer):
     time = serializers.IntegerField()
     price = serializers.IntegerField(required=False)
     #price = serializers.IntegerField()
-
 
 
     @transaction.atomic

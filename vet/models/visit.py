@@ -8,7 +8,7 @@ from .reserve_times import ReserveTimes
 class Visit(models.Model):
     vet = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="visit_vet")
     visit_id = models.CharField(max_length=128,unique=True,editable=False,null=True)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="visit_user" )
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,blank=True, related_name="visit_user" )
     pet = models.ForeignKey("dashboard.Pet",on_delete=models.CASCADE,null=True,blank=True)
     explanation = models.TextField()
     reason = models.CharField(max_length=256)
