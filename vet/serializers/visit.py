@@ -11,7 +11,7 @@ from django.db import transaction
 class VisitSerializer(serializers.Serializer):
     pet = serializers.IntegerField()
     vet = serializers.IntegerField()
-    user = serializers.IntegerField(required=False)
+    user = serializers.IntegerField()
     explanation = serializers.CharField()
     reason = serializers.CharField(max_length=256)
     photo = serializers.FileField(required=False)
