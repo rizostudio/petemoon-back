@@ -76,7 +76,7 @@ class VisitView(APIView):
 
     def post(self, request):
         data = request.data
-        data['user'] = request.user
+        data['user'] = request.user.id
         serialized_data = self.serializer_class(data=data)
         try:
             if serialized_data.is_valid():
@@ -84,7 +84,7 @@ class VisitView(APIView):
                 data = zp_send_request(visit_id)
                 return Response(data, status=status.HTTP_200_OK)
 
-            return SuccessResponse(data={"message":_("Visit added successfuly")})
+            return SuccessResponse(data={"message":_("Visit added but payment failed")})
 
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)

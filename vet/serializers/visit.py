@@ -32,7 +32,7 @@ class VisitSerializer(serializers.Serializer):
         reserve_time.save()
         visit.pet = validated_data['pet']
         visit.vet = validated_data['vet']
-        visit.user = validated_data['user']
+        visit.user = User.objects.get(id=validated_data['user'])
         visit.time = reserve_time
         visit.save()
         return visit.id
