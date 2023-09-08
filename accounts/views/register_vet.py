@@ -64,6 +64,9 @@ class VetRegisterView(APIView):
                 vet_profile = serialized_data.update(
                     instance=VetProfile.objects.filter(
                     user=request.user),validated_data=serialized_data.validated_data)
+                user = request.user
+                user.register_completed = True
+                user.save()
                 return SuccessResponse(data=self.serializer_class(vet_profile,many=True).data)
 
         except CustomException as e:
