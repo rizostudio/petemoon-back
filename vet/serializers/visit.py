@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from accounts.models import VetProfile
-
 from ..models import Visit
-
 from django.db.models import Avg
 from dashboard.models import Pet
 from accounts.models import User
