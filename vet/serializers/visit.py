@@ -22,6 +22,7 @@ class VisitSerializer(serializers.Serializer):
     #price = serializers.IntegerField()
 
 
+
     @transaction.atomic
     def create(self, validated_data):
         visit=Visit()
