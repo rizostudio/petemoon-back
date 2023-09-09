@@ -85,7 +85,8 @@ class VisitView(APIView):
             reserve_time.reserved = True
             reserve_time.save()
             visit.pet = Pet.objects.get(id=data['pet'])
-            visit.vet = User.objects.get(id=data['vet'])
+            vet = VetProfile.objects.get(id=data['vet'])
+            visit.vet = vet.user.id
             visit.user = User.objects.get(id=request.user.id)
             visit.time = reserve_time
             visit.status = "PENDING"
