@@ -59,8 +59,6 @@ def zp_send_request(visit_id):
 
 
 
-
-
 class VisitView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = VisitSerializer
