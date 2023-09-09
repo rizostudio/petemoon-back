@@ -88,6 +88,7 @@ class VisitView(APIView):
             visit.vet = User.objects.get(id=data['vet'])
             visit.user = User.objects.get(id=request.user.id)
             visit.time = reserve_time
+            visit.status = "PENDING"
             visit.save()
             data = zp_send_request(visit.id)
             return Response(data, status=status.HTTP_200_OK)

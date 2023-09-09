@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from config import responses
 from accounts.functions import get_user_data, login
-from accounts.models import OneTimePassword
+from accounts.models import OneTimePassword, VetProfile, PetshopProfile
 from accounts.selectors import get_user
 from config.settings import ACCESS_TTL
 from dashboard.models.wallet import Wallet
-from accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer, VetRegisterSerializer, PetShopRegisterSerializer
 
 
 
@@ -40,11 +40,21 @@ class VerifyOTP(APIView):
         except:
             credit = None
 
+        if user.user_type == 'petshop':
+            petshop_profile = PetshopProfile.objects.get(user=user)
+            user_type_data = PetShopRegisterSerializer(petshop_profile).data
+        elif user.user_type == 'vet':
+            vet_profile = VetProfile.objects.get(user=user)
+            user_type_data = VetRegisterSerializer(vet_profile).data
+        else:
+            user_type_data = None
+
         data = {
             "refresh_token": refresh,
             "is_registered": user.register_completed,
             "user_type": user.user_type,
             "user_data": UserSerializer(user).data,
+            "user_type_data": user_type_data,
             "wallet":credit
         }
         if user.register_completed:
