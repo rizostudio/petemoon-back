@@ -60,7 +60,6 @@ class VetRegisterView(APIView):
                 except:
                     pass
 
-
                 vet_profile = serialized_data.update(
                     instance=VetProfile.objects.filter(
                     user=request.user),validated_data=serialized_data.validated_data)
