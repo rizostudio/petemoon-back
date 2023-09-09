@@ -2,8 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from accounts.models.user_manager import UserManager
+
 
 
 class User(AbstractUser):
@@ -54,4 +54,5 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.phone_number}-{self.get_full_name()}"
+
 

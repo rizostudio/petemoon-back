@@ -17,9 +17,9 @@ class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-           
         result = self.serializer_class(self.request.user).data
         return SuccessResponse(data=result)
+
 
     def patch(self, request):
         serialized_data = self.serializer_class(request.user,data=request.data, partial=True)
@@ -37,4 +37,5 @@ class UserProfileView(APIView):
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
         except exceptions.ValidationError as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)     
+
 

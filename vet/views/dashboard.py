@@ -9,13 +9,11 @@ from accounts.views.permissions import IsVet
 from ..models import Visit
 from django.db.models import Q
 from utils.choices import Choices
-
 from django.shortcuts import render, get_object_or_404
 
 
 
 class PastVisitView(APIView):
-
     permission_classes = [IsVet]
     serializer_class = PastVisitSerializer
 
@@ -32,7 +30,6 @@ class PastVisitView(APIView):
 
 
 class SinglePastVisitView(APIView):
-
     permission_classes = [IsVet]
     serializer_class = SinglePastVisitSerializer
 

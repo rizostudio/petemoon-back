@@ -12,6 +12,7 @@ sheba_number_validator = RegexValidator(
 
 
 class PetShopRegisterSerializer(serializers.Serializer):
+    #petshop_name = serializers.CharField(max_length=200,required=False)
     first_name = serializers.CharField(max_length=200,required=True)
     last_name = serializers.CharField(max_length=200,required=True)
     address = serializers.CharField(max_length=200,required=False)

@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from accounts.functions import get_user_data
 from accounts.serializers import RegisterSerializer
 
@@ -36,6 +35,11 @@ class Register(APIView):
         serializer.save()
         if hasattr(user, "profile") and "referal_code" in data:
             user.profile.referal_code = data["referal_code"]
+            user.first_name = data["first_name"]
+            user.last_name = data["last_name"]
+            user.profile.first_name = data["first_name"]
+            user.profile.last_name = data["last_name"]
+            user.save()
             user.profile.save()
         user.refresh_from_db()
         user_data = get_user_data(user)
@@ -48,3 +52,4 @@ class Register(APIView):
             },
             status=status.HTTP_200_OK,
         )
+

@@ -16,7 +16,7 @@ from ..serializers import PetShopRegisterSerializer
 from config.responses import SuccessResponse, UnsuccessfulResponse
 from config.exceptions import CustomException
 from django.conf import settings
-
+from product.models import Petshop
 
 
 class RegisterPetshop(APIView):
@@ -53,6 +53,12 @@ class RegisterPetshop(APIView):
                 petshop_profile.first_name = serialized_data.validated_data['first_name']
                 petshop_profile.last_name = serialized_data.validated_data['last_name']
                 petshop_profile.save()
+                try:
+                    petshop_petshop = Petshop.objects.get(owner=petshop_profile)
+                    petshop_petshop.name = request.data['petshop_name']
+                    petshop_petshop.save()
+                except:
+                    pass
                 return SuccessResponse(data=self.serializer_class(petshop,many=True).data)
 
         except CustomException as e:

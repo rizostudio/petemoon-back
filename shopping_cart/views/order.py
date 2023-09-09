@@ -21,12 +21,14 @@ from rest_framework import status
 
 
 
+
 def zp_send_request(transaction):
     data = {
         "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
         "Amount": transaction.amount,
         "Description": transaction.description,
         "CallbackURL": settings.ZARIN_CALL_BACK + str(transaction.id) + "/",
+        'transactionID': transaction.id,
     }
     data = json.dumps(data)
     headers = {'content-type': 'application/json', 'content-length': str(len(data))}
@@ -98,8 +100,8 @@ class OrderView(APIView):
 
                 tran = serialized_data.save(user=request.user, total_price=total_price, products=products, address=address)
                 try:
-                    transaction = Transaction.objects.latest('id')
-                    #transaction = Transaction.objects.get(id=tran['transaction'], success=False)
+                    #transaction = Transaction.objects.latest('id')
+                    transaction = Transaction.objects.get(id=tran['transaction'], success=False)
                 except Transaction.DoesNotExist:
                     raise CustomException(detail=_("Transaction does not exist or has already been verified."))
 

@@ -9,11 +9,11 @@ from accounts.views.permissions import IsVet
 from ..models import Visit
 from django.db.models import Q
 from utils.choices import Choices
-from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum
-from dashboard.serializers import AddressSerializer
-from shopping_cart.models import PetShopOrder, Order
-from product.models.pricing import ProductPricing
+from dashboard.models import Message
+from accounts.serializers import UserSerializer, VetRegisterSerializer
+from accounts.models import VetProfile
+from vet.models import Visit
 
 
 
@@ -21,26 +21,24 @@ class VetDashboardView(APIView):
     permission_classes = [IsVet]
 
     def get(self, request):
-        income = PetShopOrder.objects.filter(product__petshop__owner__user=request.user).aggregate(Sum('price_with_shipping_and_fee'))
-        messages = None
-        products_count = ProductPricing.objects.filter(petshop__owner__user=request.user).count()
-        orders_count = Order.objects.filter(products__petshop__owner__user=request.user).count()
-        order_history = PetShopOrder.objects.filter(product__petshop__owner__user=request.user)
+        income = Visit.objects.filter(vet=request.user).aggregate(Sum('price'))
+        messages = Message.objects.filter(user=request.user)
+        vet = VetProfile.objects.get(user=request.user)
+        visits_count = Visit.objects.filter(vet=request.user).count()
 
         return SuccessResponse(data={
-            "income": income['price_with_shipping_and_fee__sum'],
+            "income": income['price__sum'],
             "messages": messages,
-            "products_count": products_count,
-            "orders_count": orders_count,
-            "orders_history": PetShopOrdersSerializer(order_history, many=True).data
+            "messages_count": messages.count(),
+            "visits_count": visits_count,
+            "user_data": UserSerializer(request.user).data,
+            "vet_data": VetRegisterSerializer(vet).data
         })
 
 
 
 
-
 class PastVisitView(APIView):
-
     permission_classes = [IsVet]
     serializer_class = PastVisitSerializer
 
@@ -53,5 +51,4 @@ class PastVisitView(APIView):
             return SuccessResponse(data=serialized_data)
         except CustomException as e:
             return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
-
 

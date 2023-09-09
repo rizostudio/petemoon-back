@@ -9,6 +9,8 @@ from vet.models import ReserveTimes
 
 class VetProfile(models.Model):
     user = models.OneToOneField( User, on_delete=models.CASCADE, related_name="vet_profile" )
+    first_name = models.CharField(max_length=100, null=True, blank=False)
+    last_name = models.CharField(max_length=100, null=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     medical_number = models.CharField(max_length=10, null=True, blank=True)
@@ -27,6 +29,15 @@ class VetProfile(models.Model):
     reserve_times = models.ManyToManyField(ReserveTimes,blank=True,related_name="vet_reserve_times")
     is_approved = models.BooleanField(default=False)
     about = models.TextField(null=True)
+    price = models.IntegerField(default=200, null=True, blank=True)
+
+    def __str__(self):
+        if self.user:
+            return self.user.phone_number
+        else:
+            return str(self.id)
+
+
 
     class Meta:
         verbose_name = "Vet Profile"

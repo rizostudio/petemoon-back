@@ -8,6 +8,12 @@ def get_normal_user_data(user):
 
 
 def get_petshop_user_data(user):
+
+    if user.petshop_profile.national_card:
+        national_card = user.petshop_profile.national_card.url
+    else:
+        national_card = None
+
     return {
         "first_name": user.first_name,
         "last_name": user.last_name,
@@ -19,7 +25,7 @@ def get_petshop_user_data(user):
         "address": user.petshop_profile.address,
         "sheba_number": user.petshop_profile.sheba_number,
         "estimated_item_count": user.petshop_profile.estimated_item_count,
-        "national_card": user.petshop_profile.national_card.url,
+        "national_card": national_card,
         "store_name": user.petshop_profile.shops.name,
         # "store_slug": user.petshop_profile.shops.slug,
     }

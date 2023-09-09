@@ -36,4 +36,13 @@ class UserDetailsSerializer(serializers.Serializer):
     order_date = serializers.DateTimeField(source='created_at')
     order_id = serializers.CharField()
     reciver = serializers.CharField(source='address.receiver')
-    
+
+
+
+class OrderSingleSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    order_id = serializers.CharField()
+    status = serializers.CharField()
+    total_price = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    products_count = serializers.IntegerField()

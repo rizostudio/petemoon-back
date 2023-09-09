@@ -6,10 +6,11 @@ from . import AvailableTimeSerializer
 from .comments import VetCommentSerializer
 
 class VetSingleSerializer(serializers.Serializer):
-    
+    id = serializers.IntegerField()
     photo = serializers.ImageField()
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
+    price = serializers.IntegerField(required=False)
     average_rating = serializers.SerializerMethodField(read_only=True)
     about = serializers.CharField()
     comments_count = serializers.SerializerMethodField(read_only=True)
