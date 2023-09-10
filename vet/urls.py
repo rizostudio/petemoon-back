@@ -4,7 +4,7 @@ from .views import (
     PotentialTimeView, AvailableReserveTimeView, VetSingleView, VetProfileView, AvailableReserveForNormalUserView, AvailableTimesView,
     ReserveForNormalUserView, VisitView, PastVisitView,SinglePastVisitView, FutureVisitView, VetDashboardView, SingleVisitView,
     SingleFutureVisitView, VetListView, UserFutureVisitView, UserSingleFutureVisitView, UserPastVisitView, UserSinglePastVisitView,
-    CreateComment, Comments, VetFinancialReportsView, NormalVisitView)
+    CreateComment, Comments, VetFinancialReportsView, NormalVisitView, VetSearchView)
 
 
 urlpatterns = [
@@ -32,5 +32,6 @@ urlpatterns = [
     path("comments",Comments.as_view(),name="comments"),
     path("create_comment/<int:id>",CreateComment.as_view(),name="create_comment"),
     path('normal-user-visits', NormalVisitView.as_view(), name='normal-user-visits'),
+    path("search",VetSearchView.as_view(),name="search"),
 ]
 
