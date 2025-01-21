@@ -1,6 +1,5 @@
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
-
 from ..models import Product
 from ..serializers import ProductGetSerializer
 

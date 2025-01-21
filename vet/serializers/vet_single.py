@@ -5,11 +5,12 @@ from django.db.models import Avg
 from . import AvailableTimeSerializer
 from .comments import VetCommentSerializer
 
+
 class VetSingleSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     photo = serializers.ImageField()
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     price = serializers.IntegerField(required=False)
     average_rating = serializers.SerializerMethodField(read_only=True)
     about = serializers.CharField()
@@ -41,3 +42,5 @@ class VetSingleSerializer(serializers.Serializer):
 #         model = VetComment
 #         fields = ("user", "product", "title", "text", "rate")
 #         extra_kwargs = {"user": {"write_only": True}}
+
+

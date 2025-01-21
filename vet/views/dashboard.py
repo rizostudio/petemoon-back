@@ -13,6 +13,19 @@ from django.shortcuts import render, get_object_or_404
 
 
 
+class NormalVisitView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PastVisitSerializer
+    def get(self, request):
+        try:
+            visit = Visit.objects.filter(user=request.user)
+            serialized_data = self.serializer_class(visit, many=True).data
+
+            return SuccessResponse(data=serialized_data)
+        except CustomException as e:
+            return UnsuccessfulResponse(errors=e.detail, status_code=e.status_code)
+
+
 class PastVisitView(APIView):
     permission_classes = [IsVet]
     serializer_class = PastVisitSerializer

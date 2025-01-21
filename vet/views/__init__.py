@@ -8,3 +8,4 @@ from .dashboard import *
 from .available import *
 from .comment import *
 from .vet_financial_reports import *
+from .search import *
